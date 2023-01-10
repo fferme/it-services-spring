@@ -42,7 +42,6 @@ public class ComputerService {
                     computerFound.setCpu(newComputer.getCpu());
                     computerFound.setRam(newComputer.getRam());
                     computerFound.setGpu(newComputer.getGpu());
-                    //computerFound.setOrder(newComputer.getOrder());
 
                     return computerRepository.save(computerFound);
                 });

@@ -15,30 +15,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
 @Entity
-public class OrderItem {
+@Table(name = "tb_order")
+public class Order {
     @Id
     @JsonProperty("_id")
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
     private UUID id = UUID.randomUUID(); 
-    
-    @NotBlank
-    @Column(length = 15, nullable = false)
-    private OrderItemType orderItemType;
 
     @NotBlank
     @Length(max = 80)
     @Column(length = 80, nullable = false)
-    private String description;
+    private String issues;
     
     @NotBlank
     @DecimalMin(value = "0.0")
-    private Double price;
+    private String notes;
 }

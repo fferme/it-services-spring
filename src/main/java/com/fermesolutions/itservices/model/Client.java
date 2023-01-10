@@ -1,5 +1,6 @@
 package com.fermesolutions.itservices.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -7,9 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 import lombok.Data;
@@ -17,19 +23,18 @@ import lombok.Data;
 @Data
 @Entity
 public class Client {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonProperty("_id")
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(updatable = false, nullable = false)
+    private UUID id = UUID.randomUUID(); 
 
     @NotBlank
-    @NotNull
     @Length(min = 5, max = 40)
     @Column(length = 40, nullable = false)
     private String name;
 
-    @NotNull
+    @NotBlank
     @Column(length = 1, nullable = false)
     private Character gender;
 
@@ -41,11 +46,9 @@ public class Client {
 
     @Length(max = 30)
     @Column(length = 30)
-    private String district;
+    private String neighbourhood;
 
     @Length(max = 20)
     @Column(length = 20)
     private String reference;
-
-
 }

@@ -2,6 +2,7 @@ package com.fermesolutions.itservices.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +13,6 @@ import com.fermesolutions.itservices.repository.ClientRepository;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 @Validated
 @Service
@@ -27,7 +27,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Optional<Client> findById(@PathVariable @NotNull @Positive Long id) {
+    public Optional<Client> findById(@PathVariable @NotNull @NotNull UUID id) {
         return clientRepository.findById(id);
     }
 
@@ -35,20 +35,20 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public Optional<Client> update(@NotNull @Positive Long id, @Valid Client newClient) {
+    public Optional<Client> update(@NotNull UUID id, @Valid Client newClient) {
         return clientRepository.findById(id)
                 .map(clientFound -> {
                     clientFound.setName(newClient.getName());
                     clientFound.setGender(newClient.getGender());
                     clientFound.setPhoneNumber(newClient.getPhoneNumber());
-                    clientFound.setDistrict(newClient.getDistrict());
+                    clientFound.setNeighbourhood(newClient.getNeighbourhood());
                     clientFound.setReference(newClient.getReference());
 
                     return clientRepository.save(clientFound);
                 });
     }
 
-    public boolean delete(@PathVariable @NotNull @Positive Long id) {
+    public boolean delete(@PathVariable @NotNull UUID id) {
         return clientRepository.findById(id)
                 .map(recordFound -> {
                     clientRepository.deleteById(id);
