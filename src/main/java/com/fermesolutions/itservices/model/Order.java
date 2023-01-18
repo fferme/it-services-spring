@@ -2,19 +2,22 @@ package com.fermesolutions.itservices.model;
 
 import lombok.Data;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fermesolutions.itservices.model.enums.OrderItemType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -24,10 +27,10 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "tb_order")
 public class Order {
     @Id
-    @JsonProperty("_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonProperty(value = "_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
-    private UUID id = UUID.randomUUID(); 
+    private Long id;
 
     @NotBlank
     @Length(max = 80)
@@ -37,4 +40,14 @@ public class Order {
     @NotBlank
     @DecimalMin(value = "0.0")
     private String notes;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToOne(mappedBy = "order")
+    private Computer computer;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

@@ -1,9 +1,4 @@
 package com.fermesolutions.itservices.model;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fermesolutions.itservices.model.enums.ComputerType;
 import com.fermesolutions.itservices.model.enums.OSType;
@@ -14,6 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "tb_computer")
 public class Computer {
     @Id
     @JsonProperty("_idAD")
@@ -41,6 +37,10 @@ public class Computer {
     @NotNull
     @Column(length = 40, nullable = false)
     private String gpu;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Order order;
 
     //@JsonIgnore
     //@OneToOne

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fermesolutions.itservices.model.enums.OrderItemType;
 
@@ -15,19 +14,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
 @Entity
+@Table(name = "tb_orderitem")
 public class OrderItem {
     @Id
-    @JsonProperty("_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonProperty(value = "_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
-    private UUID id = UUID.randomUUID(); 
+    private Long id;
     
     @NotBlank
     @Column(length = 15, nullable = false)

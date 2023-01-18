@@ -1,6 +1,5 @@
 package com.fermesolutions.itservices.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -9,25 +8,26 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.hibernate.validator.constraints.Length;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "tb_client")
 public class Client {
     @Id
-    @JsonProperty("_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonProperty(value = "_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
-    private UUID id = UUID.randomUUID(); 
+    private Long id;
 
     @NotBlank
     @Length(min = 5, max = 40)
@@ -51,4 +51,7 @@ public class Client {
     @Length(max = 20)
     @Column(length = 20)
     private String reference;
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 }

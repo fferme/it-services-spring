@@ -1,7 +1,6 @@
 package com.fermesolutions.itservices.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> findById(@PathVariable @NotNull @Positive UUID id) {
+    public ResponseEntity<Client> findById(@PathVariable @NotNull @Positive Long id) {
         return clientService.findById(id)
             .map(clientFound -> ResponseEntity.ok().body(clientFound))
             .orElse(ResponseEntity.notFound().build());
@@ -51,7 +50,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> update(@PathVariable @NotNull @Positive UUID id, 
+    public ResponseEntity<Client> update(@PathVariable @NotNull @Positive Long id, 
         @RequestBody @Valid Client newClient) {
         return clientService.update(id, newClient)
             .map(recordFound -> ResponseEntity.ok().body(recordFound))
@@ -59,7 +58,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (clientService.delete(id)) {
             return ResponseEntity.noContent().<Void>build();
         }

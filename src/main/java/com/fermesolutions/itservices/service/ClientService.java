@@ -2,7 +2,6 @@ package com.fermesolutions.itservices.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +26,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Optional<Client> findById(@PathVariable @NotNull @NotNull UUID id) {
+    public Optional<Client> findById(@PathVariable @NotNull @NotNull Long id) {
         return clientRepository.findById(id);
     }
 
@@ -35,7 +34,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public Optional<Client> update(@NotNull UUID id, @Valid Client newClient) {
+    public Optional<Client> update(@NotNull Long id, @Valid Client newClient) {
         return clientRepository.findById(id)
                 .map(clientFound -> {
                     clientFound.setName(newClient.getName());
@@ -48,7 +47,7 @@ public class ClientService {
                 });
     }
 
-    public boolean delete(@PathVariable @NotNull UUID id) {
+    public boolean delete(@PathVariable @NotNull Long id) {
         return clientRepository.findById(id)
                 .map(recordFound -> {
                     clientRepository.deleteById(id);
