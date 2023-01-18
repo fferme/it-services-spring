@@ -41,9 +41,4 @@ public class Computer {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
-
-    //@JsonIgnore
-    //@OneToOne
-    //@MapsId
-    //private Order order;
 }

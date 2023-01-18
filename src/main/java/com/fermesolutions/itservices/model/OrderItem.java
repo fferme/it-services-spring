@@ -2,8 +2,6 @@ package com.fermesolutions.itservices.model;
 
 import lombok.Data;
 
-import java.util.UUID;
-
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,9 +12,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @Data
 @Entity
@@ -28,7 +29,6 @@ public class OrderItem {
     @Column(updatable = false, nullable = false)
     private Long id;
     
-    @NotBlank
     @Column(length = 15, nullable = false)
     private OrderItemType orderItemType;
 
@@ -37,7 +37,11 @@ public class OrderItem {
     @Column(length = 80, nullable = false)
     private String description;
     
-    @NotBlank
+    @Positive
     @DecimalMin(value = "0.0")
     private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 }

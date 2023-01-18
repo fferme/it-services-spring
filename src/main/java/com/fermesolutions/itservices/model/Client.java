@@ -34,7 +34,7 @@ public class Client {
     @Column(length = 40, nullable = false)
     private String name;
 
-    @NotBlank
+    @NotNull
     @Column(length = 1, nullable = false)
     private Character gender;
 
