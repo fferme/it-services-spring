@@ -1,5 +1,6 @@
 package com.fermesolutions.itservices.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -52,6 +53,7 @@ public class Client {
     @Column(length = 20)
     private String reference;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 }

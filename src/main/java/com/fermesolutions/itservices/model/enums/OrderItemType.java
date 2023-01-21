@@ -2,7 +2,8 @@ package com.fermesolutions.itservices.model.enums;
 
 public enum OrderItemType {
     LABOR(1),
-    PART_BUYOUT(2);
+    PART_BUYOUT(2),
+    TRANSPORT(3);
 
     private int code;
 
