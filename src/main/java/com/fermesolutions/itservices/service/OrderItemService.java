@@ -1,5 +1,6 @@
 package com.fermesolutions.itservices.service;
 
+import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.OrderItem;
 import com.fermesolutions.itservices.repository.OrderItemRepository;
 import jakarta.validation.Valid;
@@ -24,15 +25,15 @@ public class OrderItemService {
         return orderItemRepository.findAll();
     }
 
-    public Optional<OrderItem> findById(@PathVariable @NotNull @Positive Long id) {
-        return orderItemRepository.findById(id);
+    public OrderItem findById(@PathVariable @NotNull @Positive Long id) {
+        return orderItemRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public OrderItem create(@Valid OrderItem orderItem) {
         return orderItemRepository.save(orderItem);
     }
 
-    public Optional<OrderItem> update(@NotNull @Positive Long id, @Valid OrderItem newOrderItem) {
+    public OrderItem update(@NotNull @Positive Long id, @Valid OrderItem newOrderItem) {
         return orderItemRepository.findById(id)
                 .map(orderItemFound -> {
                     orderItemFound.setOrderItemType(newOrderItem.getOrderItemType());
@@ -40,16 +41,12 @@ public class OrderItemService {
                     orderItemFound.setPrice(newOrderItem.getPrice());
 
                     return orderItemRepository.save(orderItemFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public boolean delete(@PathVariable @NotNull @Positive Long id) {
-        return orderItemRepository.findById(id)
-                .map(orderItemFound -> {
-                    orderItemRepository.deleteById(id);
-                    return true;
-                })
-                .orElse(false);
+    public void delete(@PathVariable @NotNull @Positive Long id) {
+        orderItemRepository.delete(orderItemRepository.findById(id)
+            .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 
 

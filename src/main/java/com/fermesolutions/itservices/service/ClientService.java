@@ -1,17 +1,18 @@
 package com.fermesolutions.itservices.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.Client;
 import com.fermesolutions.itservices.repository.ClientRepository;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 @Validated
 @Service
@@ -26,15 +27,15 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Optional<Client> findById(@PathVariable @NotNull @NotNull Long id) {
-        return clientRepository.findById(id);
+    public Client findById(@PathVariable @NotNull @Positive Long id) {
+        return clientRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
     public Client create(@Valid Client client) {
         return clientRepository.save(client);
     }
 
-    public Optional<Client> update(@NotNull Long id, @Valid Client newClient) {
+    public Client update(@NotNull Long id, @Valid Client newClient) {
         return clientRepository.findById(id)
                 .map(clientFound -> {
                     clientFound.setName(newClient.getName());
@@ -44,16 +45,12 @@ public class ClientService {
                     clientFound.setReference(newClient.getReference());
 
                     return clientRepository.save(clientFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public boolean delete(@PathVariable @NotNull Long id) {
-        return clientRepository.findById(id)
-                .map(recordFound -> {
-                    clientRepository.deleteById(id);
-                    return true;
-                })
-                .orElse(false);
+    public void delete(@PathVariable @NotNull Long id) {
+        clientRepository.delete(clientRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id)));
     }
-    
+
 }

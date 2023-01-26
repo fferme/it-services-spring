@@ -37,10 +37,8 @@ public class ComputerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Computer> findById(@PathVariable @NotNull @Positive Long id) {
-        return computerService.findById(id)
-            .map(clientFound -> ResponseEntity.ok().body(clientFound))
-            .orElse(ResponseEntity.notFound().build());
+    public Computer findById(@PathVariable @NotNull @Positive Long id) {
+        return computerService.findById(id);
     }
 
     @PostMapping
@@ -50,19 +48,15 @@ public class ComputerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Computer> update(@PathVariable @NotNull @Positive Long id, 
-        @RequestBody @Valid Computer newClient) {
-        return computerService.update(id, newClient)
-            .map(recordFound -> ResponseEntity.ok().body(recordFound))
-            .orElse(ResponseEntity.notFound().build());
+    public Computer update(@PathVariable @NotNull @Positive Long id, 
+        @RequestBody @Valid Computer newComputer) {
+        return computerService.update(id, newComputer);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (computerService.delete(id)) {
-            return ResponseEntity.noContent().<Void>build();
-        }
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        computerService.delete(id);
     }
 
 

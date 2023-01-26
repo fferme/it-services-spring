@@ -29,10 +29,8 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> findById(@PathVariable @NotNull @Positive Long orderId) {
-        return orderService.findById(orderId)
-                .map(orderFound -> ResponseEntity.ok().body(orderFound))
-                .orElse(ResponseEntity.notFound().build());
+    public Order findById(@PathVariable @NotNull @Positive Long orderId) {
+        return orderService.findById(orderId);
     }
 
     @PostMapping
@@ -42,48 +40,34 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<Order> update(@PathVariable @NotNull @Positive Long orderId,
+    public Order update(@PathVariable @NotNull @Positive Long orderId,
             @RequestBody @Valid Order newOrder) {
-        return orderService.update(orderId, newOrder)
-                .map(orderFound -> ResponseEntity.ok().body(orderFound))
-                .orElse(ResponseEntity.notFound().build());
+        return orderService.update(orderId, newOrder);
     }
 
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<Void> delete(@PathVariable Long orderId) {
-        if (orderService.delete(orderId)) {
-            return ResponseEntity.noContent().<Void>build();
-        }
-
-        return ResponseEntity.notFound().build();
+    public void delete(@PathVariable Long orderId) {
+        orderService.delete(orderId);
     }
 
     // Deleta o cliente de determinada ordem de serviço
     @DeleteMapping("/{orderId}/clients")
-    public ResponseEntity<Void> deleteClientFromOrder(@PathVariable Long orderId) {
-        if (orderService.deleteClientFromOrder(orderId)) {
-            return ResponseEntity.noContent().<Void>build();
-        }
-
-        return ResponseEntity.notFound().build();
+    public void deleteClientFromOrder(@PathVariable Long orderId) {
+        orderService.deleteClientFromOrder(orderId);
     }
     
     // Adiciona um cliente existente para determinada ordem de serviço
-    @PutMapping("/{orderId}/clients/{clientId}/add")
+    @PutMapping("/{orderId}/clients/add/{clientId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseEntity<Order> addClientToOrder(@PathVariable @NotNull @Positive Long orderId, @PathVariable @NotNull @Positive Long clientId){
-        return orderService.addClientToOrder(orderId, clientId)
-                .map(orderFound -> ResponseEntity.ok().body(orderFound))
-                .orElse(ResponseEntity.notFound().build());
+    public Order addClientToOrder(@PathVariable @NotNull @Positive Long orderId, @PathVariable @NotNull @Positive Long clientId){
+        return orderService.addClientToOrder(orderId, clientId);
     }
     
     // Atualiza um cliente para determinada ordem de serviço
-    @PutMapping("/{orderId}/clients/{clientId}")
-    public ResponseEntity<Order> updateClientInOrder(@PathVariable @NotNull @Positive Long orderId, @PathVariable @NotNull @Positive Long clientId, 
+    @PutMapping("/{orderId}/clients/update/{clientId}")
+    public Order updateClientInOrder(@PathVariable @NotNull @Positive Long orderId, @PathVariable @NotNull @Positive Long clientId, 
         @RequestBody @Valid Client newClient) {
-        return orderService.updateClientInOrder(orderId, clientId, newClient)
-                .map(orderFound -> ResponseEntity.ok().body(orderFound))
-                .orElse(ResponseEntity.notFound().build());
+        return orderService.updateClientInOrder(orderId, clientId, newClient);
     }
 
     // Cria um cliente para determinada ordem de serviço

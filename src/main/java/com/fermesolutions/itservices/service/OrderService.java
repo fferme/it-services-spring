@@ -1,11 +1,12 @@
 package com.fermesolutions.itservices.service;
 
+import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.Client;
 import com.fermesolutions.itservices.model.Order;
 import com.fermesolutions.itservices.repository.ClientRepository;
 import com.fermesolutions.itservices.repository.OrderRepository;
-import com.fermesolutions.itservices.service.exceptions.ResourceNotFoundException;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -32,15 +33,15 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> findById(@PathVariable @NotNull @Positive Long orderId) {
-        return orderRepository.findById(orderId);
+    public Order findById(@PathVariable @NotNull @Positive Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
     }
 
     public Order create(@Valid Order order) {
         return orderRepository.save(order);
     }
 
-    public Optional<Order> update(@NotNull @Positive Long orderId, @Valid Order newOrder) {
+    public Order update(@NotNull @Positive Long orderId, @Valid Order newOrder) {
         return orderRepository.findById(orderId)
                 .map(orderFound -> {
                     orderFound.setClient(newOrder.getClient());
@@ -50,29 +51,24 @@ public class OrderService {
                     orderFound.setNotes(newOrder.getNotes());
 
                     return orderRepository.save(orderFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(orderId));
     }
 
-    public boolean delete(@PathVariable @NotNull @Positive Long orderId) {
-        return orderRepository.findById(orderId)
-                .map(orderFound -> {
-                    orderRepository.deleteById(orderId);
-                    return true;
-                })
-                .orElse(false);
+    public void delete(@PathVariable @NotNull @Positive Long orderId) {
+        orderRepository.delete(orderRepository.findById(orderId)
+            .orElseThrow(() -> new RecordNotFoundException(orderId)));
     }
 
-    public boolean deleteClientFromOrder(@PathVariable @NotNull @Positive Long orderId) {
-        return orderRepository.findById(orderId)
-                .map(orderFound -> {
-                    orderFound.setClient(null);
-                    return true;
-                })
-                .orElse(false);
+    // Deleta um cliente de determinada ordem
+    public void deleteClientFromOrder(@PathVariable @NotNull @Positive Long orderId) {
+        Order orderFound = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
+        if (orderFound != null) {
+            orderFound.setClient(null);
+        }
     }
     
     // Atualiza um cliente de determinada ordem de serviço
-    public Optional<Order> updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid Client client) {
+    public Order updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid Client client) {
         clientService.update(clientId, client);
         
         return orderRepository.findById(orderId)
@@ -80,40 +76,38 @@ public class OrderService {
                     orderFound.setClient(client);
 
                     return orderRepository.save(orderFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(orderId));
     }
 
     // Cria um cliente e o adiciona para determinada ordem de serviço
     public Order createClientToOrder(@NotNull @Positive Long orderId, @Valid Client client) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
-            () -> new ResourceNotFoundException("Ordem não encontrada", orderId)
-        );
-        order.setClient(client);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
+        if (order != null) {
+            order.setClient(client);
+        }
 
         return orderRepository.save(order);
     }
 
     // Adiciona um cliente existente para determinada ordem de serviço
-    public Optional<Order> addClientToOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
-            () -> new ResourceNotFoundException("Cliente não encontrado", clientId)
-        );
+    public Order addClientToOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> new RecordNotFoundException(clientId));
 
         return orderRepository.findById(orderId)
             .map(orderFound -> {
                 orderFound.setClient(client);
 
                 return orderRepository.save(orderFound);
-            });
+            }).orElseThrow(() -> new RecordNotFoundException(clientId));
     }
 
     // Atualiza cliente para determinada ordem de serviço
-    public Optional<Order> updateClientForOrder(@NotNull @Positive Long orderId, @Valid Client client) {
+    public Order updateClientForOrder(@NotNull @Positive Long orderId, @Valid Client client) {
         return orderRepository.findById(orderId)
                 .map(orderFound -> {
                     orderFound.setClient(client);
 
                     return orderRepository.save(orderFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(orderId));
     }
 }

@@ -28,10 +28,8 @@ public class OrderItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderItem> findById(@PathVariable @NotNull @Positive Long id) {
-        return orderItemService.findById(id)
-            .map(orderItemFound -> ResponseEntity.ok().body(orderItemFound))
-            .orElse(ResponseEntity.notFound().build());
+    public OrderItem findById(@PathVariable @NotNull @Positive Long id) {
+        return orderItemService.findById(id);
     }
 
     @PostMapping
@@ -41,19 +39,15 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderItem> update(@PathVariable @NotNull @Positive Long id, 
+    public OrderItem update(@PathVariable @NotNull @Positive Long id, 
         @RequestBody @Valid OrderItem newOrderItem) {
-        return orderItemService.update(id, newOrderItem)
-            .map(orderItemFound -> ResponseEntity.ok().body(orderItemFound))
-            .orElse(ResponseEntity.notFound().build());
+        return orderItemService.update(id, newOrderItem);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (orderItemService.delete(id)) {
-            return ResponseEntity.noContent().<Void>build();
-        }
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        orderItemService.delete(id);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.fermesolutions.itservices.service;
 
+import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.Computer;
 import com.fermesolutions.itservices.repository.ComputerRepository;
 import jakarta.validation.Valid;
@@ -26,15 +27,15 @@ public class ComputerService {
         return computerRepository.findAll();
     }
 
-    public Optional<Computer> findById(@PathVariable @NotNull @Positive Long id) {
-        return computerRepository.findById(id);
+    public Computer findById(@PathVariable @NotNull @Positive Long id) {
+        return computerRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public Computer create(@Valid Computer course) {
-        return computerRepository.save(course);
+    public Computer create(@Valid Computer computer) {
+        return computerRepository.save(computer);
     }
 
-    public Optional<Computer> update(@NotNull @Positive Long id, @Valid Computer newComputer) {
+    public Computer update(@NotNull @Positive Long id, @Valid Computer newComputer) {
         return computerRepository.findById(id)
                 .map(computerFound -> {
                     computerFound.setComputerType(newComputer.getComputerType());
@@ -44,16 +45,12 @@ public class ComputerService {
                     computerFound.setGpu(newComputer.getGpu());
 
                     return computerRepository.save(computerFound);
-                });
+                }).orElseThrow(() -> new RecordNotFoundException(id));
     }
 
-    public boolean delete(@PathVariable @NotNull @Positive Long id) {
-        return computerRepository.findById(id)
-                .map(recordFound -> {
-                    computerRepository.deleteById(id);
-                    return true;
-                })
-                .orElse(false);
+    public void delete(@PathVariable @NotNull @Positive Long id) {
+        computerRepository.delete(computerRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(id)));
     }
 
 
