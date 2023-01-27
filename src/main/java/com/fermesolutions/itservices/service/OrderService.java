@@ -39,44 +39,6 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public Order update(@NotNull @Positive Long orderId, @Valid Order newOrder) {
-        return orderRepository.findById(orderId)
-                .map(orderFound -> {
-                    orderFound.setClient(newOrder.getClient());
-                    orderFound.setComputer(newOrder.getComputer());
-                    orderFound.setOrderItems(newOrder.getOrderItems());
-                    orderFound.setIssues(newOrder.getIssues());
-                    orderFound.setNotes(newOrder.getNotes());
-
-                    return orderRepository.save(orderFound);
-                }).orElseThrow(() -> new RecordNotFoundException(orderId));
-    }
-
-    public void delete(@PathVariable @NotNull @Positive Long orderId) {
-        orderRepository.delete(orderRepository.findById(orderId)
-            .orElseThrow(() -> new RecordNotFoundException(orderId)));
-    }
-
-    // Deleta um cliente de determinada ordem
-    public void deleteClientFromOrder(@PathVariable @NotNull @Positive Long orderId) {
-        Order orderFound = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
-        if (orderFound != null) {
-            orderFound.setClient(null);
-        }
-    }
-    
-    // Atualiza um cliente de determinada ordem de serviço
-    public Order updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid Client client) {
-        clientService.update(clientId, client);
-        
-        return orderRepository.findById(orderId)
-                .map(orderFound -> {
-                    orderFound.setClient(client);
-
-                    return orderRepository.save(orderFound);
-                }).orElseThrow(() -> new RecordNotFoundException(orderId));
-    }
-
     // Cria um cliente e o adiciona para determinada ordem de serviço
     public Order createClientToOrder(@NotNull @Positive Long orderId, @Valid Client client) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
@@ -99,13 +61,41 @@ public class OrderService {
             }).orElseThrow(() -> new RecordNotFoundException(clientId));
     }
 
-    // Atualiza cliente para determinada ordem de serviço
-    public Order updateClientForOrder(@NotNull @Positive Long orderId, @Valid Client client) {
+    public Order update(@NotNull @Positive Long orderId, @Valid Order newOrder) {
+        return orderRepository.findById(orderId)
+                .map(orderFound -> {
+                    orderFound.setClient(newOrder.getClient());
+                    orderFound.setComputer(newOrder.getComputer());
+                    orderFound.setOrderItems(newOrder.getOrderItems());
+                    orderFound.setIssues(newOrder.getIssues());
+                    orderFound.setNotes(newOrder.getNotes());
+
+                    return orderRepository.save(orderFound);
+                }).orElseThrow(() -> new RecordNotFoundException(orderId));
+    }
+
+    // Atualiza um cliente de determinada ordem de serviço
+    public Order updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid Client client) {
+        clientService.update(clientId, client);
+        
         return orderRepository.findById(orderId)
                 .map(orderFound -> {
                     orderFound.setClient(client);
 
                     return orderRepository.save(orderFound);
                 }).orElseThrow(() -> new RecordNotFoundException(orderId));
+    }
+
+    public void delete(@PathVariable @NotNull @Positive Long orderId) {
+        orderRepository.delete(orderRepository.findById(orderId)
+            .orElseThrow(() -> new RecordNotFoundException(orderId)));
+    }
+
+    // Deleta um cliente de determinada ordem
+    public void deleteClientFromOrder(@PathVariable @NotNull @Positive Long orderId) {
+        Order orderFound = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
+        if (orderFound != null) {
+            orderFound.setClient(null);
+        }
     }
 }
