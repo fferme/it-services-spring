@@ -42,8 +42,8 @@ public class Order {
     @Column(length = 120)
     private String notes;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "client_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id", nullable = true)
     private Client client;
 
     @OneToOne(mappedBy = "order")

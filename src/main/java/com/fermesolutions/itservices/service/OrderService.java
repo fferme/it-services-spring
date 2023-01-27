@@ -6,7 +6,6 @@ import com.fermesolutions.itservices.model.Order;
 import com.fermesolutions.itservices.repository.ClientRepository;
 import com.fermesolutions.itservices.repository.OrderRepository;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrderService {
@@ -84,9 +82,9 @@ public class OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RecordNotFoundException(orderId));
         if (order != null) {
             order.setClient(client);
+            orderRepository.save(order);
         }
-
-        return orderRepository.save(order);
+        return order;
     }
 
     // Adiciona um cliente existente para determinada ordem de serviço

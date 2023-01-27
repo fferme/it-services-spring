@@ -27,16 +27,16 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Client findById(@PathVariable @NotNull @Positive Long id) {
-        return clientRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
+    public Client findById(@PathVariable @NotNull @Positive Long clientId) {
+        return clientRepository.findById(clientId).orElseThrow(() -> new RecordNotFoundException(clientId));
     }
 
     public Client create(@Valid Client client) {
         return clientRepository.save(client);
     }
 
-    public Client update(@NotNull Long id, @Valid Client newClient) {
-        return clientRepository.findById(id)
+    public Client update(@NotNull Long clientId, @Valid Client newClient) {
+        return clientRepository.findById(clientId)
                 .map(clientFound -> {
                     clientFound.setName(newClient.getName());
                     clientFound.setGender(newClient.getGender());
@@ -45,12 +45,17 @@ public class ClientService {
                     clientFound.setReference(newClient.getReference());
 
                     return clientRepository.save(clientFound);
-                }).orElseThrow(() -> new RecordNotFoundException(id));
+                }).orElseThrow(() -> new RecordNotFoundException(clientId));
     }
 
-    public void delete(@PathVariable @NotNull Long id) {
-        clientRepository.delete(clientRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id)));
+    public void delete(@PathVariable @NotNull @Positive Long clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> new RecordNotFoundException(clientId));
+        if (!client.getOrders().isEmpty()) {
+            clientRepository.removeClientFromOrders(clientId);
+        }
+        
+        clientRepository.delete(clientRepository.findById(clientId)
+                .orElseThrow(() -> new RecordNotFoundException(clientId)));
     }
 
 }
