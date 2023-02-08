@@ -1,5 +1,7 @@
 package com.fermesolutions.itservices.service;
 
+import com.fermesolutions.itservices.dto.ClientDTO;
+import com.fermesolutions.itservices.dto.mapper.ClientMapper;
 import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.Client;
 import com.fermesolutions.itservices.model.Order;
@@ -20,11 +22,13 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ClientService clientService;
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
-    public OrderService(OrderRepository orderRepository, ClientService clientService, ClientRepository clientRepository) {
+    public OrderService(OrderRepository orderRepository, ClientService clientService, ClientRepository clientRepository, ClientMapper clientMapper) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
     public List<Order> listAll() {
@@ -75,12 +79,12 @@ public class OrderService {
     }
 
     // Atualiza um cliente de determinada ordem de serviço
-    public Order updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid Client client) {
-        clientService.update(clientId, client);
+    public Order updateClientInOrder(@NotNull @Positive Long orderId, @NotNull @Positive Long clientId, @Valid ClientDTO clientDTO) {
+        clientService.update(clientId, clientDTO);
         
         return orderRepository.findById(orderId)
                 .map(orderFound -> {
-                    orderFound.setClient(client);
+                    orderFound.setClient(clientMapper.toEntity(clientDTO));
 
                     return orderRepository.save(orderFound);
                 }).orElseThrow(() -> new RecordNotFoundException(orderId));

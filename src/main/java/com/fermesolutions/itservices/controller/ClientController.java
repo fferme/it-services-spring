@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fermesolutions.itservices.model.Client;
+import com.fermesolutions.itservices.dto.ClientDTO;
 import com.fermesolutions.itservices.service.ClientService;
 
 import jakarta.validation.Valid;
@@ -31,25 +31,25 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public @ResponseBody List<Client> listAll() {
+    public @ResponseBody List<ClientDTO> listAll() {
         return clientService.listAll();
     }
 
     @GetMapping("/{id}")
-    public Client findById(@PathVariable @NotNull @Positive Long id) {
+    public ClientDTO findById(@PathVariable @NotNull @Positive Long id) {
         return clientService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Client create(@RequestBody @Valid Client client) {
-        return clientService.create(client);
+    public ClientDTO create(@RequestBody @Valid @NotNull ClientDTO clientDTO) {
+        return clientService.create(clientDTO);
     }
 
     @PutMapping("/{id}")
-    public Client update(@PathVariable @NotNull @Positive Long id, 
-            @RequestBody @Valid Client newClient) {
-        return clientService.update(id, newClient);
+    public ClientDTO update(@PathVariable @Positive @NotNull Long id, 
+            @RequestBody @Valid @NotNull ClientDTO newClientDTO) {
+        return clientService.update(id, newClientDTO);
     }
 
     @DeleteMapping("/{id}")

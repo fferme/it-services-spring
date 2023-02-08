@@ -52,11 +52,11 @@ public class OrderController {
     }
     
     // Atualiza um cliente para determinada ordem de serviço
-    @PutMapping("/{orderId}/clients/update/{clientId}")
+    /*@PutMapping("/{orderId}/clients/update/{clientId}")
     public Order updateClientInOrder(@PathVariable @NotNull @Positive Long orderId, @PathVariable @NotNull @Positive Long clientId, 
         @RequestBody @Valid Client newClient) {
         return orderService.updateClientInOrder(orderId, clientId, newClient);
-    }
+    }*/
     
     // Adiciona um cliente existente para determinada ordem de serviço
     @PutMapping("/{orderId}/clients/add/{clientId}")

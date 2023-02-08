@@ -1,11 +1,14 @@
 package com.fermesolutions.itservices.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.fermesolutions.itservices.dto.ClientDTO;
+import com.fermesolutions.itservices.dto.mapper.ClientMapper;
 import com.fermesolutions.itservices.exception.RecordNotFoundException;
 import com.fermesolutions.itservices.model.Client;
 import com.fermesolutions.itservices.repository.ClientRepository;
@@ -18,33 +21,40 @@ import jakarta.validation.constraints.Positive;
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
-    public List<Client> listAll() {
-        return clientRepository.findAll();
+    public List<ClientDTO> listAll() {
+        return clientRepository.findAll()
+        .stream()
+        .map(clientMapper::toDTO)
+        .collect(Collectors.toList());
     }
 
-    public Client findById(@PathVariable @NotNull @Positive Long clientId) {
-        return clientRepository.findById(clientId).orElseThrow(() -> new RecordNotFoundException(clientId));
-    }
-
-    public Client create(@Valid Client client) {
-        return clientRepository.save(client);
-    }
-
-    public Client update(@NotNull Long clientId, @Valid Client newClient) {
+    public ClientDTO findById(@PathVariable @NotNull @Positive Long clientId) {
         return clientRepository.findById(clientId)
-                .map(clientFound -> {
-                    clientFound.setName(newClient.getName());
-                    clientFound.setGender(newClient.getGender());
-                    clientFound.setPhoneNumber(newClient.getPhoneNumber());
-                    clientFound.setNeighbourhood(newClient.getNeighbourhood());
-                    clientFound.setReference(newClient.getReference());
+        .map(clientMapper::toDTO)
+        .orElseThrow(() -> new RecordNotFoundException(clientId));
+    }
 
-                    return clientRepository.save(clientFound);
+    public ClientDTO create(@Valid @NotNull ClientDTO clientDTO) {
+        return clientMapper.toDTO(clientRepository.save(clientMapper.toEntity(clientDTO)));
+    }
+
+    public ClientDTO update(@Positive @NotNull Long clientId, @Valid @NotNull ClientDTO newClientDTO) {
+        return clientRepository.findById(clientId)
+                .map(clientDTOFound -> {
+                    clientDTOFound.setName(newClientDTO.name());
+                    clientDTOFound.setGender(newClientDTO.gender());
+                    clientDTOFound.setPhoneNumber(newClientDTO.phoneNumber());
+                    clientDTOFound.setNeighbourhood(newClientDTO.neighbourhood());
+                    clientDTOFound.setReference(newClientDTO.reference());
+
+                    return clientMapper.toDTO(clientRepository.save(clientDTOFound));
                 }).orElseThrow(() -> new RecordNotFoundException(clientId));
     }
 

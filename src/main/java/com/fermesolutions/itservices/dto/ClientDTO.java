@@ -18,7 +18,7 @@ public record ClientDTO(
         @NotNull Character gender, 
         @NotNull @Length(max = 11) @Pattern(regexp = "^[1-9][0-9]{9,10}$") String phoneNumber, 
         @Length(max = 30) String neighbourhood, 
-        @Length(max = 20) String reference
+        @Length(max = 20) String reference,
+        @JsonIgnore Set<Order> orders
     ) {
-    
 }
