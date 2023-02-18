@@ -3,6 +3,7 @@ package com.fermesolutions.itservices.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class ClientService {
     }
 
     public List<ClientDTO> listAll() {
-        return clientRepository.findAll()
+        return clientRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
         .stream()
         .map(clientMapper::toDTO)
         .collect(Collectors.toList());
