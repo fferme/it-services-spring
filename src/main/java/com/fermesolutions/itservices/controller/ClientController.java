@@ -57,5 +57,4 @@ public class ClientController {
     public void delete(@PathVariable @NotNull @Positive Long id) {
         clientService.delete(id);
     }
-
 }

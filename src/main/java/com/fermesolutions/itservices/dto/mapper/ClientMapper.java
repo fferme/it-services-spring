@@ -13,8 +13,7 @@ public class ClientMapper {
         }
         return new ClientDTO(
             client.getId(), 
-            client.getName(), 
-            client.getGender(), 
+            client.getName(),
             client.getPhoneNumber(), 
             client.getNeighbourhood(), 
             client.getReference(), 
@@ -31,7 +30,6 @@ public class ClientMapper {
             client.setId(clientDTO.id());
         }
         client.setName(clientDTO.name());
-        client.setGender(clientDTO.gender());
         client.setPhoneNumber(clientDTO.phoneNumber());
         client.setNeighbourhood(clientDTO.neighbourhood());
         client.setReference(clientDTO.reference());

@@ -2,7 +2,6 @@ package com.fermesolutions.itservices.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +27,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
         this.clientMapper = clientMapper;
     }
-
+    
     public List<ClientDTO> listAll() {
         return clientRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))
         .stream()
@@ -50,7 +49,6 @@ public class ClientService {
         return clientRepository.findById(clientId)
                 .map(clientDTOFound -> {
                     clientDTOFound.setName(newClientDTO.name());
-                    clientDTOFound.setGender(newClientDTO.gender());
                     clientDTOFound.setPhoneNumber(newClientDTO.phoneNumber());
                     clientDTOFound.setNeighbourhood(newClientDTO.neighbourhood());
                     clientDTOFound.setReference(newClientDTO.reference());
@@ -68,5 +66,4 @@ public class ClientService {
         clientRepository.delete(clientRepository.findById(clientId)
                 .orElseThrow(() -> new RecordNotFoundException(clientId)));
     }
-
 }

@@ -15,7 +15,6 @@ import jakarta.validation.constraints.Pattern;
 public record ClientDTO(
         @JsonProperty("_id") Long id,
         @NotBlank @NotNull @Length(min = 5, max = 40) String name,
-        @NotNull Character gender, 
         @NotNull @Length(max = 11) @Pattern(regexp = "^[1-9][0-9]{9,10}$") String phoneNumber, 
         @Length(max = 30) String neighbourhood, 
         @Length(max = 20) String reference,

@@ -20,8 +20,10 @@ import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_client")
 public class Client {
@@ -35,10 +37,6 @@ public class Client {
     @Length(min = 5, max = 40)
     @Column(length = 40, nullable = false)
     private String name;
-
-    @NotNull
-    @Column(length = 1, nullable = false)
-    private Character gender;
 
     @NotNull
     @Length(max = 11)
