@@ -25,17 +25,21 @@ public class Client extends BaseEntity implements Serializable {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^(1[1-9]|2[1-9]|3\\d|4[1-9]|5[1-5]|6[1-9]|7[1-9]|8[1-9]|9[1-9])9[2-9]\\d{7}$")
+    @Pattern(regexp = "^\\(?(\\d{2})\\)?[- ]?(\\d{4,5})[- ]?(\\d{4})$")
     @Size(min = 8, max = 11, message = "Phone number must be minimum 10 characters")
     @Column(length = 11, nullable = false, updatable = false)
     private String phoneNumber;
 
-    @Size(max = 30)
-    @Column(length = 30)
+    @Size(max = 20)
+    @Column(length = 20)
     private String neighborhood;
 
-    @Size(max = 30)
-    @Column(length = 30)
+    @Size(max = 50)
+    @Column(length = 50)
+    private String address;
+
+    @Size(max = 70)
+    @Column(length = 70)
     private String reference;
 
     @PrePersist

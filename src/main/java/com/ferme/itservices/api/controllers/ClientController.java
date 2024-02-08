@@ -52,4 +52,10 @@ public class ClientController {
     public void deleteAll() {
         clientService.deleteAll();
     }
+
+    @PostMapping("/import")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    public void importClients() {
+        clientService.importClients();
+    }
 }

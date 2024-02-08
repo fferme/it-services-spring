@@ -15,5 +15,6 @@ public class ClientDTO extends BaseEntityDTO implements Serializable {
     private String name;
     private String phoneNumber;
     private String neighborhood;
+    private String address;
     private String reference;
 }
