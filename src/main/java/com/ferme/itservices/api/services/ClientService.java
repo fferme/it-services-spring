@@ -68,7 +68,7 @@ public class ClientService {
         clientRepository.deleteAll();
     }
 
-    public void importClients() {
+    public void exportDataToClient() {
         try {
             InputStream stream = new FileInputStream("src/main/resources/entities/clients.json");
             JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
@@ -77,7 +77,6 @@ public class ClientService {
             reader.beginArray();
             while (reader.hasNext()) {
                 ClientDTO clientDTO = clientMapper.toDTO(gson.fromJson(reader, Client.class));
-                System.out.println(clientDTO);
                 clientRepository.save(clientMapper.toEntity(clientDTO));
             }
             reader.endArray();

@@ -1,7 +1,7 @@
 package com.ferme.itservices.api.controllers;
 
-import com.ferme.itservices.api.dtos.ClientDTO;
-import com.ferme.itservices.api.services.ClientService;
+import com.ferme.itservices.api.dtos.OrderItemDTO;
+import com.ferme.itservices.api.services.OrderItemService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,46 +16,46 @@ import java.util.UUID;
 @RestController
 @Transactional
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/clients")
-public class ClientController {
-    private ClientService clientService;
+@RequestMapping("/api/orderItems")
+public class OrderItemController {
+    private OrderItemService orderItemService;
 
     @GetMapping
-    public List<ClientDTO> listAll() {
-        return clientService.listAll();
+    public List<OrderItemDTO> listAll() {
+        return orderItemService.listAll();
     }
 
     @GetMapping("/{id}")
-    public ClientDTO findById(@PathVariable @NotNull UUID id) {
-        return clientService.findById(id);
+    public OrderItemDTO findById(@PathVariable @NotNull UUID id) {
+        return orderItemService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ClientDTO create(@RequestBody @Valid @NotNull ClientDTO clientDTO) {
-        return clientService.create(clientDTO);
+    public OrderItemDTO create(@RequestBody @Valid @NotNull OrderItemDTO orderItemDTO) {
+        return orderItemService.create(orderItemDTO);
     }
 
     @PutMapping("/{id}")
-    public ClientDTO update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull ClientDTO newClientDTO) {
-        return clientService.update(id, newClientDTO);
+    public OrderItemDTO update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull OrderItemDTO newOrderItemDTO) {
+        return orderItemService.update(id, newOrderItemDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable @NotNull UUID id) {
-        clientService.deleteById(id);
+        orderItemService.deleteById(id);
     }
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteAll() {
-        clientService.deleteAll();
+        orderItemService.deleteAll();
     }
 
     @PostMapping("/import")
     @ResponseStatus(code = HttpStatus.CREATED)
     public void importClients() {
-        clientService.exportDataToClient();
+        orderItemService.exportDataToOrderItem();
     }
 }

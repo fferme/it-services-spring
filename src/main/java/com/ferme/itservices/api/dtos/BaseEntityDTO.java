@@ -18,8 +18,10 @@ import java.util.UUID;
 public class BaseEntityDTO {
     @JsonProperty("_id")
     private UUID id;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     private Date createdAt;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     private Date updatedAt;
 }

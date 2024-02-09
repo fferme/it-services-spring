@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,4 +31,15 @@ public abstract class BaseEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     @Column(nullable = false)
     private Date updatedAt;
+
+    @PrePersist
+    private void onCreate() {
+        this.setCreatedAt(Date.from(Instant.now()));
+        this.setUpdatedAt(Date.from(Instant.now()));
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        this.setUpdatedAt(Date.from(Instant.now()));
+    }
 }
