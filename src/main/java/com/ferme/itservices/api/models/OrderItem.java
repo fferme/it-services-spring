@@ -1,6 +1,9 @@
 package com.ferme.itservices.api.models;
 
+import com.ferme.itservices.api.enums.OrderItemType;
+import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
@@ -19,7 +22,10 @@ import java.io.Serializable;
 @Table(name = "tb_orderItem")
 public class OrderItem extends BaseEntity implements Serializable {
 
-    private String orderItemType;
+    @NotNull
+    @Convert(converter = OrderItemTypeConverter.class)
+    @Column(length = 30, nullable = false)
+    private OrderItemType orderItemType;
 
     @NotBlank
     @Size(min = 3, max = 70, message = "Description must be minimum 5 characters")

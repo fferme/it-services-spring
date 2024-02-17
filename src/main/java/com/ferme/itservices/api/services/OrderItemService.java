@@ -2,6 +2,7 @@ package com.ferme.itservices.api.services;
 
 import com.ferme.itservices.api.dtos.OrderItemDTO;
 import com.ferme.itservices.api.dtos.mappers.OrderItemMapper;
+import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.google.gson.Gson;
@@ -50,7 +51,7 @@ public class OrderItemService {
     public OrderItemDTO update(@NotNull UUID id, @Valid @NotNull OrderItemDTO newOrderItemDTO) {
         return orderItemRepository.findById(id)
                                .map(orderItemFound -> {
-                                   orderItemFound.setOrderItemType(newOrderItemDTO.getOrderItemType());
+                                   orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(newOrderItemDTO.getOrderItemType()));
                                    orderItemFound.setDescription(newOrderItemDTO.getDescription());
                                    orderItemFound.setCashPrice(orderItemFound.getCashPrice());
                                    orderItemFound.setInstallmentPrice(orderItemFound.getInstallmentPrice());
