@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO extends BaseEntityDTO implements Serializable {
-    private List<String> header;
+    private String header;
     private String deviceName;
-    private Integer adId;
-    private List<String> problems;
+    private String deviceSN;
+    private String problems;
 }

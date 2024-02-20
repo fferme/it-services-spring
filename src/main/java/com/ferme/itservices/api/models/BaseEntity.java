@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -21,7 +23,8 @@ public abstract class BaseEntity implements Serializable {
     @Id
     @JsonProperty("_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(updatable = false, unique = true, nullable = false)
+    @Column(updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID id;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")

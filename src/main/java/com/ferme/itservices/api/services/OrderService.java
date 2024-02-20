@@ -44,7 +44,7 @@ public class OrderService {
         return orderRepository.findById(id)
                                .map(orderFound -> {
                                    orderFound.setDeviceName(newOrderDTO.getDeviceName());
-                                   orderFound.setAdId(newOrderDTO.getAdId());
+                                   orderFound.setDeviceSN(newOrderDTO.getDeviceSN());
                                    orderFound.setProblems(newOrderDTO.getProblems());
 
                                    return orderMapper.toDTO(orderRepository.save(orderFound));
