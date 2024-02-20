@@ -2,6 +2,7 @@ package com.ferme.itservices.api.services;
 
 import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.api.dtos.mappers.OrderMapper;
+import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.repositories.OrderRepository;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class OrderService {
 
     public OrderDTO findById(@Valid @NotNull UUID id) {
         return orderRepository.findById(id).map(orderMapper::toDTO)
-                               .orElseThrow(RuntimeException::new);
+                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
     public OrderDTO create(@Valid @NotNull OrderDTO OrderDTO) {
@@ -49,12 +50,12 @@ public class OrderService {
 
                                    return orderMapper.toDTO(orderRepository.save(orderFound));
 
-                               }).orElseThrow(RuntimeException::new);
+                               }).orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
     public void deleteById(@NotNull UUID id) {
         orderRepository.delete(orderRepository.findById(id)
-                                                .orElseThrow(RuntimeException::new));
+                                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id)));
     }
 
     public void deleteAll() {

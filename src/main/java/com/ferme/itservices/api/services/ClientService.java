@@ -2,6 +2,7 @@ package com.ferme.itservices.api.services;
 
 import com.ferme.itservices.api.dtos.ClientDTO;
 import com.ferme.itservices.api.dtos.mappers.ClientMapper;
+import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
 import com.google.gson.Gson;
@@ -40,7 +41,7 @@ public class ClientService {
 
     public ClientDTO findById(@Valid @NotNull UUID id) {
         return clientRepository.findById(id).map(clientMapper::toDTO)
-                               .orElseThrow(RuntimeException::new);
+                               .orElseThrow(() -> new RecordNotFoundException(Client.class, id));
     }
 
     public ClientDTO create(@Valid @NotNull ClientDTO clientDTO) {
@@ -56,12 +57,12 @@ public class ClientService {
 
                                    return clientMapper.toDTO(clientRepository.save(clientFound));
 
-                               }).orElseThrow(RuntimeException::new);
+                               }).orElseThrow(() -> new RecordNotFoundException(Client.class, id));
     }
 
     public void deleteById(@NotNull UUID id) {
         clientRepository.delete(clientRepository.findById(id)
-                                                .orElseThrow(RuntimeException::new));
+                                                .orElseThrow(() -> new RecordNotFoundException(Client.class, id)));
     }
 
     public void deleteAll() {

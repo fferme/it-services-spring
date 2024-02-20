@@ -3,6 +3,7 @@ package com.ferme.itservices.api.services;
 import com.ferme.itservices.api.dtos.OrderItemDTO;
 import com.ferme.itservices.api.dtos.mappers.OrderItemMapper;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
+import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.google.gson.Gson;
@@ -41,7 +42,7 @@ public class OrderItemService {
 
     public OrderItemDTO findById(@Valid @NotNull UUID id) {
         return orderItemRepository.findById(id).map(orderItemMapper::toDTO)
-                               .orElseThrow(RuntimeException::new);
+                                               .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
     }
 
     public OrderItemDTO create(@Valid @NotNull OrderItemDTO OrderItemDTO) {
@@ -59,12 +60,12 @@ public class OrderItemService {
 
                                    return orderItemMapper.toDTO(orderItemRepository.save(orderItemFound));
 
-                               }).orElseThrow(RuntimeException::new);
+                               }).orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
     }
 
     public void deleteById(@NotNull UUID id) {
         orderItemRepository.delete(orderItemRepository.findById(id)
-                                                .orElseThrow(RuntimeException::new));
+                                                      .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id)));
     }
 
     public void deleteAll() {
