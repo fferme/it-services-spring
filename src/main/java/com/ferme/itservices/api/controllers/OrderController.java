@@ -1,6 +1,7 @@
 package com.ferme.itservices.api.controllers;
 
 import com.ferme.itservices.api.dtos.OrderDTO;
+import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.services.OrderService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<OrderDTO> listAll() {
+    public List<Order> listAll() {
         return orderService.listAll();
     }
 
@@ -32,8 +33,9 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public OrderDTO create(@RequestBody @Valid @NotNull OrderDTO orderDTO) {
-        return orderService.create(orderDTO);
+    public Order create(@RequestBody @Valid @NotNull Order order) {
+        System.out.println(order);
+        return orderService.create(order);
     }
 
     @PutMapping("/{id}")

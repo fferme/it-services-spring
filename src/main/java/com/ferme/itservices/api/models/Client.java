@@ -41,15 +41,4 @@ public class Client extends BaseEntity implements Serializable {
     @Size(max = 70)
     @Column(length = 70)
     private String reference;
-
-    @PrePersist
-    private void onCreation() {
-        this.setCreatedAt(new Date());
-        this.setUpdatedAt(new Date());
-    }
-
-    @PreUpdate
-    private void onUpdate() {
-        this.setUpdatedAt(new Date());
-    }
 }

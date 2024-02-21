@@ -23,13 +23,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
 
-    public List<OrderDTO> listAll() {
-        List<Order> orders = orderRepository.findAll();
-
-        return orders.stream()
-                      .map(orderMapper::toDTO)
-                      .sorted(Comparator.comparing(OrderDTO::getCreatedAt))
-                      .collect(Collectors.toList());
+    public List<Order> listAll() {
+        return orderRepository.findAll();
     }
 
     public OrderDTO findById(@Valid @NotNull UUID id) {
@@ -37,8 +32,8 @@ public class OrderService {
                               .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
-    public OrderDTO create(@Valid @NotNull OrderDTO OrderDTO) {
-        return orderMapper.toDTO(orderRepository.save(orderMapper.toEntity(OrderDTO)));
+    public Order create(@Valid @NotNull Order order) {
+        return orderRepository.save(order);
     }
 
     public OrderDTO update(@NotNull UUID id, @Valid @NotNull OrderDTO newOrderDTO) {
