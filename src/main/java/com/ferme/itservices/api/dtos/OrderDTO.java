@@ -1,6 +1,5 @@
 package com.ferme.itservices.api.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,9 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO extends BaseEntityDTO implements Serializable {
-    private String header;
-    private String deviceName;
-    private String deviceSN;
-    private String problems;
-    private List<OrderItemDTO> orderItems;
+    public String header;
+    public String deviceName;
+    public String deviceSN;
+    public String problems;
+    public List<OrderItemDTO> orderItems;
 }

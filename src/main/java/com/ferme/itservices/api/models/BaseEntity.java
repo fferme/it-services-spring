@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -14,7 +16,9 @@ import java.util.Date;
 import java.util.UUID;
 
 @MappedSuperclass
+@SuperBuilder
 @Data
+@NoArgsConstructor
 @JsonIgnoreProperties(
     value = {"id", "createdAt", "updateAt"},
     allowGetters = true

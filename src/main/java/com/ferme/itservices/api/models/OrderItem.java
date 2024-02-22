@@ -1,22 +1,26 @@
 package com.ferme.itservices.api.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Entity
+@SuperBuilder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_orderItem")
 public class OrderItem extends BaseEntity implements Serializable {
 
@@ -39,8 +43,4 @@ public class OrderItem extends BaseEntity implements Serializable {
     @DecimalMax(value = "9999.00", message = "Installment price must be max 9999.00")
     @Column(length = 7, nullable = false)
     private Double installmentPrice;
-
-    @NotNull
-    @Column(length = 5, nullable = false)
-    private Boolean isPayed = false;
 }

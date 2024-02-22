@@ -34,7 +34,6 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Order create(@RequestBody @Valid @NotNull Order order) {
-        System.out.println(order);
         return orderService.create(order);
     }
 

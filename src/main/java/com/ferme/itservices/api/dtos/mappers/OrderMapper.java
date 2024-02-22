@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
     public OrderDTO toDTO(Order order) {
-        if (order == null) {
-            return null;
-        }
+        if (order == null) { return null; }
 
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setId(order.getId());

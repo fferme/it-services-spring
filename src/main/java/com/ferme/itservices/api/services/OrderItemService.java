@@ -32,21 +32,22 @@ public class OrderItemService {
     private final OrderItemMapper orderItemMapper;
 
     public List<OrderItemDTO> listAll() {
-        List<OrderItem> clients = orderItemRepository.findAll();
+        List<OrderItem> orderItems = orderItemRepository.findAll();
 
-        return clients.stream()
-                      .map(orderItemMapper::toDTO)
+        return orderItems.stream()
+                         .map(orderItemMapper::toOrderItemDTO)
                       .sorted(Comparator.comparing(OrderItemDTO::getDescription))
                       .collect(Collectors.toList());
     }
 
     public OrderItemDTO findById(@Valid @NotNull UUID id) {
-        return orderItemRepository.findById(id).map(orderItemMapper::toDTO)
+        return orderItemRepository.findById(id).map(orderItemMapper::toOrderItemDTO)
                                                .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
     }
 
     public OrderItemDTO create(@Valid @NotNull OrderItemDTO OrderItemDTO) {
-        return orderItemMapper.toDTO(orderItemRepository.save(orderItemMapper.toEntity(OrderItemDTO)));
+        return orderItemMapper.toOrderItemDTO(
+            orderItemRepository.save(orderItemMapper.toOrderItemEntity(OrderItemDTO)));
     }
 
     public OrderItemDTO update(@NotNull UUID id, @Valid @NotNull OrderItemDTO newOrderItemDTO) {
@@ -56,9 +57,8 @@ public class OrderItemService {
                                    orderItemFound.setDescription(newOrderItemDTO.getDescription());
                                    orderItemFound.setCashPrice(orderItemFound.getCashPrice());
                                    orderItemFound.setInstallmentPrice(orderItemFound.getInstallmentPrice());
-                                   orderItemFound.setIsPayed(newOrderItemDTO.getIsPayed());
 
-                                   return orderItemMapper.toDTO(orderItemRepository.save(orderItemFound));
+                                   return orderItemMapper.toOrderItemDTO(orderItemRepository.save(orderItemFound));
 
                                }).orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
     }
@@ -80,8 +80,8 @@ public class OrderItemService {
 
             reader.beginArray();
             while (reader.hasNext()) {
-                OrderItemDTO orderItemDTO = orderItemMapper.toDTO(gson.fromJson(reader, OrderItem.class));
-                orderItemRepository.save(orderItemMapper.toEntity(orderItemDTO));
+                OrderItemDTO orderItemDTO = orderItemMapper.toOrderItemDTO(gson.fromJson(reader, OrderItem.class));
+                orderItemRepository.save(orderItemMapper.toOrderItemEntity(orderItemDTO));
             }
             reader.endArray();
             reader.close();
