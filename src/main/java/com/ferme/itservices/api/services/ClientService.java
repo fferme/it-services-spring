@@ -45,6 +45,7 @@ public class ClientService {
     }
 
     public ClientDTO create(@Valid @NotNull ClientDTO clientDTO) {
+        System.out.println(clientDTO.getPhoneNumber());
         return clientMapper.toDTO(clientRepository.save(clientMapper.toEntity(clientDTO)));
     }
 

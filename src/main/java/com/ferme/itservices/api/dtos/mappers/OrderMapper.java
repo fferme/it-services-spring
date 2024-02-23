@@ -7,39 +7,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderMapper {
     public OrderDTO toDTO(Order order) {
-        if (order == null) { return null; }
-
-        OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setId(order.getId());
-        orderDTO.setHeader(order.getHeader());
-        orderDTO.setDeviceName(order.getDeviceName());
-        orderDTO.setDeviceSN(order.getDeviceSN());
-        orderDTO.setProblems(order.getProblems());
-        orderDTO.setCreatedAt(order.getCreatedAt());
-        orderDTO.setUpdatedAt(order.getUpdatedAt());
-
-        return orderDTO;
+        return (order == null)
+            ? null
+            : OrderDTO.builder()
+                      .id(order.getId())
+                      .header(order.getHeader())
+                      .deviceName(order.getDeviceName())
+                      .deviceSN(order.getDeviceSN())
+                      .problems(order.getProblems())
+                      .createdAt(order.getCreatedAt())
+                      .updatedAt(order.getUpdatedAt())
+                      .build();
     }
 
     public Order toEntity(OrderDTO orderDTO) {
-
-        if (orderDTO == null) {
-            return null;
-        }
-
-        Order order = new Order();
-        if (orderDTO.getId() != null) {
-            order.setId(orderDTO.getId());
-        }
-        order.setId(orderDTO.getId());
-        order.setCreatedAt(orderDTO.getCreatedAt());
-        order.setUpdatedAt(orderDTO.getUpdatedAt());
-        order.setDeviceName(orderDTO.getDeviceName());
-        order.setDeviceSN(orderDTO.getDeviceSN());
-        order.setProblems(orderDTO.getProblems());
-        order.setCreatedAt(orderDTO.getCreatedAt());
-        order.setUpdatedAt(orderDTO.getUpdatedAt());
-
-        return order;
+        return (orderDTO == null)
+            ? null
+            : Order.builder()
+                   .id(orderDTO.getId())
+                   .header(orderDTO.getHeader())
+                   .deviceName(orderDTO.getDeviceName())
+                   .deviceSN(orderDTO.getDeviceSN())
+                   .problems(orderDTO.getProblems())
+                   .createdAt(orderDTO.getCreatedAt())
+                   .updatedAt(orderDTO.getUpdatedAt())
+                   .build();
     }
 }

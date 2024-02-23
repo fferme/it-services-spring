@@ -20,6 +20,7 @@ import java.io.Serializable;
 public class OrderItemDTO extends BaseEntityDTO implements Serializable {
     @NotNull
     private String orderItemType;
+
     @NotBlank
     private String description;
 

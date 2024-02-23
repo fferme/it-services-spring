@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 @Component
 public class OrderItemMapper {
     public OrderItem toOrderItemEntity(OrderItemDTO orderItemDTO) {
-        if (orderItemDTO == null) { return null; }
-
-        return OrderItem.builder()
+        return (orderItemDTO == null)
+            ? null
+            : OrderItem.builder()
                         .id(orderItemDTO.getId())
                         .orderItemType(
                             OrderItemTypeConverter.convertOrderItemTypeValue(orderItemDTO.getOrderItemType()))
@@ -26,9 +26,9 @@ public class OrderItemMapper {
     }
 
     public OrderItemDTO toOrderItemDTO(OrderItem orderItem) {
-        if (orderItem == null) { return null; }
-
-        return OrderItemDTO.builder()
+        return (orderItem == null)
+            ? null
+            : OrderItemDTO.builder()
                            .id(orderItem.getId())
                            .orderItemType(orderItem.getOrderItemType().getValue())
                            .description(orderItem.getDescription())

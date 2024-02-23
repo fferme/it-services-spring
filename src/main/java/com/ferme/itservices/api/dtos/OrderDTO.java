@@ -1,21 +1,31 @@
 package com.ferme.itservices.api.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@SuperBuilder
 public class OrderDTO extends BaseEntityDTO implements Serializable {
-    public String header;
-    public String deviceName;
-    public String deviceSN;
-    public String problems;
-    public List<OrderItemDTO> orderItems;
+    @NotEmpty
+    @Size(max = 95)
+    private final String header;
+
+    @NotBlank
+    @Size(min = 4, max = 35, message = "Device name must be minimum 4 characters")
+    private String deviceName;
+
+    @NotBlank
+    @Size(min = 4, max = 35, message = "Device serial number name must be minimum 4 characters")
+    private String deviceSN;
+
+    @NotEmpty
+    @Size(max = 250)
+    private String problems;
 }
