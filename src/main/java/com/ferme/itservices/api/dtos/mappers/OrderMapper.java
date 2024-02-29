@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMapper {
+    private OrderItemMapper orderItemMapper;
+
+
+
     public OrderDTO toDTO(Order order) {
         return (order == null)
             ? null

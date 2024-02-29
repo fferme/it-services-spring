@@ -1,8 +1,6 @@
 package com.ferme.itservices.api.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -13,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
@@ -42,7 +42,6 @@ public class Order extends BaseEntity implements Serializable {
     @Column(length = 250)
     private String problems;
 
-//    @OneToMany(targetEntity = OrderItem.class, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "ooi_fk", referencedColumnName = "id")
-//    private List<OrderItem> orderItems;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
