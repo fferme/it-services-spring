@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,7 +56,7 @@ public class ClientController {
 
     @PostMapping("/import")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void importClients() {
+    public void importClients() throws IOException {
         clientService.exportDataToClient();
     }
 }

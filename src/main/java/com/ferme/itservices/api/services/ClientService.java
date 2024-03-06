@@ -13,10 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
@@ -69,22 +66,17 @@ public class ClientService {
         clientRepository.deleteAll();
     }
 
-    public void exportDataToClient() {
-        try {
-            InputStream stream = new FileInputStream("src/main/resources/entities/clients.json");
-            JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-            Gson gson = new Gson();
+    public void exportDataToClient() throws IOException {
+        InputStream stream = new FileInputStream("src/main/resources/entities/clients.json");
+        JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+        Gson gson = new Gson();
 
-            reader.beginArray();
-            while (reader.hasNext()) {
-                ClientDTO clientDTO = clientMapper.toDTO(gson.fromJson(reader, Client.class));
-                clientRepository.save(clientMapper.toEntity(clientDTO));
-            }
-            reader.endArray();
-            reader.close();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        reader.beginArray();
+        while (reader.hasNext()) {
+            ClientDTO clientDTO = clientMapper.toDTO(gson.fromJson(reader, Client.class));
+            clientRepository.save(clientMapper.toEntity(clientDTO));
         }
+        reader.endArray();
+        reader.close();
     }
 }

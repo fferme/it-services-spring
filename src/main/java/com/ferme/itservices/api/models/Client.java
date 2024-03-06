@@ -11,16 +11,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "tb_client")
+@Table(name = "clients")
 public class Client extends BaseEntity implements Serializable {
     @NotBlank
     @Size(min = 4, max = 40, message = "Name must be minimum 10 characters")
@@ -44,4 +45,9 @@ public class Client extends BaseEntity implements Serializable {
     @Size(max = 70)
     @Column(length = 70)
     private String reference;
+
+    @Override
+    public boolean equals(Object obj) {
+       return EqualsBuilder.reflectionEquals(obj, this);
+    }
 }
