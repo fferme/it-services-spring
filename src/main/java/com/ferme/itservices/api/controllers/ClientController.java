@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public Client findById(@PathVariable @NotNull UUID id) {
+    public Optional<Client> findById(@PathVariable @NotNull UUID id) {
         return clientService.findById(id);
     }
 
