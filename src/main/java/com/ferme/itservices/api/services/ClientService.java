@@ -1,7 +1,5 @@
 package com.ferme.itservices.api.services;
 
-import com.ferme.itservices.api.dtos.ClientDTO;
-import com.ferme.itservices.api.dtos.mappers.ClientMapper;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
@@ -13,7 +11,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
@@ -25,41 +26,38 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
-    private final ClientMapper clientMapper;
 
-    public List<ClientDTO> listAll() {
+    public List<Client> listAll() {
         List<Client> clients = clientRepository.findAll();
 
         return clients.stream()
-                      .map(clientMapper::toDTO)
-                      .sorted(Comparator.comparing(ClientDTO::getName))
+                      .sorted(Comparator.comparing(Client::getName))
                       .collect(Collectors.toList());
     }
 
-    public ClientDTO findById(@Valid @NotNull UUID id) {
-        return clientRepository.findById(id).map(clientMapper::toDTO)
+    public Client findById(@Valid @NotNull UUID id) {
+        return clientRepository.findById(id)
                                .orElseThrow(() -> new RecordNotFoundException(Client.class, id));
     }
 
-    public ClientDTO create(@Valid @NotNull ClientDTO clientDTO) {
-        return clientMapper.toDTO(clientRepository.save(clientMapper.toEntity(clientDTO)));
+    public Client create(@Valid @NotNull Client client) {
+        return clientRepository.save(client);
     }
 
-    public ClientDTO update(@NotNull UUID id, @Valid @NotNull ClientDTO newClientDTO) {
+    public Client update(@NotNull UUID id, @Valid @NotNull Client newClient) {
         return clientRepository.findById(id)
                                .map(clientFound -> {
-                                   clientFound.setNeighborhood(newClientDTO.getNeighborhood());
-                                   clientFound.setAddress(newClientDTO.getAddress());
-                                   clientFound.setReference(newClientDTO.getReference());
+                                   clientFound.setNeighborhood(newClient.getNeighborhood());
+                                   clientFound.setAddress(newClient.getAddress());
+                                   clientFound.setReference(newClient.getReference());
 
-                                   return clientMapper.toDTO(clientRepository.save(clientFound));
+                                   return clientRepository.save(clientFound);
 
                                }).orElseThrow(() -> new RecordNotFoundException(Client.class, id));
     }
 
     public void deleteById(@NotNull UUID id) {
-        clientRepository.delete(clientRepository.findById(id)
-                                                .orElseThrow(() -> new RecordNotFoundException(Client.class, id)));
+        clientRepository.deleteById(id);
     }
 
     public void deleteAll() {
@@ -73,8 +71,8 @@ public class ClientService {
 
         reader.beginArray();
         while (reader.hasNext()) {
-            ClientDTO clientDTO = clientMapper.toDTO(gson.fromJson(reader, Client.class));
-            clientRepository.save(clientMapper.toEntity(clientDTO));
+            Client client = gson.fromJson(reader, Client.class);
+            clientRepository.save(client);
         }
         reader.endArray();
         reader.close();

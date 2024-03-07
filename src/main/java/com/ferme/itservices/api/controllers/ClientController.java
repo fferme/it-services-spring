@@ -1,6 +1,6 @@
 package com.ferme.itservices.api.controllers;
 
-import com.ferme.itservices.api.dtos.ClientDTO;
+import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.services.ClientService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -22,24 +22,24 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping
-    public List<ClientDTO> listAll() {
+    public List<Client> listAll() {
         return clientService.listAll();
     }
 
     @GetMapping("/{id}")
-    public ClientDTO findById(@PathVariable @NotNull UUID id) {
+    public Client findById(@PathVariable @NotNull UUID id) {
         return clientService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ClientDTO create(@RequestBody @Valid @NotNull ClientDTO clientDTO) {
-        return clientService.create(clientDTO);
+    public Client create(@RequestBody @Valid @NotNull Client client) {
+        return clientService.create(client);
     }
 
     @PutMapping("/{id}")
-    public ClientDTO update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull ClientDTO newClientDTO) {
-        return clientService.update(id, newClientDTO);
+    public Client update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Client newClient) {
+        return clientService.update(id, newClient);
     }
 
     @DeleteMapping("/{id}")
