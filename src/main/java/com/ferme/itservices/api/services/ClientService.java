@@ -6,6 +6,7 @@ import com.ferme.itservices.api.repositories.ClientRepository;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,10 @@ public class ClientService {
 
     public Optional<Client> findById(@Valid @NotNull UUID id) {
         return clientRepository.findById(id);
+    }
+
+    public Optional<Client> findByName(@NotBlank String name) {
+        return clientRepository.findByName(name);
     }
 
     public Client create(@Valid @NotNull Client client) {

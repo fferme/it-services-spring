@@ -32,6 +32,11 @@ public class ClientController {
         return clientService.findById(id);
     }
 
+    @GetMapping("/name/{name}")
+    public Optional<Client> findByName(@PathVariable @NotNull String name) {
+        return clientService.findByName(name);
+    }
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Client create(@RequestBody @Valid @NotNull Client client) {
