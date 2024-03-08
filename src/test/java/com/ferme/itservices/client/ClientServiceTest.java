@@ -63,4 +63,24 @@ public class ClientServiceTest {
         assertThat(sut).isEmpty();
     }
 
+    @Test
+    public void getClient_ByExistingName_ReturnsClient() {
+        when(clientRepository.findByName(CLIENT.getName())).thenReturn(Optional.of(CLIENT));
+
+        Optional<Client> sut = clientService.findByName(CLIENT.getName());
+
+        assertThat(sut).isNotEmpty();
+        assertThat(sut.get()).isEqualTo(CLIENT);
+    }
+
+    @Test
+    public void getClient_ByUnexistingName_ReturnsClient() {
+        final String name = "Unexisting name";
+        when(clientRepository.findByName(name)).thenReturn(Optional.empty());
+
+        Optional<Client> sut = clientService.findByName(name);
+
+        assertThat(sut).isEmpty();
+    }
+
 }
