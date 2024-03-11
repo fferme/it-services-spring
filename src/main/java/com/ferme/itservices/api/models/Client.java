@@ -19,7 +19,7 @@ import java.io.Serializable;
 @SuperBuilder
 @Data
 @Entity
-@Table(name = "clients")
+@Table(name = "client")
 public class Client extends BaseEntity implements Serializable {
     @NotBlank
     @Size(min = 4, max = 40, message = "Name must be minimum 10 characters")
@@ -29,7 +29,7 @@ public class Client extends BaseEntity implements Serializable {
     @NotBlank
     @Pattern(regexp = "^\\(?(\\d{2})\\)?[- ]?(\\d{4,5})[- ]?(\\d{4})$")
     @Size(min = 8, max = 11, message = "Phone number must be minimum 10 characters")
-    @Column(length = 11, nullable = false, updatable = false)
+    @Column(name = "phone_number", length = 11, nullable = false, updatable = false)
     private String phoneNumber;
 
     @Size(max = 20)
