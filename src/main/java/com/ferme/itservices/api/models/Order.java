@@ -1,8 +1,6 @@
 package com.ferme.itservices.api.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -14,7 +12,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
@@ -40,4 +37,20 @@ public class Order extends BaseEntity implements Serializable {
     @Size(max = 250)
     @Column(length = 250)
     private String problems;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Client client;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order )) return false;
+
+        return this.getId() != null && this.getId().equals(((Order) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
