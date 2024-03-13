@@ -1,6 +1,5 @@
 package com.ferme.itservices.api.controllers;
 
-import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.services.OrderService;
 import jakarta.transaction.Transactional;
@@ -27,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public OrderDTO findById(@PathVariable @NotNull UUID id) {
+    public Order findById(@PathVariable @NotNull UUID id) {
         return orderService.findById(id);
     }
 
@@ -38,8 +37,8 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public OrderDTO update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull OrderDTO newOrderDTO) {
-        return orderService.update(id, newOrderDTO);
+    public Order update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Order newOrder) {
+        return orderService.update(id, newOrder);
     }
 
     @DeleteMapping("/{id}")

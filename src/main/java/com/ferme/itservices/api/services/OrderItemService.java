@@ -29,43 +29,34 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
-    private final OrderItemMapper orderItemMapper;
 
-    public List<OrderItemDTO> listAll() {
-        List<OrderItem> orderItems = orderItemRepository.findAll();
-
-        return orderItems.stream()
-                         .map(orderItemMapper::toOrderItemDTO)
-                      .sorted(Comparator.comparing(OrderItemDTO::getDescription))
-                      .collect(Collectors.toList());
+    public List<OrderItem> listAll() {
+        return orderItemRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(OrderItem::getDescription))
+                .collect(Collectors.toList());
     }
 
-    public OrderItemDTO findById(@Valid @NotNull UUID id) {
-        return orderItemRepository.findById(id).map(orderItemMapper::toOrderItemDTO)
-                                               .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
-    }
-
-    public OrderItemDTO create(@Valid @NotNull OrderItemDTO OrderItemDTO) {
-        return orderItemMapper.toOrderItemDTO(
-            orderItemRepository.save(orderItemMapper.toOrderItemEntity(OrderItemDTO)));
-    }
-
-    public OrderItemDTO update(@NotNull UUID id, @Valid @NotNull OrderItemDTO newOrderItemDTO) {
+    public OrderItem findById(@Valid @NotNull UUID id) {
         return orderItemRepository.findById(id)
-                               .map(orderItemFound -> {
-                                   orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(newOrderItemDTO.getOrderItemType()));
-                                   orderItemFound.setDescription(newOrderItemDTO.getDescription());
-                                   orderItemFound.setCashPrice(orderItemFound.getCashPrice());
-                                   orderItemFound.setInstallmentPrice(orderItemFound.getInstallmentPrice());
+                .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
+    }
 
-                                   return orderItemMapper.toOrderItemDTO(orderItemRepository.save(orderItemFound));
+    public OrderItem create(@Valid @NotNull OrderItem orderItem) {
+        return orderItemRepository.save(orderItem);
+    }
 
-                               }).orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
+    public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
+        OrderItem existingOrderItem = findById(id);
+        existingOrderItem.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(updatedOrderItem.getOrderItemType().getValue()));
+        existingOrderItem.setDescription(updatedOrderItem.getDescription());
+        existingOrderItem.setCashPrice(updatedOrderItem.getCashPrice());
+        existingOrderItem.setInstallmentPrice(updatedOrderItem.getInstallmentPrice());
+        return orderItemRepository.save(existingOrderItem);
     }
 
     public void deleteById(@NotNull UUID id) {
-        orderItemRepository.delete(orderItemRepository.findById(id)
-                                                      .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id)));
+        orderItemRepository.deleteById(id);
     }
 
     public void deleteAll() {
@@ -80,8 +71,8 @@ public class OrderItemService {
 
             reader.beginArray();
             while (reader.hasNext()) {
-                OrderItemDTO orderItemDTO = orderItemMapper.toOrderItemDTO(gson.fromJson(reader, OrderItem.class));
-                orderItemRepository.save(orderItemMapper.toOrderItemEntity(orderItemDTO));
+                OrderItem orderItem = gson.fromJson(reader, OrderItem.class);
+                orderItemRepository.save(orderItem);
             }
             reader.endArray();
             reader.close();

@@ -1,7 +1,5 @@
 package com.ferme.itservices.api.services;
 
-import com.ferme.itservices.api.dtos.OrderDTO;
-import com.ferme.itservices.api.dtos.mappers.OrderMapper;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.repositories.OrderRepository;
@@ -21,40 +19,33 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     public List<Order> listAll() {
         return orderRepository.findAll();
     }
 
-    public OrderDTO findById(@Valid @NotNull UUID id) {
-        return orderRepository.findById(id).map(orderMapper::toDTO)
-                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
+    public Order findById(@Valid @NotNull UUID id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
     public Order create(@Valid @NotNull Order order) {
         return orderRepository.save(order);
     }
 
-    public OrderDTO update(@NotNull UUID id, @Valid @NotNull OrderDTO newOrderDTO) {
-        return orderRepository.findById(id)
-                               .map(orderFound -> {
-                                   orderFound.setDeviceName(newOrderDTO.getDeviceName());
-                                   orderFound.setDeviceSN(newOrderDTO.getDeviceSN());
-                                   orderFound.setProblems(newOrderDTO.getProblems());
-
-                                   return orderMapper.toDTO(orderRepository.save(orderFound));
-
-                               }).orElseThrow(() -> new RecordNotFoundException(Order.class, id));
+    public Order update(@NotNull UUID id, @Valid @NotNull Order updatedOrder) {
+        Order existingOrder = findById(id);
+        existingOrder.setDeviceName(updatedOrder.getDeviceName());
+        existingOrder.setDeviceSN(updatedOrder.getDeviceSN());
+        existingOrder.setProblems(updatedOrder.getProblems());
+        return orderRepository.save(existingOrder);
     }
 
     public void deleteById(@NotNull UUID id) {
-        orderRepository.delete(orderRepository.findById(id)
-                                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id)));
+        orderRepository.deleteById(id);
     }
 
     public void deleteAll() {
         orderRepository.deleteAll();
     }
-
 }

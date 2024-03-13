@@ -1,6 +1,6 @@
 package com.ferme.itservices.api.controllers;
 
-import com.ferme.itservices.api.dtos.OrderItemDTO;
+import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.services.OrderItemService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -21,24 +21,24 @@ public class OrderItemController {
     private OrderItemService orderItemService;
 
     @GetMapping
-    public List<OrderItemDTO> listAll() {
+    public List<OrderItem> listAll() {
         return orderItemService.listAll();
     }
 
     @GetMapping("/{id}")
-    public OrderItemDTO findById(@PathVariable @NotNull UUID id) {
+    public OrderItem findById(@PathVariable @NotNull UUID id) {
         return orderItemService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public OrderItemDTO create(@RequestBody @Valid @NotNull OrderItemDTO orderItemDTO) {
-        return orderItemService.create(orderItemDTO);
+    public OrderItem create(@RequestBody @Valid @NotNull OrderItem orderItem) {
+        return orderItemService.create(orderItem);
     }
 
     @PutMapping("/{id}")
-    public OrderItemDTO update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull OrderItemDTO newOrderItemDTO) {
-        return orderItemService.update(id, newOrderItemDTO);
+    public OrderItem update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull OrderItem newOrderItem) {
+        return orderItemService.update(id, newOrderItem);
     }
 
     @DeleteMapping("/{id}")
