@@ -9,6 +9,18 @@ import java.util.stream.Stream;
 @Converter(autoApply = true)
 public class OrderItemTypeConverter implements AttributeConverter<OrderItemType, String> {
 
+    public static OrderItemType convertOrderItemTypeValue(String value) {
+        return (value == null)
+            ? null
+            : switch (value) {
+            case "Compra de Peça" -> OrderItemType.PART_BUYOUT;
+            case "Troca de Peça" -> OrderItemType.PART_EXCHANGE;
+            case "Mão de Obra" -> OrderItemType.MANPOWER;
+            case "Transporte" -> OrderItemType.CARRIAGE;
+            default -> throw new IllegalArgumentException("Invalid order item type: " + value);
+        };
+    }
+
     @Override
     public String convertToDatabaseColumn(OrderItemType orderItemType) {
         return (orderItemType == null)
@@ -24,20 +36,6 @@ public class OrderItemTypeConverter implements AttributeConverter<OrderItemType,
                     .filter(c -> c.getValue().equals(value))
                     .findFirst()
                     .orElseThrow(IllegalArgumentException::new);
-
-
-    }
-
-    public static OrderItemType convertOrderItemTypeValue(String value) {
-        return (value == null)
-            ? null
-            : switch (value) {
-                case "Compra de Peça" -> OrderItemType.PART_BUYOUT;
-                case "Troca de Peça" -> OrderItemType.PART_EXCHANGE;
-                case "Mão de Obra" -> OrderItemType.MANPOWER;
-                case "Transporte" -> OrderItemType.CARRIAGE;
-                default -> throw new IllegalArgumentException("Invalid order item type: " + value);
-            };
     }
 
 }

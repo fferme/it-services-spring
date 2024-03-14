@@ -9,10 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Validated
 @Service
@@ -26,7 +24,7 @@ public class OrderService {
 
     public Order findById(@Valid @NotNull UUID id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
+                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
     public Order create(@Valid @NotNull Order order) {

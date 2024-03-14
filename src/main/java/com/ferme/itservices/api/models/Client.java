@@ -1,6 +1,8 @@
 package com.ferme.itservices.api.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -11,8 +13,6 @@ import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,21 +44,8 @@ public class Client extends BaseEntity implements Serializable {
     @Column(length = 70)
     private String reference;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private List<Order> orders = new ArrayList<>();
-
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setClient(this);
-    }
-
-    public void removeOrder(Order order) {
-        orders.remove(order);
-        order.setClient(null);
-    }
-
     @Override
     public boolean equals(Object obj) {
-       return EqualsBuilder.reflectionEquals(obj, this);
+        return EqualsBuilder.reflectionEquals(obj, this);
     }
 }

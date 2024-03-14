@@ -6,11 +6,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,13 +39,13 @@ public class Order extends BaseEntity implements Serializable {
     @Column(length = 250)
     private String problems;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Client client;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Order )) return false;
+        if (!(o instanceof Order)) return false;
 
         return this.getId() != null && this.getId().equals(((Order) o).getId());
     }

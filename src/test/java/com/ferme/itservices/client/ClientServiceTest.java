@@ -7,16 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static com.ferme.itservices.common.ClientConstants.CLIENT;
 import static com.ferme.itservices.common.ClientConstants.INVALID_CLIENT;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -87,7 +84,9 @@ public class ClientServiceTest {
 
     @Test
     public void listClients_ReturnsAllClients() {
-        List<Client> clients = new ArrayList<>() { { add(CLIENT); } };
+        List<Client> clients = new ArrayList<>() {
+            { add(CLIENT); }
+        };
         when(clientRepository.findAll()).thenReturn(clients);
 
         List<Client> sut = clientRepository.findAll();

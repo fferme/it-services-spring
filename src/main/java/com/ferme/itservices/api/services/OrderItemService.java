@@ -1,7 +1,5 @@
 package com.ferme.itservices.api.services;
 
-import com.ferme.itservices.api.dtos.OrderItemDTO;
-import com.ferme.itservices.api.dtos.mappers.OrderItemMapper;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.OrderItem;
@@ -32,14 +30,14 @@ public class OrderItemService {
 
     public List<OrderItem> listAll() {
         return orderItemRepository.findAll()
-                .stream()
-                .sorted(Comparator.comparing(OrderItem::getDescription))
-                .collect(Collectors.toList());
+                                  .stream()
+                                  .sorted(Comparator.comparing(OrderItem::getDescription))
+                                  .collect(Collectors.toList());
     }
 
     public OrderItem findById(@Valid @NotNull UUID id) {
         return orderItemRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
+                                  .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
     }
 
     public OrderItem create(@Valid @NotNull OrderItem orderItem) {
@@ -48,7 +46,8 @@ public class OrderItemService {
 
     public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
         OrderItem existingOrderItem = findById(id);
-        existingOrderItem.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(updatedOrderItem.getOrderItemType().getValue()));
+        existingOrderItem.setOrderItemType(
+            OrderItemTypeConverter.convertOrderItemTypeValue(updatedOrderItem.getOrderItemType().getValue()));
         existingOrderItem.setDescription(updatedOrderItem.getDescription());
         existingOrderItem.setCashPrice(updatedOrderItem.getCashPrice());
         existingOrderItem.setInstallmentPrice(updatedOrderItem.getInstallmentPrice());
@@ -72,6 +71,7 @@ public class OrderItemService {
             reader.beginArray();
             while (reader.hasNext()) {
                 OrderItem orderItem = gson.fromJson(reader, OrderItem.class);
+                System.out.println(reader);
                 orderItemRepository.save(orderItem);
             }
             reader.endArray();

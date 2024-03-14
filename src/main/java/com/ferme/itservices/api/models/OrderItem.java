@@ -2,10 +2,7 @@ package com.ferme.itservices.api.models;
 
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,4 +40,7 @@ public class OrderItem extends BaseEntity implements Serializable {
     @DecimalMax(value = "9999.00", message = "Installment price must be max 9999.00")
     @Column(length = 7, nullable = false)
     private Double installmentPrice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Order order;
 }

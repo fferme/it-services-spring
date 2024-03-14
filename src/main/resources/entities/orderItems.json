@@ -1,86 +1,80 @@
 [
   {
     "orderItemType": "Mão de Obra",
+    "description": "Teste",
+    "cashPrice": 0.0,
+    "installmentPrice": 0.0
+  },
+  {
+    "orderItemType": "Mão de Obra",
     "description": "Backup de dados HD",
     "cashPrice": 80.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Backup de dados SSD",
     "cashPrice": 80.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Instalação Windows + Pacote Office",
     "cashPrice": 80.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Instalação Windows",
     "cashPrice": 60.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Serviço Simples",
     "cashPrice": 60.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Limpeza Completa",
     "cashPrice": 100.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Formatação de Armazenamento",
     "cashPrice": 70.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Mão de Obra",
     "description": "Montagem de PC",
     "cashPrice": 100.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Troca de Peça",
     "description": "HDD para SSD",
     "cashPrice": 70.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Troca de Peça",
     "description": "Fonte",
     "cashPrice": 70.00,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Transporte",
     "description": "Ida",
     "cashPrice": 0.0,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   },
   {
     "orderItemType": "Transporte",
     "description": "Volta",
     "cashPrice": 0.0,
-    "installmentPrice": 0.0,
-    "isPayed": false
+    "installmentPrice": 0.0
   }
 ]
