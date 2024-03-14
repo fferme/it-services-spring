@@ -30,12 +30,17 @@ public class OrderItemTypeConverter implements AttributeConverter<OrderItemType,
 
     @Override
     public OrderItemType convertToEntityAttribute(String value) {
-        return (value == null)
-            ? null
-            : Stream.of(OrderItemType.values())
-                    .filter(c -> c.getValue().equals(value))
-                    .findFirst()
-                    .orElseThrow(IllegalArgumentException::new);
+        if (value == null) {
+            return null;
+        }
+
+        for (OrderItemType itemType : OrderItemType.values()) {
+            if (itemType.getValue().equals(value)) {
+                return itemType;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid order item type: " + value);
     }
 
 }

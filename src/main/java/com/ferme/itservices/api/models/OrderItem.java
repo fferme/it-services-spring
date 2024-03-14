@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import jakarta.persistence.*;

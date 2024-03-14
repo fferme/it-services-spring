@@ -1,22 +1,28 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -62,24 +68,44 @@ public class OrderItemService {
         orderItemRepository.deleteAll();
     }
 
-    public void exportDataToOrderItem() {
+    public void exportDataToOrderItem() throws IOException {
+        orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
+    }
+
+    public List<OrderItem> readJsonData(String filePath) {
+        List<OrderItem> orderItems = new ArrayList<>();
+
         try {
-            InputStream stream = new FileInputStream("src/main/resources/entities/orderItems.json");
-            JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-            Gson gson = new Gson();
+            ObjectMapper objectMapper = new ObjectMapper();
+            File path = new File(filePath);
+            JsonNode jsonArrayNode = objectMapper.readTree(path);
 
-            reader.beginArray();
-            while (reader.hasNext()) {
-                OrderItem orderItem = gson.fromJson(reader, OrderItem.class);
-                System.out.println(reader);
-                orderItemRepository.save(orderItem);
+            if (jsonArrayNode.isArray()) {
+                ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
+
+                for (JsonNode orderItemNode: arrayNode) {
+                    String orderItemTypeRaw = orderItemNode.get("orderItemType").asText();
+                    OrderItemType orderItemType = OrderItemTypeConverter.convertOrderItemTypeValue(orderItemTypeRaw);
+                    String description = orderItemNode.get("description").asText();
+                    Double cashPrice = orderItemNode.get("cashPrice").asDouble();
+                    Double installmentPrice = orderItemNode.get("installmentPrice").asDouble();
+
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setOrderItemType(orderItemType);
+                    orderItem.setDescription(description);
+                    orderItem.setCashPrice(cashPrice);
+                    orderItem.setInstallmentPrice(installmentPrice);
+
+                    orderItems.add(orderItem);
+                }
+            } else {
+                System.out.println("File does not contain a JSON array");
             }
-            reader.endArray();
-            reader.close();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error when reading JSON array: " + e.getMessage());
         }
+
+        return orderItems;
     }
 
 }
