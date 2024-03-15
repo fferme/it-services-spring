@@ -1,5 +1,7 @@
 package com.ferme.itservices.api.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -7,19 +9,29 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 @Data
 @Entity
 @Table(name = "`order`")
-public class Order extends BaseEntity implements Serializable {
+public class Order implements Serializable {
+    @Id
+    @JsonProperty("_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID id;
+
     @NotEmpty
     @Size(max = 95)
     @Column(length = 95, nullable = false, updatable = false)
@@ -41,6 +53,25 @@ public class Order extends BaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
+    @Column(nullable = false, updatable = false)
+    private Date createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
+    @Column(nullable = false)
+    private Date updatedAt;
+
+    @PrePersist
+    private void onCreate() {
+        this.setCreatedAt(Date.from(Instant.now()));
+        this.setUpdatedAt(Date.from(Instant.now()));
+    }
+
+    @PreUpdate
+    private void onUpdate() {
+        this.setUpdatedAt(Date.from(Instant.now()));
+    }
 
     @Override
     public boolean equals(Object o) {
