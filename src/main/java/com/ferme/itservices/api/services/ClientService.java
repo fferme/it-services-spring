@@ -1,10 +1,11 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,15 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Validated
@@ -69,17 +64,44 @@ public class ClientService {
         clientRepository.deleteAll();
     }
 
-    public void exportDataToClient() throws IOException {
-        InputStream stream = new FileInputStream("src/main/resources/entities/clients.json");
-        JsonReader reader = new JsonReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
-        Gson gson = new Gson();
+    private static List<Client> readJsonData(String filePath) {
+        List<Client> clients = new ArrayList<>();
 
-        reader.beginArray();
-        while (reader.hasNext()) {
-            Client client = gson.fromJson(reader, Client.class);
-            clientRepository.save(client);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File path = new File(filePath);
+            JsonNode jsonArrayNode = objectMapper.readTree(path);
+
+            if (jsonArrayNode.isArray()) {
+                ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
+
+                for (JsonNode clientNode : arrayNode) {
+                    String name = clientNode.get("name").asText();
+                    String phoneNumber = clientNode.get("phoneNumber").asText();
+                    String neighborhood = clientNode.get("neighborhood").asText();
+                    String address = clientNode.get("address").asText();
+                    String reference = clientNode.get("reference").asText();
+
+                    Client client = new Client();
+                    client.setName(name);
+                    client.setPhoneNumber(phoneNumber);
+                    client.setNeighborhood(neighborhood);
+                    client.setAddress(address);
+                    client.setReference(reference);
+
+                    clients.add(client);
+                }
+            } else {
+                System.out.println("File does not contain a JSON array");
+            }
+        } catch (IOException e) {
+            System.out.println("Error when reading JSON array: " + e.getMessage());
         }
-        reader.endArray();
-        reader.close();
+
+        return clients;
+    }
+
+    public void exportDataToClient() throws IOException {
+        clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
     }
 }

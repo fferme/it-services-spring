@@ -8,20 +8,14 @@ import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -72,7 +66,7 @@ public class OrderItemService {
         orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
     }
 
-    public List<OrderItem> readJsonData(String filePath) {
+    private static List<OrderItem> readJsonData(String filePath) {
         List<OrderItem> orderItems = new ArrayList<>();
 
         try {
