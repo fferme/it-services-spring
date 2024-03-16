@@ -51,7 +51,7 @@ public class Order implements Serializable {
     @Column(length = 250)
     private String problems;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Client client;
 

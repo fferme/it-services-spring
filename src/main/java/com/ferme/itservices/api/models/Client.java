@@ -26,7 +26,7 @@ import java.util.UUID;
 @Builder
 @Data
 @Entity
-@Table(name = "  client")
+@Table(name = "client")
 public class Client implements Serializable {
     @Id
     @JsonProperty("_id")
