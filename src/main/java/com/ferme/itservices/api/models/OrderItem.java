@@ -1,11 +1,12 @@
 package com.ferme.itservices.api.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
+import com.ferme.itservices.api.utils.models.Timestamps;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +15,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,22 +56,8 @@ public class OrderItem implements Serializable {
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
-    @Column(nullable = false, updatable = false)
-    private Date createdAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
-    @Column(nullable = false)
-    private Date updatedAt;
-
-    @PrePersist
-    private void onCreate() {
-        this.setCreatedAt(Date.from(Instant.now()));
-        this.setUpdatedAt(Date.from(Instant.now()));
-    }
-
-    @PreUpdate
-    private void onUpdate() {
-        this.setUpdatedAt(Date.from(Instant.now()));
-    }
+    @Embedded
+    @Valid
+    @NotNull
+    private Timestamps timestamps = new Timestamps();
 }
