@@ -51,7 +51,19 @@ public class Order implements Serializable {
     @Column(length = 250)
     private String problems;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "rel_order_orderItems",
+        joinColumns = {
+            @JoinColumn(name = "order_id", referencedColumnName = "id")
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "orderItem_id",  referencedColumnName = "id")
+        }
+    )
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")

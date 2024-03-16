@@ -1,6 +1,7 @@
 package com.ferme.itservices.api.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
@@ -14,14 +15,16 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order_Item")
+@Table(name = "orderItem")
 public class OrderItem implements Serializable {
     @Id
     @JsonProperty("_id")
@@ -50,8 +53,9 @@ public class OrderItem implements Serializable {
     @Column(length = 7, nullable = false)
     private Double installmentPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    @ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Order> orders = new ArrayList<>();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     @Column(nullable = false, updatable = false)

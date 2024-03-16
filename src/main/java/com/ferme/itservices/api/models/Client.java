@@ -16,7 +16,9 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -24,7 +26,7 @@ import java.util.UUID;
 @Builder
 @Data
 @Entity
-@Table(name = "client")
+@Table(name = "  client")
 public class Client implements Serializable {
     @Id
     @JsonProperty("_id")
@@ -55,6 +57,9 @@ public class Client implements Serializable {
     @Size(max = 70)
     @Column(length = 70)
     private String reference;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Sao_Paulo")
     @Column(nullable = false, updatable = false)
