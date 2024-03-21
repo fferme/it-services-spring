@@ -2,6 +2,10 @@ package com.ferme.itservices.api.controllers;
 
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.services.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -18,11 +22,17 @@ import java.util.UUID;
 @RestController
 @Transactional
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/clients")
+@RequestMapping(value = "/api/clients", produces = {"application/json"})
+@Tag(name = "Client-Controller")
 public class ClientController {
     private ClientService clientService;
 
     @GetMapping
+    @Operation(summary = "Recupera lista de clientes", method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Sucesso ao recuperar lista de clientes"),
+        @ApiResponse(responseCode = "400", description = "Erro ao realizar requisição")
+    })
     public List<Client> listAll() {
         return clientService.listAll();
     }

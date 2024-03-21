@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
 @Entity
 @Table(name = "client")
