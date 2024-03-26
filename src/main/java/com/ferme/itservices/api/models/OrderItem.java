@@ -42,15 +42,10 @@ public class OrderItem implements Serializable {
     @Column(length = 70, nullable = false)
     private String description;
 
-    @DecimalMin(value = "0.0", message = "Cash price must be minimum 0.0")
-    @DecimalMax(value = "9999.00", message = "Cash price must be max 9999.00")
+    @DecimalMin(value = "0.0", message = "Price must be minimum 0.0")
+    @DecimalMax(value = "9999.00", message = "Price must be max 9999.00")
     @Column(length = 7, nullable = false)
-    private Double cashPrice;
-
-    @DecimalMin(value = "0.0", message = "Installment price must be minimum 0.0")
-    @DecimalMax(value = "9999.00", message = "Installment price must be max 9999.00")
-    @Column(length = 7, nullable = false)
-    private Double installmentPrice;
+    private Double price;
 
     @ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
     @JsonIgnore
