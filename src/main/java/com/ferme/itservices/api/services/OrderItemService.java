@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import jakarta.validation.Valid;
@@ -16,10 +17,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Validated
@@ -33,37 +31,6 @@ public class OrderItemService {
                                   .stream()
                                   .sorted(Comparator.comparing(OrderItem::getDescription))
                                   .collect(Collectors.toList());
-    }
-
-    public OrderItem findById(@Valid @NotNull UUID id) {
-        return orderItemRepository.findById(id)
-                                  .orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id));
-    }
-
-    public OrderItem create(@Valid @NotNull OrderItem orderItem) {
-        return orderItemRepository.save(orderItem);
-    }
-
-    public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
-        OrderItem existingOrderItem = findById(id);
-        existingOrderItem.setOrderItemType(
-            OrderItemTypeConverter.convertOrderItemTypeValue(updatedOrderItem.getOrderItemType().getValue()));
-        existingOrderItem.setDescription(updatedOrderItem.getDescription());
-        existingOrderItem.setCashPrice(updatedOrderItem.getCashPrice());
-        existingOrderItem.setInstallmentPrice(updatedOrderItem.getInstallmentPrice());
-        return orderItemRepository.save(existingOrderItem);
-    }
-
-    public void deleteById(@NotNull UUID id) {
-        orderItemRepository.deleteById(id);
-    }
-
-    public void deleteAll() {
-        orderItemRepository.deleteAll();
-    }
-
-    public void exportDataToOrderItem() throws IOException {
-        orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
     }
 
     private static List<OrderItem> readJsonData(String filePath) {
@@ -81,14 +48,12 @@ public class OrderItemService {
                     String orderItemTypeRaw = orderItemNode.get("orderItemType").asText();
                     OrderItemType orderItemType = OrderItemTypeConverter.convertOrderItemTypeValue(orderItemTypeRaw);
                     String description = orderItemNode.get("description").asText();
-                    Double cashPrice = orderItemNode.get("cashPrice").asDouble();
-                    Double installmentPrice = orderItemNode.get("installmentPrice").asDouble();
+                    Double price = orderItemNode.get("price").asDouble();
 
                     OrderItem orderItem = new OrderItem();
                     orderItem.setOrderItemType(orderItemType);
                     orderItem.setDescription(description);
-                    orderItem.setCashPrice(cashPrice);
-                    orderItem.setInstallmentPrice(installmentPrice);
+                    orderItem.setPrice(price);
 
                     orderItems.add(orderItem);
                 }
@@ -100,6 +65,39 @@ public class OrderItemService {
         }
 
         return orderItems;
+    }
+
+    public OrderItem create(@Valid @NotNull OrderItem orderItem) {
+        return orderItemRepository.save(orderItem);
+    }
+
+    public Optional<OrderItem> findById(@Valid @NotNull UUID id) {
+        return orderItemRepository.findById(id);
+    }
+
+    public void deleteById(@NotNull UUID id) {
+        orderItemRepository.deleteById(id);
+    }
+
+    public void deleteAll() {
+        orderItemRepository.deleteAll();
+    }
+
+    public void exportDataToOrderItem() throws IOException {
+        orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
+    }
+
+    public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
+        return orderItemRepository.findById(id)
+                                  .map(orderItemFound -> {
+                                      orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(
+                                          updatedOrderItem.getOrderItemType().getValue()));
+                                      orderItemFound.setDescription(updatedOrderItem.getDescription());
+                                      orderItemFound.setPrice(updatedOrderItem.getPrice());
+
+                                      return orderItemRepository.save(orderItemFound);
+
+                                  }).orElseThrow(() -> new RecordNotFoundException(Client.class, id));
     }
 
 }
