@@ -17,6 +17,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -53,7 +54,7 @@ public class OrderController {
                     })
     })
     @GetMapping("/{id}")
-    public Order findById(@PathVariable @NotNull UUID id) {
+    public Optional<Order> findById(@PathVariable @NotNull UUID id) {
         return orderService.findById(id);
     }
 

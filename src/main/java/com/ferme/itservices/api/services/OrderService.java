@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Validated
@@ -22,9 +23,8 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Order findById(@Valid @NotNull UUID id) {
-        return orderRepository.findById(id)
-                              .orElseThrow(() -> new RecordNotFoundException(Order.class, id));
+    public Optional<Order> findById(@Valid @NotNull UUID id) {
+        return orderRepository.findById(id);
     }
 
     public Order create(@Valid @NotNull Order order) {
@@ -32,11 +32,17 @@ public class OrderService {
     }
 
     public Order update(@NotNull UUID id, @Valid @NotNull Order updatedOrder) {
-        Order existingOrder = findById(id);
-        existingOrder.setDeviceName(updatedOrder.getDeviceName());
-        existingOrder.setDeviceSN(updatedOrder.getDeviceSN());
-        existingOrder.setProblems(updatedOrder.getProblems());
-        return orderRepository.save(existingOrder);
+        return orderRepository.findById(id)
+                              .map(orderFound -> {
+                                  orderFound.setDeviceName(updatedOrder.getDeviceName());
+                                  orderFound.setDeviceSN(updatedOrder.getDeviceSN());
+                                  orderFound.setProblems(updatedOrder.getProblems());
+                                  orderFound.setClient(updatedOrder.getClient());
+                                  orderFound.setOrderItems(updatedOrder.getOrderItems());
+
+                                  return orderRepository.save(orderFound);
+
+                              }).orElseThrow(() -> new RecordNotFoundException(Order.class, id));
     }
 
     public void deleteById(@NotNull UUID id) {
