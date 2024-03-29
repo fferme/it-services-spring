@@ -15,6 +15,7 @@ import static com.ferme.itservices.common.OrderConstants.INVALID_ORDER;
 import static com.ferme.itservices.common.OrderConstants.ORDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -86,4 +87,10 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void deleteOrder_WithExistingId_doesNotThrowAnyException(
+    public void deleteOrder_WithUnexistingId_ThrowsException() {
+        UUID unexistingUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+        doThrow(new RuntimeException()).when(orderRepository).deleteById(unexistingUUID);
+
+        assertThatThrownBy(() -> orderService.deleteById(unexistingUUID)).isInstanceOf(RuntimeException.class);
+    }
+}
