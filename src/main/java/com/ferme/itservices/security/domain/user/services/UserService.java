@@ -1,12 +1,17 @@
 package com.ferme.itservices.security.domain.user.services;
 
+import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
+import com.ferme.itservices.security.domain.user.enums.UserRole;
+import com.ferme.itservices.security.domain.user.enums.converters.UserRoleConverter;
 import com.ferme.itservices.security.domain.user.models.User;
 import com.ferme.itservices.security.domain.user.repositories.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -33,7 +38,19 @@ public class UserService {
 	}
 
 	public User create(@Valid @NotNull User user) {
-		return userRepository.save(user);
+		if (userRepository.findByUsername(user.getUsername()) != null) {
+			throw new RecordAlreadyExistsException(User.class, user.getUsername());
+		}
+
+		String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+		UserRole userRole = UserRoleConverter.convertToUserRoleValue(user.getUserRole().getValue());
+		User newUSer = User.builder()
+		   .username(user.getUsername())
+		   .password(encryptedPassword)
+		   .userRole(userRole)
+			.build();
+
+		return userRepository.save(newUSer);
 	}
 
 	public User update(@NotBlank String username, @Valid @NotNull User newUser) {

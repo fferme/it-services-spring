@@ -1,5 +1,6 @@
 package com.ferme.itservices.security.domain.user.enums.converters;
 
+import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.security.domain.user.enums.UserRole;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
@@ -24,4 +25,14 @@ public class UserRoleConverter implements AttributeConverter<UserRole, String> {
                     .orElseThrow(IllegalArgumentException::new);
     }
 
+    public static UserRole convertToUserRoleValue(String value) {
+        return (value == null)
+           ? null
+           : switch (value) {
+                case "Owner" -> UserRole.OWNER;
+                case "Admin" -> UserRole.ADMIN;
+                case "Guest" -> UserRole.GUEST;
+                default -> throw new IllegalArgumentException("Tipo inválido de permissão do usuário: " + value);
+            };
+    }
 }

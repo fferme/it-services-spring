@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.Collection;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 @Entity(name = "users")
 @Table(name = "users")
@@ -40,6 +42,7 @@ public class User implements UserDetails {
 	@Embedded
 	@Valid
 	@NotNull
+	@Builder.Default
 	private Timestamps timestamps = new Timestamps();
 
 	@Override
