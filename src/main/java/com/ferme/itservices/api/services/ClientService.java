@@ -53,7 +53,7 @@ public class ClientService {
 
                                    return clientRepository.save(clientFound);
 
-                               }).orElseThrow(() -> new RecordNotFoundException(Client.class, id));
+                               }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
     }
 
     public void deleteById(@NotNull UUID id) {

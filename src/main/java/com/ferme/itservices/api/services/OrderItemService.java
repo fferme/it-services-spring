@@ -97,7 +97,7 @@ public class OrderItemService {
 
                                       return orderItemRepository.save(orderItemFound);
 
-                                  }).orElseThrow(() -> new RecordNotFoundException(Client.class, id));
+                                  }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
     }
 
 }

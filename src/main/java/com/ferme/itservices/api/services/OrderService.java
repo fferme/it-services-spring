@@ -42,7 +42,7 @@ public class OrderService {
 
                                   return orderRepository.save(orderFound);
 
-                              }).orElseThrow(() -> new RecordNotFoundException(Order.class, id));
+                              }).orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
     }
 
     public void deleteById(@NotNull UUID id) {

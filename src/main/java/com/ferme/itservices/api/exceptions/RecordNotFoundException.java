@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 public class RecordNotFoundException extends RuntimeException implements Serializable {
-    public RecordNotFoundException(Class<?> clazz, UUID id) {
+    public RecordNotFoundException(Class<?> clazz, String id) {
         super("Record not found in class " + clazz.getSimpleName() + " with id: " + id);
     }
 
