@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.controllers;
 
+import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,12 @@ public class ApplicationControllerAdvice {
     @ExceptionHandler(RecordNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFoundException(RecordNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(RecordAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleAlreadyExistsException(RecordAlreadyExistsException ex) {
         return ex.getMessage();
     }
 
