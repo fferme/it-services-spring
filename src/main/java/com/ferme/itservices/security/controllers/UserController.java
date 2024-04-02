@@ -1,7 +1,7 @@
-package com.ferme.itservices.security.domain.user.controllers;
+package com.ferme.itservices.security.controllers;
 
-import com.ferme.itservices.security.domain.user.models.User;
-import com.ferme.itservices.security.domain.user.services.UserService;
+import com.ferme.itservices.security.models.User;
+import com.ferme.itservices.security.services.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

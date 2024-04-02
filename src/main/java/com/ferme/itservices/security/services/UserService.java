@@ -1,16 +1,15 @@
-package com.ferme.itservices.security.domain.user.services;
+package com.ferme.itservices.security.services;
 
 import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.security.domain.user.enums.UserRole;
-import com.ferme.itservices.security.domain.user.enums.converters.UserRoleConverter;
-import com.ferme.itservices.security.domain.user.models.User;
-import com.ferme.itservices.security.domain.user.repositories.UserRepository;
+import com.ferme.itservices.security.enums.UserRole;
+import com.ferme.itservices.security.enums.converters.UserRoleConverter;
+import com.ferme.itservices.security.models.User;
+import com.ferme.itservices.security.repositories.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
