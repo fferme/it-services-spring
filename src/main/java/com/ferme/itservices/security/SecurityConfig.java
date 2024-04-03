@@ -27,6 +27,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/api/auth/users").hasRole("Owner")
 				.anyRequest().authenticated()
 			)
+			.addFilterBefore()
 			.build();
 	}
 

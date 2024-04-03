@@ -1,7 +1,6 @@
-package com.ferme.itservices.security.domain.user.enums.converters;
+package com.ferme.itservices.security.enums.converters;
 
-import com.ferme.itservices.api.enums.OrderItemType;
-import com.ferme.itservices.security.domain.user.enums.UserRole;
+import com.ferme.itservices.security.enums.UserRole;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

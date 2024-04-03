@@ -1,6 +1,6 @@
 package com.ferme.itservices.security.services;
 
-import com.ferme.itservices.security.domain.user.repositories.UserRepository;
+import com.ferme.itservices.security.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
