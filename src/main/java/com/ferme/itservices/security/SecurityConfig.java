@@ -3,6 +3,7 @@ package com.ferme.itservices.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @AllArgsConstructor
 @Configuration
@@ -24,13 +26,30 @@ private SecurityFilter securityFilter;
 		return httpSecurity
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//			.authorizeHttpRequests(authorize -> authorize
-//				.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-//				.requestMatchers(HttpMethod.GET, "/auth/users").hasRole("Owner")
-//				.requestMatchers(HttpMethod.POST, "/auth/users").permitAll()
-//				.anyRequest().authenticated()
-//			)
-//				  .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+				.requestMatchers(HttpMethod.GET, "/auth/users").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/auth/users").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.DELETE, "/auth/users").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, "/auth/users").hasRole("ADMIN")
+
+				.requestMatchers(HttpMethod.GET, "/api/clients").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/api/clients").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.DELETE, "/api/clients").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, "/api/clients").hasRole("ADMIN")
+
+				.requestMatchers(HttpMethod.GET, "/api/orders").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/api/orders").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.DELETE, "/api/orders").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, "/api/orders").hasRole("ADMIN")
+
+				.requestMatchers(HttpMethod.GET, "/api/orderItems").hasRole("USER")
+				.requestMatchers(HttpMethod.POST, "/api/orderItems").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.DELETE, "/api/orderItems").hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PUT, "/api/orderItems").hasRole("ADMIN")
+				.anyRequest().authenticated()
+			)
+			.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
 			.build();
 	}
 
