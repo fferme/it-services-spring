@@ -1,4 +1,4 @@
-package com.ferme.itservices.security.enums.validation;
+package com.ferme.itservices.jwt_auth.user.enums.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = ValueOfEnumValidator.class)
+@Constraint(validatedBy = com.ferme.itservices.jwt_auth.user.enums.validation.ValueOfEnumValidator.class)
 public @interface ValueOfEnum {
     Class<? extends Enum<?>> enumClass();
 

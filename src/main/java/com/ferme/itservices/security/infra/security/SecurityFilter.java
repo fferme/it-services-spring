@@ -1,7 +1,7 @@
-package com.ferme.itservices.security;
+package com.ferme.itservices.security.infra.security;
 
-import com.ferme.itservices.security.repositories.UserRepository;
-import com.ferme.itservices.security.services.TokenService;
+import com.ferme.itservices.jwt_auth.user.repositories.UserRepository;
+import com.ferme.itservices.security.application.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
 	private String recoverToken(HttpServletRequest request) {
 		var authHeader = request.getHeader("Authorization");
-		if (authHeader == null) return null;
-		return authHeader.replace("Bearer ", "");
+
+		return (authHeader == null)
+			? null
+			: authHeader.replace("Bearer ", "");
 	}
 }

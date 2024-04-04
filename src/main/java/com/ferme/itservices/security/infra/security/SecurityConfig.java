@@ -1,4 +1,4 @@
-package com.ferme.itservices.security;
+package com.ferme.itservices.security.infra.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-private SecurityFilter securityFilter;
+	private static final String[] SWAGGER_WHITELIST = {
+		"/v3/api-docs/**",
+		"/swagger-ui/**"
+	};
+	private SecurityFilter securityFilter;
 
 	@Bean
 	public SecurityFilterChain filters(HttpSecurity httpSecurity) throws Exception {
@@ -47,6 +51,8 @@ private SecurityFilter securityFilter;
 				.requestMatchers(HttpMethod.POST, "/api/orderItems").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.DELETE, "/api/orderItems").hasRole("ADMIN")
 				.requestMatchers(HttpMethod.PUT, "/api/orderItems").hasRole("ADMIN")
+
+				.requestMatchers(SWAGGER_WHITELIST).permitAll()
 				.anyRequest().authenticated()
 			)
 			.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

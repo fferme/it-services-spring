@@ -1,9 +1,9 @@
-package com.ferme.itservices.security.controllers;
+package com.ferme.itservices.security.application.controllers;
 
-import com.ferme.itservices.security.dtos.AuthenticationDTO;
-import com.ferme.itservices.security.dtos.LoginResponseDTO;
-import com.ferme.itservices.security.models.User;
-import com.ferme.itservices.security.services.TokenService;
+import com.ferme.itservices.jwt_auth.user.models.User;
+import com.ferme.itservices.security.application.dtos.AuthenticationDTO;
+import com.ferme.itservices.security.application.dtos.LoginResponseDTO;
+import com.ferme.itservices.security.application.services.TokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

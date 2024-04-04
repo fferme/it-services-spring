@@ -1,6 +1,6 @@
-package com.ferme.itservices.security.repositories;
+package com.ferme.itservices.jwt_auth.user.repositories;
 
-import com.ferme.itservices.security.models.User;
+import com.ferme.itservices.jwt_auth.user.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

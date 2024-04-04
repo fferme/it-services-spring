@@ -1,7 +1,7 @@
-package com.ferme.itservices.security.controllers;
+package com.ferme.itservices.jwt_auth.user.controllers;
 
-import com.ferme.itservices.security.models.User;
-import com.ferme.itservices.security.services.UserService;
+import com.ferme.itservices.jwt_auth.user.models.User;
+import com.ferme.itservices.jwt_auth.user.services.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

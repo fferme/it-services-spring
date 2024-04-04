@@ -1,8 +1,8 @@
-package com.ferme.itservices.security.models;
+package com.ferme.itservices.jwt_auth.user.models;
 
 import com.ferme.itservices.api.utils.models.Timestamps;
-import com.ferme.itservices.security.enums.UserRole;
-import com.ferme.itservices.security.enums.converters.UserRoleConverter;
+import com.ferme.itservices.jwt_auth.user.enums.UserRole;
+import com.ferme.itservices.jwt_auth.user.enums.converters.UserRoleConverter;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

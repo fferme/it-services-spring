@@ -1,11 +1,11 @@
-package com.ferme.itservices.security.services;
+package com.ferme.itservices.jwt_auth.user.services;
 
 import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.security.enums.UserRole;
-import com.ferme.itservices.security.enums.converters.UserRoleConverter;
-import com.ferme.itservices.security.models.User;
-import com.ferme.itservices.security.repositories.UserRepository;
+import com.ferme.itservices.jwt_auth.user.enums.UserRole;
+import com.ferme.itservices.jwt_auth.user.enums.converters.UserRoleConverter;
+import com.ferme.itservices.jwt_auth.user.models.User;
+import com.ferme.itservices.jwt_auth.user.repositories.UserRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

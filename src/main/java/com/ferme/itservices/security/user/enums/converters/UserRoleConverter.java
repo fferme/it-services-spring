@@ -1,6 +1,6 @@
-package com.ferme.itservices.security.enums.converters;
+package com.ferme.itservices.jwt_auth.user.enums.converters;
 
-import com.ferme.itservices.security.enums.UserRole;
+import com.ferme.itservices.jwt_auth.user.enums.UserRole;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
