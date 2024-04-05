@@ -23,6 +23,11 @@ public class SecurityConfig {
 		"/v3/api-docs/**",
 		"/swagger-ui/**"
 	};
+
+	private static final String[] AUTH_API_WHITELIST = {
+		"/v3/api-docs/**"
+	};
+
 	private SecurityFilter securityFilter;
 
 	@Bean
@@ -31,27 +36,10 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/auth/**").hasRole("ADMIN")
+				.requestMatchers("/api/**").hasRole("ADMIN")
+
 				.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-				.requestMatchers(HttpMethod.GET, "/auth/users").hasRole("USER")
-				.requestMatchers(HttpMethod.POST, "/auth/users").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.DELETE, "/auth/users").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.PUT, "/auth/users").hasRole("ADMIN")
-
-				.requestMatchers(HttpMethod.GET, "/api/clients").hasRole("USER")
-				.requestMatchers(HttpMethod.POST, "/api/clients").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.DELETE, "/api/clients").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.PUT, "/api/clients").hasRole("ADMIN")
-
-				.requestMatchers(HttpMethod.GET, "/api/orders").hasRole("USER")
-				.requestMatchers(HttpMethod.POST, "/api/orders").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.DELETE, "/api/orders").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.PUT, "/api/orders").hasRole("ADMIN")
-
-				.requestMatchers(HttpMethod.GET, "/api/orderItems").hasRole("USER")
-				.requestMatchers(HttpMethod.POST, "/api/orderItems").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.DELETE, "/api/orderItems").hasRole("ADMIN")
-				.requestMatchers(HttpMethod.PUT, "/api/orderItems").hasRole("ADMIN")
-
 				.requestMatchers(SWAGGER_WHITELIST).permitAll()
 				.anyRequest().authenticated()
 			)
