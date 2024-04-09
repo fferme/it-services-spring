@@ -1,7 +1,7 @@
 package com.ferme.itservices.security.infra.security;
 
-import com.ferme.itservices.jwt_auth.user.repositories.UserRepository;
 import com.ferme.itservices.security.application.services.TokenService;
+import com.ferme.itservices.security.user.repositories.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

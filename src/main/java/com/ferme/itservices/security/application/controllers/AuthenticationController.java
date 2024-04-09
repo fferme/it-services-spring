@@ -1,9 +1,16 @@
 package com.ferme.itservices.security.application.controllers;
 
-import com.ferme.itservices.jwt_auth.user.models.User;
+import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.security.application.dtos.AuthenticationDTO;
 import com.ferme.itservices.security.application.dtos.LoginResponseDTO;
 import com.ferme.itservices.security.application.services.TokenService;
+import com.ferme.itservices.security.user.models.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +26,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(value = "/auth", produces = {"application/json"})
+@Tag(name = "Authentication Controller")
 public class AuthenticationController {
 	private final AuthenticationManager authenticationManager;
 	private final TokenService tokenService;
 
+	@Operation(summary = "Efetua o login de usuário e retorna token", method = "POST")
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "201", description = "Sucesso ao logar com usuário informado",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Erro interno do servidor",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@PostMapping("/login")
 	public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) {
 		try {

@@ -1,4 +1,4 @@
-package com.ferme.itservices.jwt_auth.user.enums.validation;
+package com.ferme.itservices.security.user.enums.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ValueOfEnumValidator implements ConstraintValidator<com.ferme.itservices.jwt_auth.user.enums.validation.ValueOfEnum, CharSequence> {
+public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
     private List<String> acceptedValues;
 
     @Override
-    public void initialize(com.ferme.itservices.jwt_auth.user.enums.validation.ValueOfEnum annotation) {
+    public void initialize(ValueOfEnum annotation) {
         this.acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
                                     .map(Enum::toString)
                                     .collect(Collectors.toList());

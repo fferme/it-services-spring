@@ -1,7 +1,7 @@
-package com.ferme.itservices.jwt_auth.user.controllers;
+package com.ferme.itservices.security.user.controllers;
 
-import com.ferme.itservices.jwt_auth.user.models.User;
-import com.ferme.itservices.jwt_auth.user.services.UserService;
+import com.ferme.itservices.security.user.models.User;
+import com.ferme.itservices.security.user.services.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @AllArgsConstructor
 @RestController
