@@ -24,10 +24,6 @@ public class SecurityConfig {
 		"/swagger-ui/**"
 	};
 
-	private static final String[] AUTH_API_WHITELIST = {
-		"/v3/api-docs/**"
-	};
-
 	private SecurityFilter securityFilter;
 
 	@Bean
@@ -36,10 +32,10 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 				.requestMatchers("/auth/**").hasRole("ADMIN")
 				.requestMatchers("/api/**").hasRole("ADMIN")
 
-				.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 				.requestMatchers(SWAGGER_WHITELIST).permitAll()
 				.anyRequest().authenticated()
 			)
