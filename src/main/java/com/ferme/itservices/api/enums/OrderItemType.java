@@ -18,8 +18,11 @@ public enum OrderItemType {
     @JsonProperty("Mão de Obra")
     MANPOWER("Mão de Obra"),
 
-    @JsonProperty("Transporte")
-    CARRIAGE("Transporte");
+    @JsonProperty("Transporte Ida")
+    CARRIAGE_GOING("Transporte Ida"),
+
+    @JsonProperty("Transporte Volta")
+    CARRIAGE_BACK("Transporte Volta");
 
     private final String value;
 }
