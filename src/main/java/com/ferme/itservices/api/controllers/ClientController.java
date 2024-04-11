@@ -26,7 +26,7 @@ import java.util.UUID;
 @Transactional
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/clients", produces = {"application/json"})
-@Tag(name = "Client-Controller")
+@Tag(name = "Client Controller")
 public class ClientController {
     private ClientService clientService;
 
