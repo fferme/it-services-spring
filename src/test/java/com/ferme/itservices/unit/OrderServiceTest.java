@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.repositories.OrderRepository;
@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static com.ferme.itservices.common.OrderConstants.INVALID_ORDER;
-import static com.ferme.itservices.common.OrderConstants.ORDER;
+import static com.ferme.itservices.common.OrderConstants.VALID_ORDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
@@ -28,11 +28,11 @@ public class OrderServiceTest {
 
     @Test
     public void createOrder_WithValidData_ReturnsOrder() {
-        when(orderRepository.save(ORDER)).thenReturn(ORDER);
+        when(orderRepository.save(VALID_ORDER)).thenReturn(VALID_ORDER);
 
-        Order sut = orderService.create(ORDER);
+        Order sut = orderService.create(VALID_ORDER);
 
-        assertThat(sut).isEqualTo(ORDER);
+        assertThat(sut).isEqualTo(VALID_ORDER);
     }
 
     @Test
@@ -45,12 +45,12 @@ public class OrderServiceTest {
     @Test
     public void getOrder_ByExistingId_ReturnsOrder() {
         UUID uuid = UUID.randomUUID();
-        when(orderRepository.findById(uuid)).thenReturn(Optional.of(ORDER));
+        when(orderRepository.findById(uuid)).thenReturn(Optional.of(VALID_ORDER));
 
         Optional<Order> sut = orderService.findById(uuid);
 
         assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(ORDER);
+        assertThat(sut.get()).isEqualTo(VALID_ORDER);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class OrderServiceTest {
     @Test
     public void listOrders_ReturnsAllOrders() {
         List<Order> orders = new ArrayList<>() {
-            { add(ORDER); }
+            { add(VALID_ORDER); }
         };
         when(orderRepository.findAll()).thenReturn(orders);
 
@@ -74,7 +74,7 @@ public class OrderServiceTest {
 
         assertThat(sut).isNotEmpty();
         assertThat(sut).hasSize(1);
-        assertThat(sut.getFirst()).isEqualTo(ORDER);
+        assertThat(sut.getFirst()).isEqualTo(VALID_ORDER);
     }
 
     @Test

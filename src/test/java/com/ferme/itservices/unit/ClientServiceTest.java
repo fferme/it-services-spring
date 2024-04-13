@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static com.ferme.itservices.common.ClientConstants.CLIENT;
 import static com.ferme.itservices.common.ClientConstants.INVALID_CLIENT;
+import static com.ferme.itservices.common.ClientConstants.VALID_CLIENT;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -27,11 +27,11 @@ public class ClientServiceTest {
 
     @Test
     public void createClient_WithValidData_ReturnsClient() {
-        when(clientRepository.save(CLIENT)).thenReturn(CLIENT);
+        when(clientRepository.save(VALID_CLIENT)).thenReturn(VALID_CLIENT);
 
-        Client sut = clientService.create(CLIENT);
+        Client sut = clientService.create(VALID_CLIENT);
 
-        assertThat(sut).isEqualTo(CLIENT);
+        assertThat(sut).isEqualTo(VALID_CLIENT);
     }
 
     @Test
@@ -44,12 +44,12 @@ public class ClientServiceTest {
     @Test
     public void getClient_ByExistingId_ReturnsClient() {
         UUID uuid = UUID.randomUUID();
-        when(clientRepository.findById(uuid)).thenReturn(Optional.of(CLIENT));
+        when(clientRepository.findById(uuid)).thenReturn(Optional.of(VALID_CLIENT));
 
         Optional<Client> sut = clientService.findById(uuid);
 
         assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(CLIENT);
+        assertThat(sut.get()).isEqualTo(VALID_CLIENT);
     }
 
     @Test
@@ -64,12 +64,12 @@ public class ClientServiceTest {
 
     @Test
     public void getClient_ByExistingName_ReturnsClient() {
-        when(clientRepository.findByName(CLIENT.getName())).thenReturn(Optional.of(CLIENT));
+        when(clientRepository.findByName(VALID_CLIENT.getName())).thenReturn(Optional.of(VALID_CLIENT));
 
-        Optional<Client> sut = clientService.findByName(CLIENT.getName());
+        Optional<Client> sut = clientService.findByName(VALID_CLIENT.getName());
 
         assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(CLIENT);
+        assertThat(sut.get()).isEqualTo(VALID_CLIENT);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ClientServiceTest {
     @Test
     public void listClients_ReturnsAllClients() {
         List<Client> clients = new ArrayList<>() {
-            { add(CLIENT); }
+            { add(VALID_CLIENT); }
         };
         when(clientRepository.findAll()).thenReturn(clients);
 
@@ -93,7 +93,7 @@ public class ClientServiceTest {
 
         assertThat(sut).isNotEmpty();
         assertThat(sut).hasSize(1);
-        assertThat(sut.getFirst()).isEqualTo(CLIENT);
+        assertThat(sut.getFirst()).isEqualTo(VALID_CLIENT);
     }
 
     @Test

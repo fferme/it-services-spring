@@ -1,4 +1,4 @@
-package com.ferme.itservices.orderItem;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
-import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM;
+import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -27,11 +27,11 @@ public class OrderItemServiceTest {
 
     @Test
     public void createOrderItem_WithValidData_ReturnsClient() {
-        when(orderItemRepository.save(ORDERITEM)).thenReturn(ORDERITEM);
+        when(orderItemRepository.save(VALID_ORDERITEM)).thenReturn(VALID_ORDERITEM);
 
-        OrderItem sut = orderItemService.create(ORDERITEM);
+        OrderItem sut = orderItemService.create(VALID_ORDERITEM);
 
-        assertThat(sut).isEqualTo(ORDERITEM);
+        assertThat(sut).isEqualTo(VALID_ORDERITEM);
     }
 
     @Test
@@ -44,12 +44,12 @@ public class OrderItemServiceTest {
     @Test
     public void getOrderItem_ByExistingId_ReturnsOrderItem() {
         UUID uuid = UUID.randomUUID();
-        when(orderItemRepository.findById(uuid)).thenReturn(Optional.of(ORDERITEM));
+        when(orderItemRepository.findById(uuid)).thenReturn(Optional.of(VALID_ORDERITEM));
 
         Optional<OrderItem> sut = orderItemService.findById(uuid);
 
         assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(ORDERITEM);
+        assertThat(sut.get()).isEqualTo(VALID_ORDERITEM);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class OrderItemServiceTest {
     @Test
     public void listOrderItems_ReturnsAllOrderItems() {
         List<OrderItem> orderItems = new ArrayList<>() {
-            { add(ORDERITEM); }
+            { add(VALID_ORDERITEM); }
         };
         when(orderItemRepository.findAll()).thenReturn(orderItems);
 
@@ -73,7 +73,7 @@ public class OrderItemServiceTest {
 
         assertThat(sut).isNotEmpty();
         assertThat(sut).hasSize(1);
-        assertThat(sut.getFirst()).isEqualTo(ORDERITEM);
+        assertThat(sut.getFirst()).isEqualTo(VALID_ORDERITEM);
     }
 
     @Test

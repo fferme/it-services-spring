@@ -1,24 +1,26 @@
 package com.ferme.itservices.common;
 
 import com.ferme.itservices.api.models.Order;
-import com.ferme.itservices.api.utils.models.DateUtils;
-import com.ferme.itservices.api.utils.models.Timestamps;
 
-import java.util.Date;
-import java.util.UUID;
+import static com.ferme.itservices.common.ClientConstants.INVALID_CLIENT;
+import static com.ferme.itservices.common.ClientConstants.VALID_CLIENT;
+import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_INVALID_LIST;
+import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_LIST;
 
 public class OrderConstants {
-    public static final Order INVALID_ORDER = new Order(UUID.randomUUID(), null, null, null, null, null, null, null);
-    private static final Date date = DateUtils.parseDate("2024-03-19 22:00:00");
-    private static final Timestamps timestamps = new Timestamps(date, date);
-    public static final Order ORDER = new Order(
-        UUID.randomUUID(),
-        "",
-        "Asus Notebook AB9299",
-        "9128902183912839021",
-        "Erro ao iniciar sistema",
-        ClientConstants.CLIENT,
-        OrderItemConstants.ORDERITEM_LIST,
-        timestamps
-    );
+    public static final Order INVALID_ORDER = Order.builder()
+       .deviceName("")
+       .deviceSN("")
+       .problems("")
+       .client(INVALID_CLIENT)
+       .orderItems(ORDERITEM_INVALID_LIST)
+       .build();
+
+    public static final Order VALID_ORDER = Order.builder()
+       .deviceName("Asus Notebook AB9299")
+       .deviceSN("9128902183912839021")
+       .problems("Erro ao iniciar sistema")
+       .client(VALID_CLIENT)
+       .orderItems(ORDERITEM_LIST)
+       .build();
 }
