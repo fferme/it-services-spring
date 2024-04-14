@@ -2,6 +2,7 @@ package com.ferme.itservices.security.user.services;
 
 import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.utils.models.Timestamps;
 import com.ferme.itservices.security.user.enums.UserRole;
 import com.ferme.itservices.security.user.enums.converters.UserRoleConverter;
 import com.ferme.itservices.security.user.models.User;
@@ -10,7 +11,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -42,15 +42,15 @@ public class UserService {
 			throw new RecordAlreadyExistsException(User.class, user.getUsername());
 		}
 
-		String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
 		UserRole userRole = UserRoleConverter.convertToUserRoleValue(user.getUserRole().getValue());
-		User newUSer = User.builder()
+		User newUser = User.builder()
 		   .username(user.getUsername())
-		   .password(encryptedPassword)
+			.password(user.getPassword())
 		   .userRole(userRole)
+			.timestamps(new Timestamps())
 			.build();
 
-		return userRepository.save(newUSer);
+		return userRepository.save(newUser);
 	}
 
 	public User update(@NotBlank String username, @Valid @NotNull User newUser) {

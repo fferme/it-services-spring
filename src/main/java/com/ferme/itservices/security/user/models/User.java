@@ -40,7 +40,6 @@ public class User implements UserDetails {
 	@Embedded
 	@Valid
 	@NotNull
-	@Builder.Default
 	private Timestamps timestamps = new Timestamps();
 
 	@Override

@@ -2,8 +2,6 @@ package com.ferme.itservices.common;
 
 import com.ferme.itservices.api.models.Client;
 
-import java.text.ParseException;
-
 public class ClientConstants {
     public static final Client VALID_CLIENT = Client.builder()
        .name("José Pereira")
@@ -20,6 +18,4 @@ public class ClientConstants {
        .address("")
        .reference("")
        .build();
-
-    public ClientConstants() throws ParseException { }
 }
