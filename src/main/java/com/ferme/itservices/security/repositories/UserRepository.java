@@ -1,6 +1,6 @@
-package com.ferme.itservices.security.user.repositories;
+package com.ferme.itservices.security.repositories;
 
-import com.ferme.itservices.security.user.models.User;
+import com.ferme.itservices.security.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

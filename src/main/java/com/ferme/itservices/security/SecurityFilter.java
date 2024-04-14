@@ -1,7 +1,7 @@
-package com.ferme.itservices.security.infra.security;
+package com.ferme.itservices.security;
 
-import com.ferme.itservices.security.application.services.TokenService;
-import com.ferme.itservices.security.user.repositories.UserRepository;
+import com.ferme.itservices.security.repositories.UserRepository;
+import com.ferme.itservices.security.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

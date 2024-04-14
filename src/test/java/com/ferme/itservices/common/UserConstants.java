@@ -1,7 +1,7 @@
 package com.ferme.itservices.common;
 
-import com.ferme.itservices.security.user.enums.UserRole;
-import com.ferme.itservices.security.user.models.User;
+import com.ferme.itservices.security.enums.UserRole;
+import com.ferme.itservices.security.models.User;
 
 public class UserConstants {
 	public static final User VALID_USER = User.builder()

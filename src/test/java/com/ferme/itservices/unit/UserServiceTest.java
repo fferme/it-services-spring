@@ -1,8 +1,8 @@
 package com.ferme.itservices.unit;
 
-import com.ferme.itservices.security.user.models.User;
-import com.ferme.itservices.security.user.repositories.UserRepository;
-import com.ferme.itservices.security.user.services.UserService;
+import com.ferme.itservices.security.models.User;
+import com.ferme.itservices.security.repositories.UserRepository;
+import com.ferme.itservices.security.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

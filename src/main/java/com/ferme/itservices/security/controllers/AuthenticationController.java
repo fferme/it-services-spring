@@ -1,10 +1,10 @@
-package com.ferme.itservices.security.application.controllers;
+package com.ferme.itservices.security.controllers;
 
 import com.ferme.itservices.api.models.Client;
-import com.ferme.itservices.security.application.dtos.AuthenticationDTO;
-import com.ferme.itservices.security.application.dtos.LoginResponseDTO;
-import com.ferme.itservices.security.application.services.TokenService;
-import com.ferme.itservices.security.user.models.User;
+import com.ferme.itservices.security.dtos.AuthenticationDTO;
+import com.ferme.itservices.security.dtos.LoginResponseDTO;
+import com.ferme.itservices.security.models.User;
+import com.ferme.itservices.security.services.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,4 +1,4 @@
-package com.ferme.itservices.security.user.enums.validation;
+package com.ferme.itservices.security.enums.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

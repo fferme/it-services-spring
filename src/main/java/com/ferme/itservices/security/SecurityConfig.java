@@ -1,4 +1,4 @@
-package com.ferme.itservices.security.infra.security;
+package com.ferme.itservices.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;

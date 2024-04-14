@@ -1,4 +1,4 @@
-package com.ferme.itservices.security.application.dtos;
+package com.ferme.itservices.security.dtos;
 
 public record AuthenticationDTO(
 	String username,

@@ -1,4 +1,4 @@
-package com.ferme.itservices.security.user.enums;
+package com.ferme.itservices.security.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
