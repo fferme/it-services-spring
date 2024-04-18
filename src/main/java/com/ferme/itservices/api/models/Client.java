@@ -41,7 +41,7 @@ public class Client implements Serializable {
     @NotBlank
     @Pattern(regexp = "^\\(?(\\d{2})\\)?[- ]?(\\d{4,5})[- ]?(\\d{4})$")
     @Size(min = 8, max = 11, message = "Phone number must be minimum 10 characters")
-    @Column(name = "phone_number", length = 11, nullable = false, updatable = false)
+    @Column(name = "phone_number", length = 11, unique = true, nullable = false, updatable = false)
     private String phoneNumber;
 
     @Size(max = 20)

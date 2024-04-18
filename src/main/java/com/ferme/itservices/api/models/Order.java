@@ -42,7 +42,7 @@ public class Order implements Serializable {
     private String deviceName;
 
     @Size(max = 35)
-    @Column(name = "device_sn", length = 35)
+    @Column(name = "device_sn", unique = true, length = 35)
     private String deviceSN;
 
     @NotEmpty
