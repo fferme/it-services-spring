@@ -1,5 +1,6 @@
 package com.ferme.itservices.common;
 
+import com.ferme.itservices.api.utils.models.Timestamps;
 import com.ferme.itservices.security.enums.UserRole;
 import com.ferme.itservices.security.models.User;
 
@@ -8,6 +9,7 @@ public class UserConstants {
 		.username("jpaulo")
 		.password("Teste123")
 		.userRole(UserRole.GUEST)
+		.timestamps(new Timestamps())
 		.build();
 
 	public static final User INVALID_USER = User.builder()

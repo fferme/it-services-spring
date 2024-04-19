@@ -37,7 +37,7 @@ public class OrderItem implements Serializable {
 
     @NotBlank
     @Size(min = 3, max = 70, message = "Description must be minimum 5 characters")
-    @Column(length = 70, nullable = false)
+    @Column(length = 70, nullable = false, unique = true)
     private String description;
 
     @DecimalMin(value = "0.0", message = "Price must be minimum 0.0")

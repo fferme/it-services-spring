@@ -27,9 +27,8 @@ public class Order implements Serializable {
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
 
-    @NotBlank
     @Size(max = 95)
-    @Column(length = 95, nullable = false, updatable = false)
+    @Column(length = 95, updatable = false)
     private String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
 
     @NotBlank

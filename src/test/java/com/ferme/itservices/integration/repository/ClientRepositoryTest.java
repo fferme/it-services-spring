@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.repositories;
+package com.ferme.itservices.integration.repository;
 
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
@@ -37,7 +37,6 @@ public class ClientRepositoryTest {
 	@Test
 	public void createClient_WithInvalidData_ThrowsException() {
 		Client emptyClient = new Client();
-
 		assertThatThrownBy(() -> clientRepository.save(emptyClient)).isInstanceOf(RuntimeException.class);
 		assertThatThrownBy(() -> clientRepository.save(INVALID_CLIENT)).isInstanceOf(RuntimeException.class);
 	}
@@ -51,6 +50,4 @@ public class ClientRepositoryTest {
 
 		assertThatThrownBy(() -> clientRepository.save(client)).isInstanceOf(RuntimeException.class);
 	}
-
-
 }
