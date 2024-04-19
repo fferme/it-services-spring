@@ -7,7 +7,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
@@ -15,7 +14,6 @@ import java.util.Date;
 
 @Embeddable
 @AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Getter
 public class Timestamps {
@@ -27,7 +25,12 @@ public class Timestamps {
     @Column(nullable = false)
     protected Date updatedAt;
 
-    @PrePersist
+	public Timestamps() {
+		this.createdAt = Date.from(Instant.now());
+		this.updatedAt = Date.from(Instant.now());
+	}
+
+	@PrePersist
     private void onCreate() {
         this.setCreatedAt(Date.from(Instant.now()));
         this.setUpdatedAt(Date.from(Instant.now()));

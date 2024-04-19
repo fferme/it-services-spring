@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit;
+package com.ferme.itservices.unit.services;
 
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;

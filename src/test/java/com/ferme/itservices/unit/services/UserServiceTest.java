@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit;
+package com.ferme.itservices.unit.services;
 
 import com.ferme.itservices.security.models.User;
 import com.ferme.itservices.security.repositories.UserRepository;
