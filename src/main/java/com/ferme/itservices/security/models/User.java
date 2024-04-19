@@ -5,7 +5,7 @@ import com.ferme.itservices.security.enums.UserRole;
 import com.ferme.itservices.security.enums.converters.UserRoleConverter;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -27,7 +27,7 @@ public class User implements UserDetails {
 	@Column(length = 30, updatable = false, unique = true, nullable = false)
 	private String username;
 
-	@NotBlank
+	@NotEmpty
 	@Size(min = 4, message = "Password must be minimum 4 characters")
 	@Column(nullable = false)
 	private String password;

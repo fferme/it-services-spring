@@ -15,7 +15,10 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Validated
@@ -32,7 +35,7 @@ public class ClientService {
                       .collect(Collectors.toList());
     }
 
-    public Optional<Client> findById(@Valid @NotNull UUID id) {
+    public Optional<Client> findById(@Valid @NotNull Long id) {
         return clientRepository.findById(id);
     }
 
@@ -44,19 +47,19 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public Client update(@NotNull UUID id, @Valid @NotNull Client newClient) {
+    public Client update(@NotNull Long id, @Valid @NotNull Client newClient) {
         return clientRepository.findById(id)
-                               .map(clientFound -> {
-                                   clientFound.setNeighborhood(newClient.getNeighborhood());
-                                   clientFound.setAddress(newClient.getAddress());
-                                   clientFound.setReference(newClient.getReference());
+           .map(clientFound -> {
+               clientFound.setNeighborhood(newClient.getNeighborhood());
+               clientFound.setAddress(newClient.getAddress());
+               clientFound.setReference(newClient.getReference());
 
-                                   return clientRepository.save(clientFound);
+               return clientRepository.save(clientFound);
 
-                               }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
+           }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
     }
 
-    public void deleteById(@NotNull UUID id) {
+    public void deleteById(@NotNull Long id) {
         clientRepository.deleteById(id);
     }
 

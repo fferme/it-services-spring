@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -56,7 +55,7 @@ public class ClientController {
         })
     })
     @GetMapping("/{id}")
-    public Optional<Client> findById(@PathVariable @NotNull UUID id) {
+    public Optional<Client> findById(@PathVariable @NotNull Long id) {
         return clientService.findById(id);
     }
 
@@ -90,19 +89,19 @@ public class ClientController {
         return clientService.create(client);
     }
 
-    @Operation(summary = "Atualiza cliente existente", method = "PUT")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Sucesso ao atualizar cliente no banco",
-            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-        @ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
-            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-        })
-    })
-    @PutMapping("/{id}")
-    public Client update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Client newClient) {
-        return clientService.update(id, newClient);
-    }
+//    @Operation(summary = "Atualiza cliente existente", method = "PUT")
+//    @ApiResponses(value = {
+//        @ApiResponse(responseCode = "201", description = "Sucesso ao atualizar cliente no banco",
+//            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+//        @ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
+//        @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
+//            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+//        })
+//    })
+//    @PutMapping("/{id}")
+//    public Client update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Client newClient) {
+//        return clientService.update(id, newClient);
+//    }
 
     @Operation(summary = "Deleta cliente existente", method = "DELETE")
     @ApiResponses(value = {
@@ -115,7 +114,7 @@ public class ClientController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @NotNull UUID id) {
+    public void deleteById(@PathVariable @NotNull Long id) {
         clientService.deleteById(id);
     }
 

@@ -2,7 +2,6 @@ package com.ferme.itservices.security.services;
 
 import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.utils.models.Timestamps;
 import com.ferme.itservices.security.enums.UserRole;
 import com.ferme.itservices.security.enums.converters.UserRoleConverter;
 import com.ferme.itservices.security.models.User;
@@ -47,7 +46,7 @@ public class UserService {
 		   .username(user.getUsername())
 			.password(user.getPassword())
 		   .userRole(userRole)
-			.timestamps(new Timestamps())
+			//.timestamps(new Timestamps())
 			.build();
 
 		return userRepository.save(newUser);

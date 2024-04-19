@@ -9,13 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,12 +23,11 @@ import java.util.UUID;
 public class Order implements Serializable {
     @Id
     @JsonProperty("_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, unique = true, nullable = false)
+    private Long id;
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 95)
     @Column(length = 95, nullable = false, updatable = false)
     private String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
@@ -41,11 +37,11 @@ public class Order implements Serializable {
     @Column(name = "device_name", length = 35, nullable = false)
     private String deviceName;
 
+    @NotBlank
     @Size(max = 35)
-    @Column(name = "device_sn", unique = true, length = 35)
+    @Column(name = "device_sn", unique = true, nullable = false, length = 35)
     private String deviceSN;
 
-    @NotEmpty
     @Size(max = 250)
     @Column(length = 250)
     private String problems;

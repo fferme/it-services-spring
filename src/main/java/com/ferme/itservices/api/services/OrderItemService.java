@@ -17,87 +17,90 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Validated
 @Service
 @AllArgsConstructor
 public class OrderItemService {
-    private final OrderItemRepository orderItemRepository;
+	private final OrderItemRepository orderItemRepository;
 
-    public List<OrderItem> listAll() {
-        return orderItemRepository.findAll()
-                                  .stream()
-                                  .sorted(Comparator.comparing(OrderItem::getDescription))
-                                  .collect(Collectors.toList());
-    }
+	private static List<OrderItem> readJsonData(String filePath) {
+		List<OrderItem> orderItems = new ArrayList<>();
 
-    private static List<OrderItem> readJsonData(String filePath) {
-        List<OrderItem> orderItems = new ArrayList<>();
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			File path = new File(filePath);
+			JsonNode jsonArrayNode = objectMapper.readTree(path);
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File path = new File(filePath);
-            JsonNode jsonArrayNode = objectMapper.readTree(path);
+			if (jsonArrayNode.isArray()) {
+				ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
 
-            if (jsonArrayNode.isArray()) {
-                ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
+				for (JsonNode orderItemNode : arrayNode) {
+					String orderItemTypeRaw = orderItemNode.get("orderItemType").asText();
+					OrderItemType orderItemType = OrderItemTypeConverter.convertOrderItemTypeValue(orderItemTypeRaw);
+					String description = orderItemNode.get("description").asText();
+					Double price = orderItemNode.get("price").asDouble();
 
-                for (JsonNode orderItemNode: arrayNode) {
-                    String orderItemTypeRaw = orderItemNode.get("orderItemType").asText();
-                    OrderItemType orderItemType = OrderItemTypeConverter.convertOrderItemTypeValue(orderItemTypeRaw);
-                    String description = orderItemNode.get("description").asText();
-                    Double price = orderItemNode.get("price").asDouble();
+					OrderItem orderItem = new OrderItem();
+					orderItem.setOrderItemType(orderItemType);
+					orderItem.setDescription(description);
+					orderItem.setPrice(price);
 
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.setOrderItemType(orderItemType);
-                    orderItem.setDescription(description);
-                    orderItem.setPrice(price);
+					orderItems.add(orderItem);
+				}
+			} else {
+				System.out.println("File does not contain a JSON array");
+			}
+		} catch (IOException e) {
+			System.out.println("Error when reading JSON array: " + e.getMessage());
+		}
 
-                    orderItems.add(orderItem);
-                }
-            } else {
-                System.out.println("File does not contain a JSON array");
-            }
-        } catch (IOException e) {
-            System.out.println("Error when reading JSON array: " + e.getMessage());
-        }
+		return orderItems;
+	}
 
-        return orderItems;
-    }
+	public List<OrderItem> listAll() {
+		return orderItemRepository.findAll()
+			.stream()
+			.sorted(Comparator.comparing(OrderItem::getDescription))
+			.collect(Collectors.toList());
+	}
 
-    public OrderItem create(@Valid @NotNull OrderItem orderItem) {
-        return orderItemRepository.save(orderItem);
-    }
+	public OrderItem create(@Valid @NotNull OrderItem orderItem) {
+		return orderItemRepository.save(orderItem);
+	}
 
-    public Optional<OrderItem> findById(@Valid @NotNull UUID id) {
-        return orderItemRepository.findById(id);
-    }
+	public Optional<OrderItem> findById(@Valid @NotNull Long id) {
+		return orderItemRepository.findById(id);
+	}
 
-    public void deleteById(@NotNull UUID id) {
-        orderItemRepository.deleteById(id);
-    }
+	public void deleteById(@NotNull Long id) {
+		orderItemRepository.deleteById(id);
+	}
 
-    public void deleteAll() {
-        orderItemRepository.deleteAll();
-    }
+	public void deleteAll() {
+		orderItemRepository.deleteAll();
+	}
 
-    public void exportDataToOrderItem() throws IOException {
-        orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
-    }
+	public OrderItem update(@NotNull Long id, @Valid @NotNull OrderItem updatedOrderItem) {
+		return orderItemRepository.findById(id)
+			.map(orderItemFound -> {
+				orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(
+					updatedOrderItem.getOrderItemType().getValue()));
+				orderItemFound.setDescription(updatedOrderItem.getDescription());
+				orderItemFound.setPrice(updatedOrderItem.getPrice());
 
-    public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
-        return orderItemRepository.findById(id)
-                                  .map(orderItemFound -> {
-                                      orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(
-                                          updatedOrderItem.getOrderItemType().getValue()));
-                                      orderItemFound.setDescription(updatedOrderItem.getDescription());
-                                      orderItemFound.setPrice(updatedOrderItem.getPrice());
+				return orderItemRepository.save(orderItemFound);
 
-                                      return orderItemRepository.save(orderItemFound);
+			}).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
+	}
 
-                                  }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
-    }
+	public void exportDataToOrderItem() throws IOException {
+		orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
+	}
 
 }

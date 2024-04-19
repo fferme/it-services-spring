@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -55,7 +54,7 @@ public class OrderItemController {
                     })
     })
     @GetMapping("/{id}")
-    public Optional<OrderItem> findById(@PathVariable @NotNull UUID id) {
+    public Optional<OrderItem> findById(@PathVariable @NotNull Long id) {
         return orderItemService.findById(id);
     }
 
@@ -84,7 +83,7 @@ public class OrderItemController {
                     })
     })
     @PutMapping("/{id}")
-    public OrderItem update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull OrderItem newOrderItem) {
+    public OrderItem update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull OrderItem newOrderItem) {
         return orderItemService.update(id, newOrderItem);
     }
 
@@ -99,7 +98,7 @@ public class OrderItemController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @NotNull UUID id) {
+    public void deleteById(@PathVariable @NotNull Long id) {
         orderItemService.deleteById(id);
     }
 

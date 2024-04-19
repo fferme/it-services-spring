@@ -4,44 +4,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.utils.models.Timestamps;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-@AllArgsConstructor
+
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "client")
+@Getter
+@Entity(name = "clients")
+@Table(name = "clients")
 public class Client implements Serializable {
     @Id
     @JsonProperty("_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, unique = true, nullable = false)
+    private Long id;
 
-    @NotBlank
-    @Size(min = 4, max = 40, message = "Name must be minimum 10 characters")
-    @Column(length = 40, nullable = false, updatable = false)
+    @NotEmpty(message = "Name is required")
+    @Size(min = 4, max = 40, message = "Name must be between 4 and 40 characters")
+    @Column(length = 40, nullable = false)
     private String name;
 
-    @NotBlank
-    @Pattern(regexp = "^\\(?(\\d{2})\\)?[- ]?(\\d{4,5})[- ]?(\\d{4})$")
-    @Size(min = 8, max = 11, message = "Phone number must be minimum 10 characters")
-    @Column(name = "phone_number", length = 11, unique = true, nullable = false, updatable = false)
+    @NotEmpty(message = "Phone number is required")
+    @Pattern(regexp = "^\\(?(\\d{2})\\)?[- ]?(\\d{4,5})[- ]?(\\d{4})$", message = "Invalid phone number format")
+    @Size(min = 8, max = 11, message = "Phone number must be between 8 and 11 characters")
+    @Column(name = "phone_number", length = 11, unique = true, nullable = false)
     private String phoneNumber;
 
     @Size(max = 20)

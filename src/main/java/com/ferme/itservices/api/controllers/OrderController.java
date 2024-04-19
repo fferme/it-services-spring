@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -54,7 +53,7 @@ public class OrderController {
                     })
     })
     @GetMapping("/{id}")
-    public Optional<Order> findById(@PathVariable @NotNull UUID id) {
+    public Optional<Order> findById(@PathVariable @NotNull Long id) {
         return orderService.findById(id);
     }
 
@@ -83,7 +82,7 @@ public class OrderController {
                     })
     })
     @PutMapping("/{id}")
-    public Order update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Order newOrder) {
+    public Order update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull Order newOrder) {
         return orderService.update(id, newOrder);
     }
 
@@ -98,7 +97,7 @@ public class OrderController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @NotNull UUID id) {
+    public void deleteById(@PathVariable @NotNull Long id) {
         orderService.deleteById(id);
     }
 
