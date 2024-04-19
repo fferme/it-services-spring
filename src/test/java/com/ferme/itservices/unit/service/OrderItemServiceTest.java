@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.services;
+package com.ferme.itservices.unit.service;
 
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
@@ -25,6 +25,9 @@ public class OrderItemServiceTest {
     @Mock
     private OrderItemRepository orderItemRepository;
 
+    private static final Long valid_id = 123456L;
+    private static final Long invalid_id = 978541L;
+
     @Test
     public void createOrderItem_WithValidData_ReturnsClient() {
         when(orderItemRepository.save(VALID_ORDERITEM)).thenReturn(VALID_ORDERITEM);
@@ -43,10 +46,9 @@ public class OrderItemServiceTest {
 
     @Test
     public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-        UUID uuid = UUID.randomUUID();
-        when(orderItemRepository.findById(uuid)).thenReturn(Optional.of(VALID_ORDERITEM));
+        when(orderItemRepository.findById(valid_id)).thenReturn(Optional.of(VALID_ORDERITEM));
 
-        Optional<OrderItem> sut = orderItemService.findById(uuid);
+        Optional<OrderItem> sut = orderItemService.findById(valid_id);
 
         assertThat(sut).isNotEmpty();
         assertThat(sut.get()).isEqualTo(VALID_ORDERITEM);
@@ -54,10 +56,9 @@ public class OrderItemServiceTest {
 
     @Test
     public void getOrderItem_ByUnexistingId_ReturnsOrderItem() {
-        UUID uuid = UUID.randomUUID();
-        when(orderItemRepository.findById(uuid)).thenReturn(Optional.empty());
+        when(orderItemRepository.findById(invalid_id)).thenReturn(Optional.empty());
 
-        Optional<OrderItem> sut = orderItemService.findById(uuid);
+        Optional<OrderItem> sut = orderItemService.findById(invalid_id);
 
         assertThat(sut).isEmpty();
     }
@@ -87,15 +88,13 @@ public class OrderItemServiceTest {
 
     @Test
     public void deleteOrderItem_WithExistingId_doesNotThrowAnyException() {
-        UUID uuid = UUID.randomUUID();
-        assertThatCode(() -> orderItemService.deleteById(uuid)).doesNotThrowAnyException();
+        assertThatCode(() -> orderItemService.deleteById(valid_id)).doesNotThrowAnyException();
     }
 
     @Test
     public void deleteOrderItem_WithUnexistingId_ThrowsException() {
-        UUID unexistingUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        doThrow(new RuntimeException()).when(orderItemRepository).deleteById(unexistingUUID);
+        doThrow(new RuntimeException()).when(orderItemRepository).deleteById(invalid_id);
 
-        assertThatThrownBy(() -> orderItemService.deleteById(unexistingUUID)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> orderItemService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
     }
 }

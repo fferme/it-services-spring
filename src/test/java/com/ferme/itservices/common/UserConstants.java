@@ -11,8 +11,8 @@ public class UserConstants {
 		.build();
 
 	public static final User INVALID_USER = User.builder()
-		.username("")
 		.password("")
 		.userRole(null)
+		.timestamps(null)
 		.build();
 }

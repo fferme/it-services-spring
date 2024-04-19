@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.services;
+package com.ferme.itservices.unit.service;
 
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
@@ -25,6 +25,9 @@ public class ClientServiceTest {
     @Mock
     private ClientRepository clientRepository;
 
+    private static final Long valid_id = 123456L;
+    private static final Long invalid_id = 978541L;
+
     @Test
     public void createClient_WithValidData_ReturnsClient() {
         when(clientRepository.save(VALID_CLIENT)).thenReturn(VALID_CLIENT);
@@ -43,10 +46,9 @@ public class ClientServiceTest {
 
     @Test
     public void getClient_ByExistingId_ReturnsClient() {
-        UUID uuid = UUID.randomUUID();
-        when(clientRepository.findById(uuid)).thenReturn(Optional.of(VALID_CLIENT));
+        when(clientRepository.findById(valid_id)).thenReturn(Optional.of(VALID_CLIENT));
 
-        Optional<Client> sut = clientService.findById(uuid);
+        Optional<Client> sut = clientService.findById(valid_id);
 
         assertThat(sut).isNotEmpty();
         assertThat(sut.get()).isEqualTo(VALID_CLIENT);
@@ -55,9 +57,9 @@ public class ClientServiceTest {
     @Test
     public void getClient_ByUnexistingId_ReturnsEmpty() {
         UUID uuid = UUID.randomUUID();
-        when(clientRepository.findById(uuid)).thenReturn(Optional.empty());
+        when(clientRepository.findById(invalid_id)).thenReturn(Optional.empty());
 
-        Optional<Client> sut = clientService.findById(uuid);
+        Optional<Client> sut = clientService.findById(invalid_id);
 
         assertThat(sut).isEmpty();
     }
@@ -107,16 +109,14 @@ public class ClientServiceTest {
 
     @Test
     public void deleteClient_WithExistingId_doesNotThrowAnyException() {
-        UUID uuid = UUID.randomUUID();
-        assertThatCode(() -> clientService.deleteById(uuid)).doesNotThrowAnyException();
+        assertThatCode(() -> clientService.deleteById(valid_id)).doesNotThrowAnyException();
     }
 
     @Test
     public void deleteClient_WithUnexistingId_ThrowsException() {
-        UUID unexistingUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        doThrow(new RuntimeException()).when(clientRepository).deleteById(unexistingUUID);
+        doThrow(new RuntimeException()).when(clientRepository).deleteById(invalid_id);
 
-        assertThatThrownBy(() -> clientService.deleteById(unexistingUUID)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> clientService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
     }
 
 

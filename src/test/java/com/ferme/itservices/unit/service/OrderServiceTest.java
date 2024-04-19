@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.services;
+package com.ferme.itservices.unit.service;
 
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.repositories.OrderRepository;
@@ -26,6 +26,9 @@ public class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
+    private static final Long valid_id = 123456L;
+    private static final Long invalid_id = 978541L;
+
     @Test
     public void createOrder_WithValidData_ReturnsOrder() {
         when(orderRepository.save(VALID_ORDER)).thenReturn(VALID_ORDER);
@@ -44,10 +47,9 @@ public class OrderServiceTest {
 
     @Test
     public void getOrder_ByExistingId_ReturnsOrder() {
-        UUID uuid = UUID.randomUUID();
-        when(orderRepository.findById(uuid)).thenReturn(Optional.of(VALID_ORDER));
+        when(orderRepository.findById(valid_id)).thenReturn(Optional.of(VALID_ORDER));
 
-        Optional<Order> sut = orderService.findById(uuid);
+        Optional<Order> sut = orderService.findById(valid_id);
 
         assertThat(sut).isNotEmpty();
         assertThat(sut.get()).isEqualTo(VALID_ORDER);
@@ -55,10 +57,9 @@ public class OrderServiceTest {
 
     @Test
     public void getOrder_ByUnexistingId_ReturnsOrder() {
-        UUID uuid = UUID.randomUUID();
-        when(orderRepository.findById(uuid)).thenReturn(Optional.empty());
+        when(orderRepository.findById(invalid_id)).thenReturn(Optional.empty());
 
-        Optional<Order> sut = orderService.findById(uuid);
+        Optional<Order> sut = orderService.findById(invalid_id);
 
         assertThat(sut).isEmpty();
     }
@@ -88,9 +89,8 @@ public class OrderServiceTest {
 
     @Test
     public void deleteOrder_WithUnexistingId_ThrowsException() {
-        UUID unexistingUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-        doThrow(new RuntimeException()).when(orderRepository).deleteById(unexistingUUID);
+        doThrow(new RuntimeException()).when(orderRepository).deleteById(invalid_id);
 
-        assertThatThrownBy(() -> orderService.deleteById(unexistingUUID)).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> orderService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
     }
 }

@@ -19,5 +19,6 @@ public class ClientConstants {
        .neighborhood("")
        .address("")
        .reference("")
+	    .timestamps(null)
        .build();
 }
