@@ -1,12 +1,9 @@
 package com.ferme.itservices.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
-import com.ferme.itservices.api.utils.models.Timestamps;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +14,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "orderItem")
+@Entity(name = "orderItems")
+@Table(name = "order_Items")
 public class OrderItem implements Serializable {
     @Id
-    @JsonProperty("_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
@@ -48,9 +44,4 @@ public class OrderItem implements Serializable {
     @ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Order> orders = new ArrayList<>();
-
-    @Embedded
-    @Valid
-    @NotNull
-    private Timestamps timestamps = new Timestamps();
 }

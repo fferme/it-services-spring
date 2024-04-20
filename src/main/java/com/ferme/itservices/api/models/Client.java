@@ -1,29 +1,26 @@
 package com.ferme.itservices.api.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ferme.itservices.api.utils.models.Timestamps;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Getter
 @Entity(name = "clients")
 @Table(name = "clients")
 public class Client implements Serializable {
     @Id
-    @JsonProperty("_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
@@ -53,9 +50,4 @@ public class Client implements Serializable {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
-
-    @Embedded
-    @Valid
-    @NotNull
-    private Timestamps timestamps = new Timestamps();
 }

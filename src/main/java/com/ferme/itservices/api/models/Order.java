@@ -1,9 +1,6 @@
 package com.ferme.itservices.api.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ferme.itservices.api.utils.models.Timestamps;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,18 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-@Entity
-@Table(name = "`order`")
+@Entity(name = "´orders´")
+@Table(name = "`orders`")
 public class Order implements Serializable {
     @Id
-    @JsonProperty("_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, unique = true, nullable = false)
     private Long id;
 
     @Size(max = 95)
     @Column(length = 95, updatable = false)
-    private String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
+    private final String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
 
     @NotBlank
     @Size(min = 4, max = 35, message = "Device name must be minimum 4 characters")
@@ -65,11 +61,6 @@ public class Order implements Serializable {
     @DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
     @Column(length = 7, nullable = false)
     private Double totalPrice = 0.0;
-
-    @Embedded
-    @Valid
-    @NotNull
-    private Timestamps timestamps = new Timestamps();
 
     @PrePersist
     @PreUpdate

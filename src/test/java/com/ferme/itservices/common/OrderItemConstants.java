@@ -2,7 +2,6 @@ package com.ferme.itservices.common;
 
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.utils.models.Timestamps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ public class OrderItemConstants {
        .orderItemType(OrderItemType.MANPOWER)
        .description("Limpeza completa")
        .price(80.0)
-       .timestamps(new Timestamps())
        .build();
 
     public static final OrderItem INVALID_ORDERITEM = OrderItem.builder()
@@ -20,7 +18,6 @@ public class OrderItemConstants {
        .description("")
        .price(0.0)
        .orders(null)
-       .timestamps(null)
        .build();
 
     public static final List<OrderItem> ORDERITEM_LIST = fillList();
@@ -35,7 +32,6 @@ public class OrderItemConstants {
                           .description("SSD Kingston 240Gb")
                           .price(120.0)
                           .orders(null)
-                          .timestamps(new Timestamps())
                           .build());
 
         return orderItems;

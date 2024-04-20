@@ -11,7 +11,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Validated
 @Service
 @AllArgsConstructor
 public class ClientService {
@@ -43,7 +41,7 @@ public class ClientService {
         return clientRepository.findByName(name);
     }
 
-    public Client create(@Valid @NotNull Client client) {
+    public Client create(Client client) {
         return clientRepository.save(client);
     }
 

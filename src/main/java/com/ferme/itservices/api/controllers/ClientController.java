@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,13 +20,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor
 @RestController
-@Transactional
-@CrossOrigin(origins = "*")
-@RequestMapping(value = "/api/clients", produces = {"application/json"})
+@RequestMapping("/api/clients")
 @Tag(name = "Client Controller")
 public class ClientController {
+    @Autowired
     private ClientService clientService;
 
     @GetMapping
@@ -84,24 +82,27 @@ public class ClientController {
         })
     })
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
-    public Client create(@RequestBody @Valid @NotNull Client client) {
-        return clientService.create(client);
+    public ResponseEntity<Client> create(@RequestBody @Valid Client client) {
+        Client clientCreated = clientService.create(client);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientCreated);
     }
 
-//    @Operation(summary = "Atualiza cliente existente", method = "PUT")
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "201", description = "Sucesso ao atualizar cliente no banco",
-//            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-//        @ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
-//        @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
-//            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-//        })
-//    })
-//    @PutMapping("/{id}")
-//    public Client update(@PathVariable @NotNull UUID id, @RequestBody @Valid @NotNull Client newClient) {
-//        return clientService.update(id, newClient);
-//    }
+    @Operation(summary = "Atualiza cliente existente", method = "PUT")
+    @ApiResponses(
+       value = {
+          @ApiResponse(
+             responseCode = "201", description = "Sucesso ao atualizar cliente no banco",
+             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+          @ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
+          @ApiResponse(
+             responseCode = "500", description = "Erro interno do servidor",
+             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+             })
+       })
+    @PutMapping("/{id}")
+    public Client update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull Client newClient) {
+        return clientService.update(id, newClient);
+    }
 
     @Operation(summary = "Deleta cliente existente", method = "DELETE")
     @ApiResponses(value = {
