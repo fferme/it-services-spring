@@ -9,7 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static com.ferme.itservices.common.OrderConstants.INVALID_ORDER;
 import static com.ferme.itservices.common.OrderConstants.VALID_ORDER;
@@ -20,77 +23,75 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
-    @InjectMocks
-    private OrderService orderService;
+	private static final Long valid_id = 123456L;
+	private static final Long invalid_id = 978541L;
+	@InjectMocks
+	private OrderService orderService;
+	@Mock
+	private OrderRepository orderRepository;
 
-    @Mock
-    private OrderRepository orderRepository;
+	@Test
+	public void createOrder_WithValidData_ReturnsOrder() {
+		when(orderRepository.save(VALID_ORDER)).thenReturn(VALID_ORDER);
 
-    private static final Long valid_id = 123456L;
-    private static final Long invalid_id = 978541L;
+		Order sut = orderService.create(VALID_ORDER);
 
-    @Test
-    public void createOrder_WithValidData_ReturnsOrder() {
-        when(orderRepository.save(VALID_ORDER)).thenReturn(VALID_ORDER);
+		assertThat(sut).isEqualTo(VALID_ORDER);
+	}
 
-        Order sut = orderService.create(VALID_ORDER);
+	@Test
+	public void createOrder_WithInvalidData_ThrowsException() {
+		when(orderRepository.save(INVALID_ORDER)).thenThrow(RuntimeException.class);
 
-        assertThat(sut).isEqualTo(VALID_ORDER);
-    }
+		assertThatThrownBy(() -> orderService.create(INVALID_ORDER)).isInstanceOf(RuntimeException.class);
+	}
 
-    @Test
-    public void createOrder_WithInvalidData_ThrowsException() {
-        when(orderRepository.save(INVALID_ORDER)).thenThrow(RuntimeException.class);
+	@Test
+	public void getOrder_ByExistingId_ReturnsOrder() {
+		when(orderRepository.findById(valid_id)).thenReturn(Optional.of(VALID_ORDER));
 
-        assertThatThrownBy(() -> orderService.create(INVALID_ORDER)).isInstanceOf(RuntimeException.class);
-    }
+		Optional<Order> sut = orderService.findById(valid_id);
 
-    @Test
-    public void getOrder_ByExistingId_ReturnsOrder() {
-        when(orderRepository.findById(valid_id)).thenReturn(Optional.of(VALID_ORDER));
+		assertThat(sut).isNotEmpty();
+		assertThat(sut.get()).isEqualTo(VALID_ORDER);
+	}
 
-        Optional<Order> sut = orderService.findById(valid_id);
+	@Test
+	public void getOrder_ByUnexistingId_ReturnsOrder() {
+		when(orderRepository.findById(invalid_id)).thenReturn(Optional.empty());
 
-        assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(VALID_ORDER);
-    }
+		Optional<Order> sut = orderService.findById(invalid_id);
 
-    @Test
-    public void getOrder_ByUnexistingId_ReturnsOrder() {
-        when(orderRepository.findById(invalid_id)).thenReturn(Optional.empty());
+		assertThat(sut).isEmpty();
+	}
 
-        Optional<Order> sut = orderService.findById(invalid_id);
+	@Test
+	public void listOrders_ReturnsAllOrders() {
+		List<Order> orders = new ArrayList<>() {
+			{ add(VALID_ORDER); }
+		};
+		when(orderRepository.findAll()).thenReturn(orders);
 
-        assertThat(sut).isEmpty();
-    }
+		List<Order> sut = orderRepository.findAll();
 
-    @Test
-    public void listOrders_ReturnsAllOrders() {
-        List<Order> orders = new ArrayList<>() {
-            { add(VALID_ORDER); }
-        };
-        when(orderRepository.findAll()).thenReturn(orders);
+		assertThat(sut).isNotEmpty();
+		assertThat(sut).hasSize(1);
+		assertThat(sut.getFirst()).isEqualTo(VALID_ORDER);
+	}
 
-        List<Order> sut = orderRepository.findAll();
+	@Test
+	public void listOrders_ReturnsNoOrders() {
+		when(orderRepository.findAll()).thenReturn(Collections.emptyList());
 
-        assertThat(sut).isNotEmpty();
-        assertThat(sut).hasSize(1);
-        assertThat(sut.getFirst()).isEqualTo(VALID_ORDER);
-    }
+		List<Order> sut = orderRepository.findAll();
 
-    @Test
-    public void listOrders_ReturnsNoOrders() {
-        when(orderRepository.findAll()).thenReturn(Collections.emptyList());
+		assertThat(sut).isEmpty();
+	}
 
-        List<Order> sut = orderRepository.findAll();
+	@Test
+	public void deleteOrder_WithUnexistingId_ThrowsException() {
+		doThrow(new RuntimeException()).when(orderRepository).deleteById(invalid_id);
 
-        assertThat(sut).isEmpty();
-    }
-
-    @Test
-    public void deleteOrder_WithUnexistingId_ThrowsException() {
-        doThrow(new RuntimeException()).when(orderRepository).deleteById(invalid_id);
-
-        assertThatThrownBy(() -> orderService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
-    }
+		assertThatThrownBy(() -> orderService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
+	}
 }

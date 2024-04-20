@@ -21,27 +21,27 @@ import java.util.List;
 @Entity(name = "orderItems")
 @Table(name = "orderItems")
 public class OrderItem implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false, unique = true, nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(updatable = false, unique = true, nullable = false)
+	private Long id;
 
-    @NotNull
-    @Convert(converter = OrderItemTypeConverter.class)
-    @Column(length = 30, nullable = false)
-    private OrderItemType orderItemType;
+	@NotNull
+	@Convert(converter = OrderItemTypeConverter.class)
+	@Column(length = 30, nullable = false)
+	private OrderItemType orderItemType;
 
-    @NotBlank
-    @Size(min = 3, max = 70, message = "Description must be minimum 5 characters")
-    @Column(length = 70, nullable = false, unique = true)
-    private String description;
+	@NotBlank
+	@Size(min = 3, max = 70, message = "Description must be minimum 5 characters")
+	@Column(length = 70, nullable = false, unique = true)
+	private String description;
 
-    @DecimalMin(value = "0.0", message = "Price must be minimum 0.0")
-    @DecimalMax(value = "9999.00", message = "Price must be max 9999.00")
-    @Column(length = 7, nullable = false)
-    private Double price;
+	@DecimalMin(value = "0.0", message = "Price must be minimum 0.0")
+	@DecimalMax(value = "9999.00", message = "Price must be max 9999.00")
+	@Column(length = 7, nullable = false)
+	private Double price;
 
-    @ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<Order> orders = new ArrayList<>();
+	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Order> orders = new ArrayList<>();
 }

@@ -19,105 +19,103 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {
-    @InjectMocks
-    private ClientService clientService;
+	private static final Long valid_id = 123456L;
+	private static final Long invalid_id = 978541L;
+	@InjectMocks
+	private ClientService clientService;
+	@Mock
+	private ClientRepository clientRepository;
 
-    @Mock
-    private ClientRepository clientRepository;
+	@Test
+	public void createClient_WithValidData_ReturnsClient() {
+		when(clientRepository.save(VALID_CLIENT)).thenReturn(VALID_CLIENT);
 
-    private static final Long valid_id = 123456L;
-    private static final Long invalid_id = 978541L;
+		Client sut = clientService.create(VALID_CLIENT);
 
-    @Test
-    public void createClient_WithValidData_ReturnsClient() {
-        when(clientRepository.save(VALID_CLIENT)).thenReturn(VALID_CLIENT);
+		assertThat(sut).isEqualTo(VALID_CLIENT);
+	}
 
-        Client sut = clientService.create(VALID_CLIENT);
+	@Test
+	public void createClient_WithInvalidData_ThrowsException() {
+		when(clientRepository.save(INVALID_CLIENT)).thenThrow(RuntimeException.class);
 
-        assertThat(sut).isEqualTo(VALID_CLIENT);
-    }
+		assertThatThrownBy(() -> clientService.create(INVALID_CLIENT)).isInstanceOf(RuntimeException.class);
+	}
 
-    @Test
-    public void createClient_WithInvalidData_ThrowsException() {
-        when(clientRepository.save(INVALID_CLIENT)).thenThrow(RuntimeException.class);
+	@Test
+	public void getClient_ByExistingId_ReturnsClient() {
+		when(clientRepository.findById(valid_id)).thenReturn(Optional.of(VALID_CLIENT));
 
-        assertThatThrownBy(() -> clientService.create(INVALID_CLIENT)).isInstanceOf(RuntimeException.class);
-    }
+		Optional<Client> sut = clientService.findById(valid_id);
 
-    @Test
-    public void getClient_ByExistingId_ReturnsClient() {
-        when(clientRepository.findById(valid_id)).thenReturn(Optional.of(VALID_CLIENT));
+		assertThat(sut).isNotEmpty();
+		assertThat(sut.get()).isEqualTo(VALID_CLIENT);
+	}
 
-        Optional<Client> sut = clientService.findById(valid_id);
+	@Test
+	public void getClient_ByUnexistingId_ReturnsEmpty() {
+		UUID uuid = UUID.randomUUID();
+		when(clientRepository.findById(invalid_id)).thenReturn(Optional.empty());
 
-        assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(VALID_CLIENT);
-    }
+		Optional<Client> sut = clientService.findById(invalid_id);
 
-    @Test
-    public void getClient_ByUnexistingId_ReturnsEmpty() {
-        UUID uuid = UUID.randomUUID();
-        when(clientRepository.findById(invalid_id)).thenReturn(Optional.empty());
+		assertThat(sut).isEmpty();
+	}
 
-        Optional<Client> sut = clientService.findById(invalid_id);
+	@Test
+	public void getClient_ByExistingName_ReturnsClient() {
+		when(clientRepository.findByName(VALID_CLIENT.getName())).thenReturn(Optional.of(VALID_CLIENT));
 
-        assertThat(sut).isEmpty();
-    }
+		Optional<Client> sut = clientService.findByName(VALID_CLIENT.getName());
 
-    @Test
-    public void getClient_ByExistingName_ReturnsClient() {
-        when(clientRepository.findByName(VALID_CLIENT.getName())).thenReturn(Optional.of(VALID_CLIENT));
+		assertThat(sut).isNotEmpty();
+		assertThat(sut.get()).isEqualTo(VALID_CLIENT);
+	}
 
-        Optional<Client> sut = clientService.findByName(VALID_CLIENT.getName());
+	@Test
+	public void getClient_ByUnexistingName_ReturnsClient() {
+		final String name = "Unexisting name";
+		when(clientRepository.findByName(name)).thenReturn(Optional.empty());
 
-        assertThat(sut).isNotEmpty();
-        assertThat(sut.get()).isEqualTo(VALID_CLIENT);
-    }
+		Optional<Client> sut = clientService.findByName(name);
 
-    @Test
-    public void getClient_ByUnexistingName_ReturnsClient() {
-        final String name = "Unexisting name";
-        when(clientRepository.findByName(name)).thenReturn(Optional.empty());
+		assertThat(sut).isEmpty();
+	}
 
-        Optional<Client> sut = clientService.findByName(name);
+	@Test
+	public void listClients_ReturnsAllClients() {
+		List<Client> clients = new ArrayList<>() {
+			{ add(VALID_CLIENT); }
+		};
+		when(clientRepository.findAll()).thenReturn(clients);
 
-        assertThat(sut).isEmpty();
-    }
+		List<Client> sut = clientRepository.findAll();
 
-    @Test
-    public void listClients_ReturnsAllClients() {
-        List<Client> clients = new ArrayList<>() {
-            { add(VALID_CLIENT); }
-        };
-        when(clientRepository.findAll()).thenReturn(clients);
+		assertThat(sut).isNotEmpty();
+		assertThat(sut).hasSize(1);
+		assertThat(sut.getFirst()).isEqualTo(VALID_CLIENT);
+	}
 
-        List<Client> sut = clientRepository.findAll();
+	@Test
+	public void listClients_ReturnsNoClients() {
+		when(clientRepository.findAll()).thenReturn(Collections.emptyList());
 
-        assertThat(sut).isNotEmpty();
-        assertThat(sut).hasSize(1);
-        assertThat(sut.getFirst()).isEqualTo(VALID_CLIENT);
-    }
+		List<Client> sut = clientRepository.findAll();
 
-    @Test
-    public void listClients_ReturnsNoClients() {
-        when(clientRepository.findAll()).thenReturn(Collections.emptyList());
+		assertThat(sut).isEmpty();
+	}
 
-        List<Client> sut = clientRepository.findAll();
+	@Test
+	public void deleteClient_WithExistingId_doesNotThrowAnyException() {
+		assertThatCode(() -> clientService.deleteById(valid_id)).doesNotThrowAnyException();
+	}
 
-        assertThat(sut).isEmpty();
-    }
+	@Test
+	public void deleteClient_WithUnexistingId_ThrowsException() {
+		doThrow(new RuntimeException()).when(clientRepository).deleteById(invalid_id);
 
-    @Test
-    public void deleteClient_WithExistingId_doesNotThrowAnyException() {
-        assertThatCode(() -> clientService.deleteById(valid_id)).doesNotThrowAnyException();
-    }
-
-    @Test
-    public void deleteClient_WithUnexistingId_ThrowsException() {
-        doThrow(new RuntimeException()).when(clientRepository).deleteById(invalid_id);
-
-        assertThatThrownBy(() -> clientService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
-    }
+		assertThatThrownBy(() -> clientService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
+	}
 
 
 }

@@ -23,86 +23,86 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class ClientService {
-    private final ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-    public List<Client> listAll() {
-        List<Client> clients = clientRepository.findAll();
+	private static List<Client> readJsonData(String filePath) {
+		List<Client> clients = new ArrayList<>();
 
-        return clients.stream()
-                      .sorted(Comparator.comparing(Client::getName))
-                      .collect(Collectors.toList());
-    }
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			File path = new File(filePath);
+			JsonNode jsonArrayNode = objectMapper.readTree(path);
 
-    public Optional<Client> findById(@Valid @NotNull Long id) {
-        return clientRepository.findById(id);
-    }
+			if (jsonArrayNode.isArray()) {
+				ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
 
-    public Optional<Client> findByName(@NotBlank String name) {
-        return clientRepository.findByName(name);
-    }
+				for (JsonNode clientNode : arrayNode) {
+					String name = clientNode.get("name").asText();
+					String phoneNumber = clientNode.get("phoneNumber").asText();
+					String neighborhood = clientNode.get("neighborhood").asText();
+					String address = clientNode.get("address").asText();
+					String reference = clientNode.get("reference").asText();
 
-    public Client create(Client client) {
-        return clientRepository.save(client);
-    }
+					Client client = new Client();
+					client.setName(name);
+					client.setPhoneNumber(phoneNumber);
+					client.setNeighborhood(neighborhood);
+					client.setAddress(address);
+					client.setReference(reference);
 
-    public Client update(@NotNull Long id, @Valid @NotNull Client newClient) {
-        return clientRepository.findById(id)
-           .map(clientFound -> {
-               clientFound.setNeighborhood(newClient.getNeighborhood());
-               clientFound.setAddress(newClient.getAddress());
-               clientFound.setReference(newClient.getReference());
+					clients.add(client);
+				}
+			} else {
+				System.out.println("File does not contain a JSON array");
+			}
+		} catch (IOException e) {
+			System.out.println("Error when reading JSON array: " + e.getMessage());
+		}
 
-               return clientRepository.save(clientFound);
+		return clients;
+	}
 
-           }).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
-    }
+	public List<Client> listAll() {
+		List<Client> clients = clientRepository.findAll();
 
-    public void deleteById(@NotNull Long id) {
-        clientRepository.deleteById(id);
-    }
+		return clients.stream()
+			.sorted(Comparator.comparing(Client::getName))
+			.collect(Collectors.toList());
+	}
 
-    public void deleteAll() {
-        clientRepository.deleteAll();
-    }
+	public Optional<Client> findById(@Valid @NotNull Long id) {
+		return clientRepository.findById(id);
+	}
 
-    private static List<Client> readJsonData(String filePath) {
-        List<Client> clients = new ArrayList<>();
+	public Optional<Client> findByName(@NotBlank String name) {
+		return clientRepository.findByName(name);
+	}
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            File path = new File(filePath);
-            JsonNode jsonArrayNode = objectMapper.readTree(path);
+	public Client create(Client client) {
+		return clientRepository.save(client);
+	}
 
-            if (jsonArrayNode.isArray()) {
-                ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
+	public Client update(@NotNull Long id, @Valid @NotNull Client newClient) {
+		return clientRepository.findById(id)
+			.map(clientFound -> {
+				clientFound.setNeighborhood(newClient.getNeighborhood());
+				clientFound.setAddress(newClient.getAddress());
+				clientFound.setReference(newClient.getReference());
 
-                for (JsonNode clientNode : arrayNode) {
-                    String name = clientNode.get("name").asText();
-                    String phoneNumber = clientNode.get("phoneNumber").asText();
-                    String neighborhood = clientNode.get("neighborhood").asText();
-                    String address = clientNode.get("address").asText();
-                    String reference = clientNode.get("reference").asText();
+				return clientRepository.save(clientFound);
 
-                    Client client = new Client();
-                    client.setName(name);
-                    client.setPhoneNumber(phoneNumber);
-                    client.setNeighborhood(neighborhood);
-                    client.setAddress(address);
-                    client.setReference(reference);
+			}).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
+	}
 
-                    clients.add(client);
-                }
-            } else {
-                System.out.println("File does not contain a JSON array");
-            }
-        } catch (IOException e) {
-            System.out.println("Error when reading JSON array: " + e.getMessage());
-        }
+	public void deleteById(@NotNull Long id) {
+		clientRepository.deleteById(id);
+	}
 
-        return clients;
-    }
+	public void deleteAll() {
+		clientRepository.deleteAll();
+	}
 
-    public void exportDataToClient() throws IOException {
-        clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
-    }
+	public void exportDataToClient() throws IOException {
+		clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
+	}
 }
