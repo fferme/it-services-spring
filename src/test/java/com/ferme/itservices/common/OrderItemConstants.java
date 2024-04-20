@@ -17,7 +17,6 @@ public class OrderItemConstants {
        .orderItemType(null)
        .description("")
        .price(0.0)
-       .orders(null)
        .build();
 
     public static final List<OrderItem> ORDERITEM_LIST = fillList();
@@ -31,7 +30,7 @@ public class OrderItemConstants {
                           .orderItemType(OrderItemType.PART_BUYOUT)
                           .description("SSD Kingston 240Gb")
                           .price(120.0)
-                          .orders(null)
+                          //.orders(null)
                           .build());
 
         return orderItems;

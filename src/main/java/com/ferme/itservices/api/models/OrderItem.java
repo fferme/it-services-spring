@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity(name = "orderItems")
-@Table(name = "order_Items")
+@Table(name = "orderItems")
 public class OrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

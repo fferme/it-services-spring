@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -27,7 +28,7 @@ public class Client implements Serializable {
 
     @NotEmpty(message = "Name is required")
     @Size(min = 4, max = 40, message = "Name must be between 4 and 40 characters")
-    @Column(length = 40, nullable = false)
+    @Column(length = 40, unique = true, nullable = false)
     private String name;
 
     @NotEmpty(message = "Phone number is required")
@@ -48,6 +49,7 @@ public class Client implements Serializable {
     @Column(length = 70)
     private String reference;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 }

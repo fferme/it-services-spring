@@ -2,18 +2,15 @@ package com.ferme.itservices.api.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Data
 @Entity(name = "´orders´")
 @Table(name = "`orders`")

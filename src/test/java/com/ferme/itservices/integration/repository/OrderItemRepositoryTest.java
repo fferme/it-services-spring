@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.DirtiesContext;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
+import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
 import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -26,17 +30,20 @@ public class OrderItemRepositoryTest {
 		OrderItem sut = testEntityManager.find(OrderItem.class, orderItem.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getId()).isEqualTo(VALID_ORDERITEM.getId());
+		assertThat(sut.getOrderItemType()).isEqualTo(VALID_ORDERITEM.getOrderItemType());
+		assertThat(sut.getDescription()).isEqualTo(VALID_ORDERITEM.getDescription());
+		assertThat(sut.getPrice()).isEqualTo(VALID_ORDERITEM.getPrice());
 	}
 
 	@Test
 	public void createOrderItem_WithInvalidData_ThrowsException() {
-		OrderItem orderItem = new OrderItem();
-		assertThatThrownBy(() -> orderItemRepository.save(orderItem)).isInstanceOf(RuntimeException.class);
+		OrderItem emptyOrderItem = new OrderItem();
+		assertThatThrownBy(() -> orderItemRepository.save(emptyOrderItem)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemRepository.save(INVALID_ORDERITEM)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
-	public void createOrderItem_WithExistingId_ThrowsException() {
+	public void createOrderItem_WithExistingDescription_ThrowsException() {
 		OrderItem orderItem = testEntityManager.persistFlushFind(VALID_ORDERITEM);
 		testEntityManager.detach(orderItem);
 		orderItem.setId(null);

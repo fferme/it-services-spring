@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import static com.ferme.itservices.common.OrderConstants.INVALID_ORDER;
 import static com.ferme.itservices.common.OrderConstants.VALID_ORDER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -26,13 +27,19 @@ public class OrderRepositoryTest {
 		Order sut = testEntityManager.find(Order.class, order.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getId()).isEqualTo(VALID_ORDER.getId());
+		assertThat(sut.getProblems()).isEqualTo(order.getProblems());
+		assertThat(sut.getDeviceName()).isEqualTo(order.getDeviceName());
+		assertThat(sut.getDeviceSN()).isEqualTo(order.getDeviceSN());
+		assertThat(sut.getClient()).isEqualTo(order.getClient());
+		assertThat(sut.getOrderItems()).isEqualTo(order.getOrderItems());
+		assertThat(sut.getTotalPrice()).isEqualTo(order.getTotalPrice());
 	}
 
 	@Test
 	public void createOrder_WithInvalidData_ThrowsException() {
-		Order order = new Order();
-		assertThatThrownBy(() -> orderRepository.save(order)).isInstanceOf(RuntimeException.class);
+		Order emptyOrder = new Order();
+		assertThatThrownBy(() -> orderRepository.save(emptyOrder)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderRepository.save(INVALID_ORDER)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
