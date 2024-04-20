@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,8 +20,6 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@Transactional
-@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/orders", produces = {"application/json"})
 @Tag(name = "Order Controller")
 public class OrderController {

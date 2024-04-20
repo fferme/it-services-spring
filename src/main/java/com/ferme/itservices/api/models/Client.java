@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -51,5 +50,5 @@ public class Client implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-	private List<Order> orders = new ArrayList<>();
+	private List<Order> orders;
 }

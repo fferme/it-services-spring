@@ -37,7 +37,7 @@ public class OrderService {
 				orderFound.setDeviceSN(updatedOrder.getDeviceSN());
 				orderFound.setProblems(updatedOrder.getProblems());
 				orderFound.setClient(updatedOrder.getClient());
-				orderFound.setOrderItems(updatedOrder.getOrderItems());
+            orderFound.setOrderItems(updatedOrder.getOrderItems());
 
 				return orderRepository.save(orderFound);
 

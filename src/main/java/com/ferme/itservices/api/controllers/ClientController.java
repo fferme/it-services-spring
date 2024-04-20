@@ -10,9 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,11 +19,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping(value = "/api/clients", produces = {"application/json"})
 @Tag(name = "Client Controller")
 public class ClientController {
-	@Autowired
 	private ClientService clientService;
 
 	@GetMapping
@@ -94,10 +93,8 @@ public class ClientController {
 				})
 		})
 	@PostMapping
-	public ResponseEntity<Client> create(@RequestBody @Valid Client client) {
-		Client clientCreated = clientService.create(client);
-		return ResponseEntity.status(HttpStatus.CREATED).body(clientCreated);
-	}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Client create(@RequestBody @Valid Client client) { return clientService.create(client); }
 
 	@Operation(summary = "Atualiza cliente existente", method = "PUT")
 	@ApiResponses(

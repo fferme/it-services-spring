@@ -25,43 +25,6 @@ import java.util.stream.Collectors;
 public class ClientService {
 	private final ClientRepository clientRepository;
 
-	private static List<Client> readJsonData(String filePath) {
-		List<Client> clients = new ArrayList<>();
-
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			File path = new File(filePath);
-			JsonNode jsonArrayNode = objectMapper.readTree(path);
-
-			if (jsonArrayNode.isArray()) {
-				ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
-
-				for (JsonNode clientNode : arrayNode) {
-					String name = clientNode.get("name").asText();
-					String phoneNumber = clientNode.get("phoneNumber").asText();
-					String neighborhood = clientNode.get("neighborhood").asText();
-					String address = clientNode.get("address").asText();
-					String reference = clientNode.get("reference").asText();
-
-					Client client = new Client();
-					client.setName(name);
-					client.setPhoneNumber(phoneNumber);
-					client.setNeighborhood(neighborhood);
-					client.setAddress(address);
-					client.setReference(reference);
-
-					clients.add(client);
-				}
-			} else {
-				System.out.println("File does not contain a JSON array");
-			}
-		} catch (IOException e) {
-			System.out.println("Error when reading JSON array: " + e.getMessage());
-		}
-
-		return clients;
-	}
-
 	public List<Client> listAll() {
 		List<Client> clients = clientRepository.findAll();
 
@@ -104,5 +67,42 @@ public class ClientService {
 
 	public void exportDataToClient() throws IOException {
 		clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
+	}
+
+	private static List<Client> readJsonData(String filePath) {
+		List<Client> clients = new ArrayList<>();
+
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			File path = new File(filePath);
+			JsonNode jsonArrayNode = objectMapper.readTree(path);
+
+			if (jsonArrayNode.isArray()) {
+				ArrayNode arrayNode = (ArrayNode) jsonArrayNode;
+
+				for (JsonNode clientNode : arrayNode) {
+					String name = clientNode.get("name").asText();
+					String phoneNumber = clientNode.get("phoneNumber").asText();
+					String neighborhood = clientNode.get("neighborhood").asText();
+					String address = clientNode.get("address").asText();
+					String reference = clientNode.get("reference").asText();
+
+					Client client = new Client();
+					client.setName(name);
+					client.setPhoneNumber(phoneNumber);
+					client.setNeighborhood(neighborhood);
+					client.setAddress(address);
+					client.setReference(reference);
+
+					clients.add(client);
+				}
+			} else {
+				System.out.println("File does not contain a JSON array");
+			}
+		} catch (IOException e) {
+			System.out.println("Error when reading JSON array: " + e.getMessage());
+		}
+
+		return clients;
 	}
 }

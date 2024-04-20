@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -41,7 +40,7 @@ public class OrderItem implements Serializable {
 	@Column(length = 7, nullable = false)
 	private Double price;
 
-	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private List<Order> orders = new ArrayList<>();
+	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
+	private List<Order> orders;
 }
