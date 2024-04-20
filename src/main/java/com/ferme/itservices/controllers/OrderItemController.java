@@ -1,18 +1,18 @@
-package com.ferme.itservices.api.controllers;
+package com.ferme.itservices.controllers;
 
-import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.services.OrderItemService;
+import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.services.OrderItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +22,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@Transactional
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/orderItems")
+@RequestMapping(value = "/api/orderItems", produces = {"application/json"})
 @Tag(name = "OrderItem Controller")
 public class OrderItemController {
 	private OrderItemService orderItemService;
@@ -78,8 +76,9 @@ public class OrderItemController {
 		})
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public OrderItem create(@RequestBody @Valid @NotNull OrderItem orderItem) {
-		return orderItemService.create(orderItem);
+	public ResponseEntity<OrderItem> create(@RequestBody @Valid OrderItem orderItem) {
+		OrderItem orderItemCreated = orderItemService.create(orderItem);
+		return ResponseEntity.status(HttpStatus.CREATED).body(orderItemCreated);
 	}
 
 	@Operation(summary = "Atualiza item de pedido existente", method = "PUT")

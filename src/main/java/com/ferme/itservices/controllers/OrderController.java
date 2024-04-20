@@ -1,7 +1,7 @@
-package com.ferme.itservices.api.controllers;
+package com.ferme.itservices.controllers;
 
-import com.ferme.itservices.api.models.Order;
-import com.ferme.itservices.api.services.OrderService;
+import com.ferme.itservices.models.Order;
+import com.ferme.itservices.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

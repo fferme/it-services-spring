@@ -1,8 +1,8 @@
-package com.ferme.itservices.api.services;
+package com.ferme.itservices.services;
 
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.Order;
-import com.ferme.itservices.api.repositories.OrderRepository;
+import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Order;
+import com.ferme.itservices.repositories.OrderRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

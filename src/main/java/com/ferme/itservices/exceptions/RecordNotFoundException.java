@@ -1,4 +1,4 @@
-package com.ferme.itservices.api.exceptions;
+package com.ferme.itservices.exceptions;
 
 import java.io.Serializable;
 

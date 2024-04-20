@@ -1,6 +1,6 @@
-package com.ferme.itservices.api.repositories;
+package com.ferme.itservices.repositories;
 
-import com.ferme.itservices.api.models.Client;
+import com.ferme.itservices.models.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

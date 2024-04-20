@@ -1,4 +1,4 @@
-package com.ferme.itservices.api.enums;
+package com.ferme.itservices.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

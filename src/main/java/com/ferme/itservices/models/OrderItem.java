@@ -1,8 +1,8 @@
-package com.ferme.itservices.api.models;
+package com.ferme.itservices.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ferme.itservices.api.enums.OrderItemType;
-import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
+import com.ferme.itservices.enums.OrderItemType;
+import com.ferme.itservices.enums.converter.OrderItemTypeConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

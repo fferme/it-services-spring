@@ -1,4 +1,4 @@
-package com.ferme.itservices.api.models;
+package com.ferme.itservices.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

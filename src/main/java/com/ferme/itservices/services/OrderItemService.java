@@ -1,14 +1,14 @@
-package com.ferme.itservices.api.services;
+package com.ferme.itservices.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ferme.itservices.api.enums.OrderItemType;
-import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.Client;
-import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.repositories.OrderItemRepository;
+import com.ferme.itservices.enums.OrderItemType;
+import com.ferme.itservices.enums.converter.OrderItemTypeConverter;
+import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Client;
+import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.repositories.OrderItemRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

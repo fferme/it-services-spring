@@ -1,6 +1,6 @@
-package com.ferme.itservices.api.enums.converter;
+package com.ferme.itservices.enums.converter;
 
-import com.ferme.itservices.api.enums.OrderItemType;
+import com.ferme.itservices.enums.OrderItemType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

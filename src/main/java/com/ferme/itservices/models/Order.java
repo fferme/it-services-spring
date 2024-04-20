@@ -1,4 +1,4 @@
-package com.ferme.itservices.api.models;
+package com.ferme.itservices.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

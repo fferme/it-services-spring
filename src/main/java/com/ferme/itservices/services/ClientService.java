@@ -1,11 +1,11 @@
-package com.ferme.itservices.api.services;
+package com.ferme.itservices.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.Client;
-import com.ferme.itservices.api.repositories.ClientRepository;
+import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Client;
+import com.ferme.itservices.repositories.ClientRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
