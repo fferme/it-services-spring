@@ -11,5 +11,13 @@ public class ClientConstants {
 		.reference("Amigo do Jaca")
 		.build();
 
-	public static final Client INVALID_CLIENT = new Client();
+	public static final Client EMPTY_CLIENT = new Client();
+
+	public static final Client INVALID_CLIENT = Client.builder()
+		.name("")
+		.phoneNumber("21986861613333")
+		.neighborhood("")
+		.address("")
+		.reference("")
+		.build();
 }

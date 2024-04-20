@@ -2,7 +2,7 @@ package com.ferme.itservices.common;
 
 import com.ferme.itservices.api.models.Order;
 
-import static com.ferme.itservices.common.ClientConstants.INVALID_CLIENT;
+import static com.ferme.itservices.common.ClientConstants.EMPTY_CLIENT;
 import static com.ferme.itservices.common.ClientConstants.VALID_CLIENT;
 import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_INVALID_LIST;
 import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_LIST;
@@ -20,7 +20,9 @@ public class OrderConstants {
 		.deviceName("")
 		.deviceSN("")
 		.problems("")
-		.client(INVALID_CLIENT)
+		.client(EMPTY_CLIENT)
 		.orderItems(ORDERITEM_INVALID_LIST)
 		.build();
+
+	public static final Order EMPTY_ORDER = new Order();
 }

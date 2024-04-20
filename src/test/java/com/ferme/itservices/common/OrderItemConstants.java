@@ -14,10 +14,11 @@ public class OrderItemConstants {
 		.build();
 
 	public static final OrderItem INVALID_ORDERITEM = OrderItem.builder()
-		.orderItemType(null)
 		.description("")
 		.price(0.0)
 		.build();
+
+	public static final OrderItem EMPTY_ORDERITEM = new OrderItem();
 
 	public static final List<OrderItem> ORDERITEM_LIST = fillList();
 	public static final List<OrderItem> ORDERITEM_INVALID_LIST = fillInvalidList();
@@ -30,7 +31,6 @@ public class OrderItemConstants {
 			               .orderItemType(OrderItemType.PART_BUYOUT)
 			               .description("SSD Kingston 240Gb")
 			               .price(120.0)
-			               //.orders(null)
 			               .build());
 
 		return orderItems;
