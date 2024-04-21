@@ -1,8 +1,8 @@
 package com.ferme.itservices.unit.service;
 
-import com.ferme.itservices.api.models.Client;
-import com.ferme.itservices.api.repositories.ClientRepository;
-import com.ferme.itservices.api.services.ClientService;
+import com.ferme.itservices.models.Client;
+import com.ferme.itservices.repositories.ClientRepository;
+import com.ferme.itservices.services.ClientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

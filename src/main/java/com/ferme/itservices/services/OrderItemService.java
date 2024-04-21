@@ -84,8 +84,8 @@ public class OrderItemService {
 		return orderItems;
 	}
 
-	public void exportDataToOrderItem() throws IOException {
-		orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
+	public List<OrderItem> exportDataToOrderItem() throws IOException {
+		return orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
 	}
 
 	public OrderItem update(@NotNull Long id, @Valid @NotNull OrderItem updatedOrderItem) {

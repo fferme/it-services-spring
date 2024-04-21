@@ -1,6 +1,6 @@
 package com.ferme.itservices.common;
 
-import com.ferme.itservices.api.models.Client;
+import com.ferme.itservices.models.Client;
 
 public class ClientConstants {
 	public static final Client VALID_CLIENT = Client.builder()

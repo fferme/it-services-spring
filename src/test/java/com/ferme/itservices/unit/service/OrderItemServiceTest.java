@@ -1,8 +1,8 @@
 package com.ferme.itservices.unit.service;
 
-import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.repositories.OrderItemRepository;
-import com.ferme.itservices.api.services.OrderItemService;
+import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.repositories.OrderItemRepository;
+import com.ferme.itservices.services.OrderItemService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

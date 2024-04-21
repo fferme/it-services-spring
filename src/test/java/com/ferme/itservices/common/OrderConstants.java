@@ -1,6 +1,6 @@
 package com.ferme.itservices.common;
 
-import com.ferme.itservices.api.models.Order;
+import com.ferme.itservices.models.Order;
 
 import static com.ferme.itservices.common.ClientConstants.EMPTY_CLIENT;
 import static com.ferme.itservices.common.ClientConstants.VALID_CLIENT;

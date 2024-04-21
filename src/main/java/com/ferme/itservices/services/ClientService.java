@@ -65,8 +65,8 @@ public class ClientService {
 		clientRepository.deleteAll();
 	}
 
-	public void exportDataToClient() throws IOException {
-		clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
+	public List<Client> exportDataToClient() throws IOException {
+		return clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
 	}
 
 	private static List<Client> readJsonData(String filePath) {

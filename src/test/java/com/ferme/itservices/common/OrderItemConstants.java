@@ -1,7 +1,7 @@
 package com.ferme.itservices.common;
 
-import com.ferme.itservices.api.enums.OrderItemType;
-import com.ferme.itservices.api.models.OrderItem;
+import com.ferme.itservices.enums.OrderItemType;
+import com.ferme.itservices.models.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;

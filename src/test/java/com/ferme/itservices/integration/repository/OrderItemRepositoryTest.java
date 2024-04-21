@@ -1,11 +1,14 @@
 package com.ferme.itservices.integration.repository;
 
-import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.repositories.OrderItemRepository;
+import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.repositories.OrderItemRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import java.util.Optional;
 
 import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
 import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
@@ -19,6 +22,11 @@ public class OrderItemRepositoryTest {
 
 	@Autowired
 	private TestEntityManager testEntityManager;
+
+	@AfterEach
+	public void nullifyId() {
+		VALID_ORDERITEM.setId(null);
+	}
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsOrderItem() {
@@ -46,5 +54,22 @@ public class OrderItemRepositoryTest {
 		orderItem.setId(null);
 
 		assertThatThrownBy(() -> orderItemRepository.save(orderItem)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
+		OrderItem orderItem = testEntityManager.persistFlushFind(VALID_ORDERITEM);
+
+		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItem.getId());
+
+		assertThat(orderItemOpt).isNotEmpty();
+		assertThat(orderItemOpt.orElse(null)).isEqualTo(orderItem);
+	}
+
+	@Test
+	public void getOrderItem_ByUnexistingId_ReturnsEmpty() {
+		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(1L);
+
+		assertThat(orderItemOpt).isEmpty();
 	}
 }
