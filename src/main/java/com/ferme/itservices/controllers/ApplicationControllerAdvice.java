@@ -1,17 +1,23 @@
-package com.ferme.itservices.api.controllers;
+package com.ferme.itservices.controllers;
 
-import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
+import com.ferme.itservices.exceptions.RecordAlreadyExistsException;
+import com.ferme.itservices.exceptions.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class ApplicationControllerAdvice {
+public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(RecordNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -23,14 +29,6 @@ public class ApplicationControllerAdvice {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public String handleAlreadyExistsException(RecordAlreadyExistsException ex) {
 		return ex.getMessage();
-	}
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public String handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-		return ex.getBindingResult().getFieldErrors().stream()
-			.map(error -> error.getField() + " " + error.getDefaultMessage())
-			.reduce("", (acc, error) -> acc + error + "\n");
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -51,5 +49,16 @@ public class ApplicationControllerAdvice {
 			return ex.getName() + " should be of type " + typeName;
 		}
 		return "Argument type not valid";
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		return super.handleMethodArgumentNotValid(ex, headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	private String handleConflict(DataIntegrityViolationException ex) {
+		return ex.getMessage();
 	}
 }

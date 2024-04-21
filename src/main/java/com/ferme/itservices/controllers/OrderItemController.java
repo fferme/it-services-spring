@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -40,8 +38,9 @@ public class OrderItemController {
 				})
 		})
 	@GetMapping
-	public List<OrderItem> listAll() {
-		return orderItemService.listAll();
+	public ResponseEntity<List<OrderItem>> listAll() {
+		List<OrderItem> orderItems = orderItemService.listAll();
+		return ResponseEntity.ok(orderItems);
 	}
 
 	@Operation(summary = "Recupera item de pedido pelo ID", method = "GET")
@@ -58,8 +57,10 @@ public class OrderItemController {
 				})
 		})
 	@GetMapping("/{id}")
-	public Optional<OrderItem> findById(@PathVariable @NotNull Long id) {
-		return orderItemService.findById(id);
+	public ResponseEntity<OrderItem> findById(@PathVariable("id") Long id) {
+		return orderItemService.findById(id)
+			.map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@Operation(summary = "Cria novo item de pedido", method = "POST")
@@ -75,10 +76,9 @@ public class OrderItemController {
 				})
 		})
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
 	public ResponseEntity<OrderItem> create(@RequestBody @Valid OrderItem orderItem) {
-		OrderItem orderItemCreated = orderItemService.create(orderItem);
-		return ResponseEntity.status(HttpStatus.CREATED).body(orderItemCreated);
+		OrderItem createdOrderItem = orderItemService.create(orderItem);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderItem);
 	}
 
 	@Operation(summary = "Atualiza item de pedido existente", method = "PUT")
@@ -94,8 +94,11 @@ public class OrderItemController {
 				})
 		})
 	@PutMapping("/{id}")
-	public OrderItem update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull OrderItem newOrderItem) {
-		return orderItemService.update(id, newOrderItem);
+	public ResponseEntity<OrderItem> update(@PathVariable("id") Long id, @RequestBody @Valid OrderItem updatedOrderItem) {
+		OrderItem modifiedOrderItem = orderItemService.update(id, updatedOrderItem);
+		return (modifiedOrderItem != null)
+			? ResponseEntity.ok(modifiedOrderItem)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Deleta item de pedido existente", method = "DELETE")
@@ -111,9 +114,9 @@ public class OrderItemController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable @NotNull Long id) {
+	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		orderItemService.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Deleta todos itens de pedido existentes", method = "DELETE")
@@ -128,9 +131,9 @@ public class OrderItemController {
 				})
 		})
 	@DeleteMapping
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteAll() {
+	public ResponseEntity<Void> deleteAll() {
 		orderItemService.deleteAll();
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Importa itens de pedido de arquivo e salva no banco", method = "POST")
@@ -146,8 +149,8 @@ public class OrderItemController {
 				})
 		})
 	@PostMapping("/import")
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public void importClients() throws IOException {
-		orderItemService.exportDataToOrderItem();
+	public ResponseEntity<List<OrderItem>> importOrderItems() throws IOException {
+		List<OrderItem> orderItems = orderItemService.exportDataToOrderItem();
+		return ResponseEntity.status(HttpStatus.CREATED).body(orderItems);
 	}
 }

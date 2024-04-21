@@ -9,15 +9,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -40,8 +40,9 @@ public class ClientController {
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
-	public List<Client> listAll() {
-		return clientService.listAll();
+	public ResponseEntity<List<Client>> listAll() {
+		List<Client> clients = clientService.listAll();
+		return ResponseEntity.ok(clients);
 	}
 
 	@Operation(summary = "Recupera cliente pelo ID", method = "GET")
@@ -58,8 +59,9 @@ public class ClientController {
 				})
 		})
 	@GetMapping("/{id}")
-	public Optional<Client> findById(@PathVariable @NotNull Long id) {
-		return clientService.findById(id);
+	public ResponseEntity<Client> findById(@PathVariable("id") Long id) {
+		return clientService.findById(id).map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@Operation(summary = "Recupera cliente pelo nome", method = "GET")
@@ -76,8 +78,9 @@ public class ClientController {
 				})
 		})
 	@GetMapping("/name/{name}")
-	public Optional<Client> findByName(@PathVariable @NotNull String name) {
-		return clientService.findByName(name);
+	public ResponseEntity<Client> findByName(@PathVariable("name") @NotEmpty String name) {
+		return clientService.findByName(name).map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@Operation(summary = "Salva novo cliente", method = "POST")
@@ -93,8 +96,10 @@ public class ClientController {
 				})
 		})
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Client create(@RequestBody @Valid Client client) { return clientService.create(client); }
+	public ResponseEntity<Client> create(@RequestBody @Valid Client client) {
+		Client createdClient = clientService.create(client);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
+	}
 
 	@Operation(summary = "Atualiza cliente existente", method = "PUT")
 	@ApiResponses(
@@ -109,8 +114,11 @@ public class ClientController {
 				})
 		})
 	@PutMapping("/{id}")
-	public Client update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull Client newClient) {
-		return clientService.update(id, newClient);
+	public ResponseEntity<Client> update(@PathVariable("id") Long id, @RequestBody @Valid Client updatedClient) {
+		Client modifiedClient = clientService.update(id, updatedClient);
+		return (modifiedClient != null)
+			? ResponseEntity.ok(modifiedClient)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Deleta cliente existente", method = "DELETE")
@@ -126,9 +134,9 @@ public class ClientController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable @NotNull Long id) {
+	public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
 		clientService.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Deleta todos clientes existentes", method = "DELETE")
@@ -143,9 +151,9 @@ public class ClientController {
 				})
 		})
 	@DeleteMapping
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteAll() {
+	public ResponseEntity<Void> remove() {
 		clientService.deleteAll();
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Importa clientes de arquivo e salva no banco", method = "POST")
@@ -161,8 +169,8 @@ public class ClientController {
 				})
 		})
 	@PostMapping("/import")
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public void importClients() throws IOException {
-		clientService.exportDataToClient();
+	public ResponseEntity<List<Client>> importClients() throws IOException {
+		List<Client> clients = clientService.exportDataToClient();
+		return ResponseEntity.status(HttpStatus.CREATED).body(clients);
 	}
 }

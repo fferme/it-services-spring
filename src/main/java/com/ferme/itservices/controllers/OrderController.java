@@ -9,14 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -38,8 +37,9 @@ public class OrderController {
 				})
 		})
 	@GetMapping
-	public List<Order> listAll() {
-		return orderService.listAll();
+	public ResponseEntity<List<Order>> listAll() {
+		List<Order> orders = orderService.listAll();
+		return ResponseEntity.ok(orders);
 	}
 
 	@Operation(summary = "Recupera pedido pelo ID", method = "GET")
@@ -56,8 +56,10 @@ public class OrderController {
 				})
 		})
 	@GetMapping("/{id}")
-	public Optional<Order> findById(@PathVariable @NotNull Long id) {
-		return orderService.findById(id);
+	public ResponseEntity<Order> findById(@PathVariable("id") Long id) {
+		return orderService.findById(id)
+			.map(ResponseEntity::ok)
+			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
 	@Operation(summary = "Cria novo pedido", method = "POST")
@@ -73,9 +75,9 @@ public class OrderController {
 				})
 		})
 	@PostMapping
-	@ResponseStatus(code = HttpStatus.CREATED)
-	public Order create(@RequestBody @Valid @NotNull Order order) {
-		return orderService.create(order);
+	public ResponseEntity<Order> create(@RequestBody @Valid Order order) {
+		Order createdOrder = orderService.create(order);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
 	}
 
 	@Operation(summary = "Atualiza pedido existente", method = "PUT")
@@ -91,8 +93,11 @@ public class OrderController {
 				})
 		})
 	@PutMapping("/{id}")
-	public Order update(@PathVariable @NotNull Long id, @RequestBody @Valid @NotNull Order newOrder) {
-		return orderService.update(id, newOrder);
+	public ResponseEntity<Order> update(@PathVariable("id") Long id, @RequestBody @Valid Order updatedOrder) {
+		Order modifiedOrder = orderService.update(id, updatedOrder);
+		return (modifiedOrder != null)
+			? ResponseEntity.ok(modifiedOrder)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Deleta pedido existente", method = "DELETE")
@@ -108,9 +113,9 @@ public class OrderController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteById(@PathVariable @NotNull Long id) {
+	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		orderService.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	@Operation(summary = "Deleta todos pedidos existentes", method = "DELETE")
@@ -125,8 +130,8 @@ public class OrderController {
 				})
 		})
 	@DeleteMapping
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void deleteAll() {
+	public ResponseEntity<Void> deleteAll() {
 		orderService.deleteAll();
+		return ResponseEntity.noContent().build();
 	}
 }
