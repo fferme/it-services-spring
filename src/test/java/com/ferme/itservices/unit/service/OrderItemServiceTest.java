@@ -14,8 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.IdConstants.INVALID_ID;
-import static com.ferme.itservices.common.IdConstants.VALID_ID;
 import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
 import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
 import static org.assertj.core.api.Assertions.*;
@@ -48,9 +46,9 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(VALID_ID)).thenReturn(Optional.of(VALID_ORDERITEM));
+		when(orderItemRepository.findById(1L)).thenReturn(Optional.of(VALID_ORDERITEM));
 
-		Optional<OrderItem> sut = orderItemService.findById(VALID_ID);
+		Optional<OrderItem> sut = orderItemService.findById(1L);
 
 		assertThat(sut).isNotEmpty();
 		assertThat(sut.get()).isEqualTo(VALID_ORDERITEM);
@@ -58,9 +56,9 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(INVALID_ID)).thenReturn(Optional.empty());
+		when(orderItemRepository.findById(1L)).thenReturn(Optional.empty());
 
-		Optional<OrderItem> sut = orderItemService.findById(INVALID_ID);
+		Optional<OrderItem> sut = orderItemService.findById(1L);
 
 		assertThat(sut).isEmpty();
 	}
@@ -90,13 +88,13 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void deleteOrderItem_WithExistingId_doesNotThrowAnyException() {
-		assertThatCode(() -> orderItemService.deleteById(VALID_ID)).doesNotThrowAnyException();
+		assertThatCode(() -> orderItemService.deleteById(1L)).doesNotThrowAnyException();
 	}
 
 	@Test
 	public void deleteOrderItem_WithUnexistingId_ThrowsException() {
-		doThrow(new RuntimeException()).when(orderItemRepository).deleteById(INVALID_ID);
+		doThrow(new RuntimeException()).when(orderItemRepository).deleteById(1L);
 
-		assertThatThrownBy(() -> orderItemService.deleteById(INVALID_ID)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemService.deleteById(1L)).isInstanceOf(RuntimeException.class);
 	}
 }

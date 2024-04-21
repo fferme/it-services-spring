@@ -16,8 +16,6 @@ import java.util.Optional;
 
 import static com.ferme.itservices.common.ClientConstants.EMPTY_CLIENT;
 import static com.ferme.itservices.common.ClientConstants.VALID_CLIENT;
-import static com.ferme.itservices.common.IdConstants.INVALID_ID;
-import static com.ferme.itservices.common.IdConstants.VALID_ID;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -48,9 +46,9 @@ public class ClientServiceTest {
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		when(clientRepository.findById(VALID_ID)).thenReturn(Optional.of(VALID_CLIENT));
+		when(clientRepository.findById(1L)).thenReturn(Optional.of(VALID_CLIENT));
 
-		Optional<Client> sut = clientService.findById(VALID_ID);
+		Optional<Client> sut = clientService.findById(1L);
 
 		assertThat(sut).isNotEmpty();
 		assertThat(sut.get()).isEqualTo(VALID_CLIENT);
@@ -58,9 +56,9 @@ public class ClientServiceTest {
 
 	@Test
 	public void getClient_ByUnexistingId_ReturnsEmpty() {
-		when(clientRepository.findById(INVALID_ID)).thenReturn(Optional.empty());
+		when(clientRepository.findById(1L)).thenReturn(Optional.empty());
 
-		Optional<Client> sut = clientService.findById(INVALID_ID);
+		Optional<Client> sut = clientService.findById(1L);
 
 		assertThat(sut).isEmpty();
 	}
@@ -109,14 +107,14 @@ public class ClientServiceTest {
 
 	@Test
 	public void deleteClient_WithExistingId_doesNotThrowAnyException() {
-		assertThatCode(() -> clientService.deleteById(VALID_ID)).doesNotThrowAnyException();
+		assertThatCode(() -> clientService.deleteById(1L)).doesNotThrowAnyException();
 	}
 
 	@Test
 	public void deleteClient_WithUnexistingId_ThrowsException() {
-		doThrow(new RuntimeException()).when(clientRepository).deleteById(INVALID_ID);
+		doThrow(new RuntimeException()).when(clientRepository).deleteById(1L);
 
-		assertThatThrownBy(() -> clientService.deleteById(INVALID_ID)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> clientService.deleteById(1L)).isInstanceOf(RuntimeException.class);
 	}
 
 

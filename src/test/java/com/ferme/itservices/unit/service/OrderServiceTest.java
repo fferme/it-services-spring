@@ -23,10 +23,9 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
-	private static final Long valid_id = 123456L;
-	private static final Long invalid_id = 978541L;
 	@InjectMocks
 	private OrderService orderService;
+	
 	@Mock
 	private OrderRepository orderRepository;
 
@@ -48,9 +47,9 @@ public class OrderServiceTest {
 
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() {
-		when(orderRepository.findById(valid_id)).thenReturn(Optional.of(VALID_ORDER));
+		when(orderRepository.findById(1L)).thenReturn(Optional.of(VALID_ORDER));
 
-		Optional<Order> sut = orderService.findById(valid_id);
+		Optional<Order> sut = orderService.findById(1L);
 
 		assertThat(sut).isNotEmpty();
 		assertThat(sut.get()).isEqualTo(VALID_ORDER);
@@ -58,9 +57,9 @@ public class OrderServiceTest {
 
 	@Test
 	public void getOrder_ByUnexistingId_ReturnsOrder() {
-		when(orderRepository.findById(invalid_id)).thenReturn(Optional.empty());
+		when(orderRepository.findById(1L)).thenReturn(Optional.empty());
 
-		Optional<Order> sut = orderService.findById(invalid_id);
+		Optional<Order> sut = orderService.findById(1L);
 
 		assertThat(sut).isEmpty();
 	}
@@ -90,8 +89,8 @@ public class OrderServiceTest {
 
 	@Test
 	public void deleteOrder_WithUnexistingId_ThrowsException() {
-		doThrow(new RuntimeException()).when(orderRepository).deleteById(invalid_id);
+		doThrow(new RuntimeException()).when(orderRepository).deleteById(1L);
 
-		assertThatThrownBy(() -> orderService.deleteById(invalid_id)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderService.deleteById(1L)).isInstanceOf(RuntimeException.class);
 	}
 }
