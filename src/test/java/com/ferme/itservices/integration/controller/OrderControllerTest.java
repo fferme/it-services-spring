@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,9 +24,9 @@ import static com.ferme.itservices.common.OrderConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -157,4 +158,19 @@ public class OrderControllerTest {
 			.andExpect(jsonPath("$", hasSize(0)));
 	}
 
+	@Test
+	public void removeOrder_WithExistingId_ReturnsNoContent() throws Exception {
+		mockMvc
+			.perform(delete("/api/orders/1"))
+			.andExpect(status().isNoContent());
+	}
+
+	@Test
+	public void removeOrder_WithUnexistingId_ReturnsNotFound() throws Exception {
+		doThrow(new EmptyResultDataAccessException(1)).when(orderService).deleteById(1L);
+
+		mockMvc
+			.perform(delete("/api/orders/1"))
+			.andExpect(status().isNotFound());
+	}
 }

@@ -95,7 +95,7 @@ public class ClientRepositoryTest {
 
 	@Sql(scripts = "/sql_scripts/import_clients.sql")
 	@Test
-	public void listClients_ReturnsClients() throws Exception {
+	public void listClients_ReturnsClients() {
 		List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isNotEmpty();
@@ -103,9 +103,19 @@ public class ClientRepositoryTest {
 	}
 
 	@Test
-	public void listClients_ReturnsNoClients() throws Exception {
+	public void listClients_ReturnsNoClients() {
 		List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isEmpty();
+	}
+
+	@Test
+	public void removeClient_WithExistingId_RemovesClientFromDatabase() {
+		Client client = testEntityManager.persistFlushFind(FELIPE);
+
+		clientRepository.deleteById(FELIPE.getId());
+
+		Client removedClient = testEntityManager.find(Client.class, FELIPE.getId());
+		assertThat(removedClient).isNull();
 	}
 }

@@ -50,12 +50,12 @@ public class OrderItemService {
 		orderItemRepository.deleteAll();
 	}
 
-	private static List<OrderItem> readJsonData(String filePath) {
+	private static List<OrderItem> readJsonData() {
 		List<OrderItem> orderItems = new ArrayList<>();
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			File path = new File(filePath);
+			File path = new File("src/main/resources/entities/orderItems.json");
 			JsonNode jsonArrayNode = objectMapper.readTree(path);
 
 			if (jsonArrayNode.isArray()) {
@@ -85,7 +85,7 @@ public class OrderItemService {
 	}
 
 	public List<OrderItem> exportDataToOrderItem() throws IOException {
-		return orderItemRepository.saveAll(readJsonData("src/main/resources/entities/orderItems.json"));
+		return orderItemRepository.saveAll(readJsonData());
 	}
 
 	public OrderItem update(@NotNull Long id, @Valid @NotNull OrderItem updatedOrderItem) {

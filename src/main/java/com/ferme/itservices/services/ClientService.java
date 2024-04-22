@@ -66,15 +66,15 @@ public class ClientService {
 	}
 
 	public List<Client> exportDataToClient() throws IOException {
-		return clientRepository.saveAll(readJsonData("src/main/resources/entities/clients.json"));
+		return clientRepository.saveAll(readJsonData());
 	}
 
-	private static List<Client> readJsonData(String filePath) {
+	private static List<Client> readJsonData() {
 		List<Client> clients = new ArrayList<>();
 
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			File path = new File(filePath);
+			File path = new File("src/main/resources/entities/clients.json");
 			JsonNode jsonArrayNode = objectMapper.readTree(path);
 
 			if (jsonArrayNode.isArray()) {

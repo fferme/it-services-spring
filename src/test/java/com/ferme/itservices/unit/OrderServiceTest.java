@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.service;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.repositories.OrderRepository;

@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit.service;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
@@ -116,6 +116,4 @@ public class ClientServiceTest {
 
 		assertThatThrownBy(() -> clientService.deleteById(1L)).isInstanceOf(RuntimeException.class);
 	}
-
-
 }

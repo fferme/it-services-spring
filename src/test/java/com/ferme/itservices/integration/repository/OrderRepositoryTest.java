@@ -101,4 +101,13 @@ public class OrderRepositoryTest {
 		assertThat(orders).isEmpty();
 	}
 
+	@Test
+	public void removeOrder_WithExistingId_RemovesOrderFromDatabase() {
+		Order order = testEntityManager.persistFlushFind(ORDER_A);
+
+		orderRepository.deleteById(order.getId());
+		Order removedOrder = testEntityManager.find(Order.class, order.getId());
+
+		assertThat(removedOrder).isNull();
+	}
 }

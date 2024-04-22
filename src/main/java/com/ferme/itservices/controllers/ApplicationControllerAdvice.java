@@ -4,6 +4,7 @@ import com.ferme.itservices.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -60,5 +61,10 @@ public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler 
 	@ResponseStatus(HttpStatus.CONFLICT)
 	private String handleConflict(DataIntegrityViolationException ex) {
 		return ex.getMessage();
+	}
+
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	private ResponseEntity<Object> handleBadRequest(EmptyResultDataAccessException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 }
