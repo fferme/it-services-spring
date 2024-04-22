@@ -93,7 +93,7 @@ public class ClientRepositoryTest {
 		assertThat(clientOpt).isEmpty();
 	}
 
-	@Sql(scripts = "/sql_scripts/import_clients.sql")
+	@Sql(scripts = "/resources/scripts/import_clients.sql")
 	@Test
 	public void listClients_ReturnsClients() {
 		List<Client> clients = clientRepository.findAll();

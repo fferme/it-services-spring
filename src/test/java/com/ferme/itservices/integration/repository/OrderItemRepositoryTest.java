@@ -77,7 +77,7 @@ public class OrderItemRepositoryTest {
 		assertThat(orderItemOpt).isEmpty();
 	}
 
-	@Sql(scripts = "/sql_scripts/import_orderItems.sql")
+	@Sql(scripts = "/resources/scripts/import_orderItems.sql")
 	@Test
 	public void listOrderItems_ReturnsOrderItems() throws Exception {
 		List<OrderItem> orderItems = orderItemRepository.findAll();

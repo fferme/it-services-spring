@@ -82,9 +82,9 @@ public class OrderRepositoryTest {
 
 	@Sql(
 		scripts = {
-			"/sql_scripts/import_clients.sql",
-			"/sql_scripts/import_orderItems.sql",
-			"/sql_scripts/import_orders.sql"
+			"/resources/scripts/import_clients.sql",
+			"/resources/scripts/import_orderItems.sql",
+			"/resources/scripts/import_orders.sql"
 		})
 	@Test
 	public void listOrders_ReturnsOrders() throws Exception {
