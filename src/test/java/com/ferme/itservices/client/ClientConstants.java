@@ -1,4 +1,4 @@
-package com.ferme.itservices.common;
+package com.ferme.itservices.client;
 
 import com.ferme.itservices.models.Client;
 
