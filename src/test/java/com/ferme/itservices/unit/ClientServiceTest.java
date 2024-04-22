@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.client.ClientConstants.EMPTY_CLIENT;
-import static com.ferme.itservices.client.ClientConstants.FELIPE;
+import static com.ferme.itservices.common.ClientConstants.EMPTY_CLIENT;
+import static com.ferme.itservices.common.ClientConstants.FELIPE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;

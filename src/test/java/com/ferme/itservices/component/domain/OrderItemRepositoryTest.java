@@ -1,4 +1,4 @@
-package com.ferme.itservices.orderItem;
+package com.ferme.itservices.component.domain;
 
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderItemRepository;
