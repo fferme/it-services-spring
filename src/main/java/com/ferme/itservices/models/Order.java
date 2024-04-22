@@ -1,6 +1,7 @@
 package com.ferme.itservices.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "´orders´")
-@Table(name = "`orders`")
+@Entity(name = "orders")
+@Table(name = "orders")
 public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,11 +41,14 @@ public class Order implements Serializable {
 	@Column(length = 250)
 	private String problems;
 
+	@NotNull
+	@Valid
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "client_id")
 	private Client client;
 
 	@NotNull
+	@Valid
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(
 		name = "rel_order_orderItems",
@@ -65,7 +69,7 @@ public class Order implements Serializable {
 	@PrePersist
 	@PreUpdate
 	private void calculateTotal() {
-		if ((orderItems != null) && (!orderItems.isEmpty())) {
+		if (!orderItems.isEmpty()) {
 			this.totalPrice = orderItems.stream()
 				.mapToDouble(OrderItem::getPrice)
 				.sum();
