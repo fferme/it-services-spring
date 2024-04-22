@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
-import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
+import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_A;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -30,11 +30,11 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsClient() {
-		when(orderItemRepository.save(VALID_ORDERITEM)).thenReturn(VALID_ORDERITEM);
+		when(orderItemRepository.save(ORDERITEM_A)).thenReturn(ORDERITEM_A);
 
-		OrderItem sut = orderItemService.create(VALID_ORDERITEM);
+		OrderItem sut = orderItemService.create(ORDERITEM_A);
 
-		assertThat(sut).isEqualTo(VALID_ORDERITEM);
+		assertThat(sut).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test
@@ -46,12 +46,12 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(1L)).thenReturn(Optional.of(VALID_ORDERITEM));
+		when(orderItemRepository.findById(1L)).thenReturn(Optional.of(ORDERITEM_A));
 
 		Optional<OrderItem> sut = orderItemService.findById(1L);
 
 		assertThat(sut).isNotEmpty();
-		assertThat(sut.get()).isEqualTo(VALID_ORDERITEM);
+		assertThat(sut.get()).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class OrderItemServiceTest {
 	@Test
 	public void listOrderItems_ReturnsAllOrderItems() {
 		List<OrderItem> orderItems = new ArrayList<>() {
-			{ add(VALID_ORDERITEM); }
+			{ add(ORDERITEM_A); }
 		};
 		when(orderItemRepository.findAll()).thenReturn(orderItems);
 
@@ -74,7 +74,7 @@ public class OrderItemServiceTest {
 
 		assertThat(sut).isNotEmpty();
 		assertThat(sut).hasSize(1);
-		assertThat(sut.getFirst()).isEqualTo(VALID_ORDERITEM);
+		assertThat(sut.getFirst()).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test

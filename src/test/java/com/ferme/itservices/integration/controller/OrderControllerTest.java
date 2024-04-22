@@ -15,10 +15,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.ferme.itservices.common.OrderConstants.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,27 +42,27 @@ public class OrderControllerTest {
 
 	@Test
 	public void createOrder_ValidData_ReturnsCreated() throws Exception {
-		when(orderService.create(any(Order.class))).thenReturn(VALID_ORDER);
+		when(orderService.create(any(Order.class))).thenReturn(ORDER_A);
 
 		MvcResult mvcResult = mockMvc.perform(
 				post("/api/orders")
-					.content(objectMapper.writeValueAsString(VALID_ORDER))
+					.content(objectMapper.writeValueAsString(ORDER_A))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 
-			.andExpect(jsonPath("$.header").value(VALID_ORDER.getHeader()))
-			.andExpect(jsonPath("$.deviceName").value(VALID_ORDER.getDeviceName()))
-			.andExpect(jsonPath("$.deviceSN").value(VALID_ORDER.getDeviceSN()))
-			.andExpect(jsonPath("$.problems").value(VALID_ORDER.getProblems()))
+			.andExpect(jsonPath("$.header").value(ORDER_A.getHeader()))
+			.andExpect(jsonPath("$.deviceName").value(ORDER_A.getDeviceName()))
+			.andExpect(jsonPath("$.deviceSN").value(ORDER_A.getDeviceSN()))
+			.andExpect(jsonPath("$.problems").value(ORDER_A.getProblems()))
 
-			.andExpect(jsonPath("$.client").value(VALID_ORDER.getClient()))
+			.andExpect(jsonPath("$.client").value(ORDER_A.getClient()))
 			.andReturn();
 
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
 		Order order = objectMapper.readValue(responseBody, Order.class);
 
 		List<OrderItem> actualOrderItems = order.getOrderItems();
-		List<OrderItem> expectedOrderItems = VALID_ORDER.getOrderItems();
+		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
 
 		for (int i = 0; i < expectedOrderItems.size(); i++) {
 			OrderItem expectedOrderItem = expectedOrderItems.get(i);
@@ -93,31 +95,31 @@ public class OrderControllerTest {
 
 		mockMvc
 			.perform(
-				post("/api/orders").content(objectMapper.writeValueAsString(VALID_ORDER))
+				post("/api/orders").content(objectMapper.writeValueAsString(ORDER_A))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() throws Exception {
-		when(orderService.findById(1L)).thenReturn(Optional.ofNullable(VALID_ORDER));
+		when(orderService.findById(1L)).thenReturn(Optional.of(ORDER_A));
 
 		MvcResult mvcResult = mockMvc.perform(get("/api/orders/1"))
 			.andExpect(status().isOk())
 
-			.andExpect(jsonPath("$.header").value(VALID_ORDER.getHeader()))
-			.andExpect(jsonPath("$.deviceName").value(VALID_ORDER.getDeviceName()))
-			.andExpect(jsonPath("$.deviceSN").value(VALID_ORDER.getDeviceSN()))
-			.andExpect(jsonPath("$.problems").value(VALID_ORDER.getProblems()))
+			.andExpect(jsonPath("$.header").value(ORDER_A.getHeader()))
+			.andExpect(jsonPath("$.deviceName").value(ORDER_A.getDeviceName()))
+			.andExpect(jsonPath("$.deviceSN").value(ORDER_A.getDeviceSN()))
+			.andExpect(jsonPath("$.problems").value(ORDER_A.getProblems()))
 
-			.andExpect(jsonPath("$.client").value(VALID_ORDER.getClient()))
+			.andExpect(jsonPath("$.client").value(ORDER_A.getClient()))
 			.andReturn();
 
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
 		Order order = objectMapper.readValue(responseBody, Order.class);
 
 		List<OrderItem> actualOrderItems = order.getOrderItems();
-		List<OrderItem> expectedOrderItems = VALID_ORDER.getOrderItems();
+		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
 
 		for (int i = 0; i < expectedOrderItems.size(); i++) {
 			OrderItem expectedOrderItem = expectedOrderItems.get(i);
@@ -133,6 +135,26 @@ public class OrderControllerTest {
 	public void getOrder_ByUnexistingId_ReturnsNotFound() throws Exception {
 		mockMvc.perform(get("/api/orders/1"))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void listOrders_ReturnsOrders() throws Exception {
+		when(orderService.listAll()).thenReturn(ORDERS);
+
+		mockMvc
+			.perform(get("/api/orders"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(3)));
+	}
+
+	@Test
+	public void listOrders_ReturnsNoOrders() throws Exception {
+		when(orderService.listAll()).thenReturn(Collections.emptyList());
+
+		mockMvc
+			.perform(get("/api/orders"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(0)));
 	}
 
 }

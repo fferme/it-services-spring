@@ -11,10 +11,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.OrderItemConstants.EMPTY_ORDERITEM;
-import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
+import static com.ferme.itservices.common.OrderItemConstants.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -35,17 +36,17 @@ public class OrderItemControllerTest {
 
 	@Test
 	public void createOrder_WithValidData_ReturnsCreated() throws Exception {
-		when(orderItemService.create(VALID_ORDERITEM)).thenReturn(VALID_ORDERITEM);
+		when(orderItemService.create(ORDERITEM_A)).thenReturn(ORDERITEM_A);
 
 		mockMvc
 			.perform(
-				post("/api/orderItems").content(objectMapper.writeValueAsString(VALID_ORDERITEM))
+				post("/api/orderItems").content(objectMapper.writeValueAsString(ORDERITEM_A))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
 
-			.andExpect(jsonPath("$.orderItemType").value(VALID_ORDERITEM.getOrderItemType().getValue()))
-			.andExpect(jsonPath("$.description").value(VALID_ORDERITEM.getDescription()))
-			.andExpect(jsonPath("$.price").value(VALID_ORDERITEM.getPrice()));
+			.andExpect(jsonPath("$.orderItemType").value(ORDERITEM_A.getOrderItemType().getValue()))
+			.andExpect(jsonPath("$.description").value(ORDERITEM_A.getDescription()))
+			.andExpect(jsonPath("$.price").value(ORDERITEM_A.getPrice()));
 	}
 
 	@Test
@@ -69,27 +70,47 @@ public class OrderItemControllerTest {
 
 		mockMvc
 			.perform(
-				post("/api/orderItems").content(objectMapper.writeValueAsString(VALID_ORDERITEM))
+				post("/api/orderItems").content(objectMapper.writeValueAsString(ORDERITEM_A))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() throws Exception {
-		when(orderItemService.findById(1L)).thenReturn(Optional.ofNullable(VALID_ORDERITEM));
+		when(orderItemService.findById(1L)).thenReturn(Optional.of(ORDERITEM_A));
 
 		mockMvc.perform(get("/api/orderItems/1"))
 			.andExpect(status().isOk())
 
-			.andExpect(jsonPath("$.orderItemType").value(VALID_ORDERITEM.getOrderItemType().getValue()))
-			.andExpect(jsonPath("$.description").value(VALID_ORDERITEM.getDescription()))
-			.andExpect(jsonPath("$.price").value(VALID_ORDERITEM.getPrice()));
+			.andExpect(jsonPath("$.orderItemType").value(ORDERITEM_A.getOrderItemType().getValue()))
+			.andExpect(jsonPath("$.description").value(ORDERITEM_A.getDescription()))
+			.andExpect(jsonPath("$.price").value(ORDERITEM_A.getPrice()));
 	}
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsNotFound() throws Exception {
 		mockMvc.perform(get("/api/orderItems/1"))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void listOrderItems_ReturnsOrderItems() throws Exception {
+		when(orderItemService.listAll()).thenReturn(ORDER_ITEMS);
+
+		mockMvc
+			.perform(get("/api/orderItems"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(3)));
+	}
+
+	@Test
+	public void listOrderItems_ReturnsNoOrderItems() throws Exception {
+		when(orderItemService.listAll()).thenReturn(Collections.emptyList());
+
+		mockMvc
+			.perform(get("/api/orderItems"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$", hasSize(0)));
 	}
 
 }

@@ -7,13 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
-import static com.ferme.itservices.common.OrderItemConstants.VALID_ORDERITEM;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_A;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+;
 
 @DataJpaTest
 public class OrderItemRepositoryTest {
@@ -25,19 +29,19 @@ public class OrderItemRepositoryTest {
 
 	@AfterEach
 	public void nullifyId() {
-		VALID_ORDERITEM.setId(null);
+		ORDERITEM_A.setId(null);
 	}
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsOrderItem() {
-		OrderItem orderItem = orderItemRepository.save(VALID_ORDERITEM);
+		OrderItem orderItem = orderItemRepository.save(ORDERITEM_A);
 
 		OrderItem sut = testEntityManager.find(OrderItem.class, orderItem.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getOrderItemType()).isEqualTo(VALID_ORDERITEM.getOrderItemType());
-		assertThat(sut.getDescription()).isEqualTo(VALID_ORDERITEM.getDescription());
-		assertThat(sut.getPrice()).isEqualTo(VALID_ORDERITEM.getPrice());
+		assertThat(sut.getOrderItemType()).isEqualTo(ORDERITEM_A.getOrderItemType());
+		assertThat(sut.getDescription()).isEqualTo(ORDERITEM_A.getDescription());
+		assertThat(sut.getPrice()).isEqualTo(ORDERITEM_A.getPrice());
 	}
 
 	@Test
@@ -49,7 +53,7 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void createOrderItem_WithExistingDescription_ThrowsException() {
-		OrderItem orderItem = testEntityManager.persistFlushFind(VALID_ORDERITEM);
+		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
 		testEntityManager.detach(orderItem);
 		orderItem.setId(null);
 
@@ -58,7 +62,7 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		OrderItem orderItem = testEntityManager.persistFlushFind(VALID_ORDERITEM);
+		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
 
 		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItem.getId());
 
@@ -71,5 +75,21 @@ public class OrderItemRepositoryTest {
 		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(1L);
 
 		assertThat(orderItemOpt).isEmpty();
+	}
+
+	@Sql(scripts = "/sql_scripts/import_orderItems.sql")
+	@Test
+	public void listOrderItems_ReturnsOrderItems() throws Exception {
+		List<OrderItem> orderItems = orderItemRepository.findAll();
+
+		assertThat(orderItems).isNotEmpty();
+		assertThat(orderItems).hasSize(3);
+	}
+
+	@Test
+	public void listOrderItems_ReturnsNoOrderItems() throws Exception {
+		List<OrderItem> orderItems = orderItemRepository.findAll();
+
+		assertThat(orderItems).isEmpty();
 	}
 }

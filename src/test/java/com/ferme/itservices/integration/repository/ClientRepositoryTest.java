@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.ferme.itservices.common.ClientConstants.*;
@@ -24,21 +26,21 @@ public class ClientRepositoryTest {
 
 	@AfterEach
 	public void nullifyId() {
-		VALID_CLIENT.setId(null);
+		FELIPE.setId(null);
 	}
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		Client client = clientRepository.save(VALID_CLIENT);
+		Client client = clientRepository.save(FELIPE);
 
 		Client sut = testEntityManager.find(Client.class, client.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getName()).isEqualTo(VALID_CLIENT.getName());
-		assertThat(sut.getPhoneNumber()).isEqualTo(VALID_CLIENT.getPhoneNumber());
-		assertThat(sut.getNeighborhood()).isEqualTo(VALID_CLIENT.getNeighborhood());
-		assertThat(sut.getAddress()).isEqualTo(VALID_CLIENT.getAddress());
-		assertThat(sut.getReference()).isEqualTo(VALID_CLIENT.getReference());
+		assertThat(sut.getName()).isEqualTo(FELIPE.getName());
+		assertThat(sut.getPhoneNumber()).isEqualTo(FELIPE.getPhoneNumber());
+		assertThat(sut.getNeighborhood()).isEqualTo(FELIPE.getNeighborhood());
+		assertThat(sut.getAddress()).isEqualTo(FELIPE.getAddress());
+		assertThat(sut.getReference()).isEqualTo(FELIPE.getReference());
 	}
 
 	@Test
@@ -50,7 +52,7 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void createClient_WithExistingPhoneNumber_ThrowsException() {
-		Client client = testEntityManager.persistFlushFind(VALID_CLIENT);
+		Client client = testEntityManager.persistFlushFind(FELIPE);
 		testEntityManager.detach(client);
 		client.setId(null);
 
@@ -59,7 +61,7 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(VALID_CLIENT);
+		Client client = testEntityManager.persistFlushFind(FELIPE);
 
 		Optional<Client> clientOpt = clientRepository.findById(client.getId());
 
@@ -72,5 +74,38 @@ public class ClientRepositoryTest {
 		Optional<Client> clientOpt = clientRepository.findById(1L);
 
 		assertThat(clientOpt).isEmpty();
+	}
+
+	@Test
+	public void getClient_ByExistingName_ReturnsClient() {
+		Client client = testEntityManager.persistFlushFind(FELIPE);
+
+		Optional<Client> clientOpt = clientRepository.findByName(client.getName());
+
+		assertThat(clientOpt).isNotEmpty();
+		assertThat(clientOpt.orElse(null)).isEqualTo(client);
+	}
+
+	@Test
+	public void getClient_ByUnexistingName_ReturnsEmpty() {
+		Optional<Client> clientOpt = clientRepository.findByName("Inexistente");
+
+		assertThat(clientOpt).isEmpty();
+	}
+
+	@Sql(scripts = "/sql_scripts/import_clients.sql")
+	@Test
+	public void listClients_ReturnsClients() throws Exception {
+		List<Client> clients = clientRepository.findAll();
+
+		assertThat(clients).isNotEmpty();
+		assertThat(clients).hasSize(3);
+	}
+
+	@Test
+	public void listClients_ReturnsNoClients() throws Exception {
+		List<Client> clients = clientRepository.findAll();
+
+		assertThat(clients).isEmpty();
 	}
 }
