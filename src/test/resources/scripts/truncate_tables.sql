@@ -1,0 +1,7 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE clients;
+TRUNCATE order_items;
+TRUNCATE orders;
+
+SET FOREIGN_KEY_CHECKS = 1;

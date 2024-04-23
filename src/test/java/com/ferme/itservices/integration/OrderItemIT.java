@@ -1,6 +1,6 @@
 package com.ferme.itservices.integration;
 
-import com.ferme.itservices.models.Client;
+import com.ferme.itservices.models.OrderItem;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,30 +10,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Objects;
-
-import static com.ferme.itservices.common.ClientConstants.JOAO;
+import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_A;
+import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-public class ClientIT {
+public class OrderItemIT {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void createClient_ReturnsCreated() {
-		ResponseEntity<Client> sut = restTemplate.postForEntity("/api/clients", JOAO, Client.class);
+	public void createOrderItem_ReturnsCreated() {
+		ResponseEntity<OrderItem> sut = restTemplate.postForEntity("/api/orderItems", ORDERITEM_A, OrderItem.class);
 
 		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-		assertThat(Objects.requireNonNull(sut.getBody()).getId()).isNotNull();
-		assertThat(sut.getBody().getName()).isEqualTo(JOAO.getName());
-		assertThat(sut.getBody().getPhoneNumber()).isEqualTo(JOAO.getPhoneNumber());
-		assertThat(sut.getBody().getNeighborhood()).isEqualTo(JOAO.getNeighborhood());
-		assertThat(sut.getBody().getAddress()).isEqualTo(JOAO.getAddress());
-		assertThat(sut.getBody().getReference()).isEqualTo(JOAO.getReference());
-		assertThat(sut.getBody().getOrders()).isEqualTo(JOAO.getOrders());
+		assertThat(requireNonNull(sut.getBody()).getId()).isNotNull();
+		assertThat(sut.getBody().getOrderItemType()).isEqualTo(ORDERITEM_A.getOrderItemType());
+		assertThat(sut.getBody().getDescription()).isEqualTo(ORDERITEM_A.getDescription());
+		assertThat(sut.getBody().getPrice()).isEqualTo(ORDERITEM_A.getPrice());
+		assertThat(sut.getBody().getOrders()).isEqualTo(ORDERITEM_A.getOrders());
 	}
 
 }
