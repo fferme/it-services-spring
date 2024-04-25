@@ -65,14 +65,7 @@ public class OrderControllerTest {
 		List<OrderItem> actualOrderItems = order.getOrderItems();
 		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
 
-		for (int i = 0; i < expectedOrderItems.size(); i++) {
-			OrderItem expectedOrderItem = expectedOrderItems.get(i);
-			OrderItem actualOrderItem = actualOrderItems.get(i);
-
-			assertEquals(expectedOrderItem.getOrderItemType(), actualOrderItem.getOrderItemType());
-			assertEquals(expectedOrderItem.getDescription(), actualOrderItem.getDescription());
-			assertEquals(expectedOrderItem.getPrice(), actualOrderItem.getPrice());
-		}
+		assertEquals(expectedOrderItems, actualOrderItems);
 	}
 
 	@Test
@@ -122,14 +115,7 @@ public class OrderControllerTest {
 		List<OrderItem> actualOrderItems = order.getOrderItems();
 		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
 
-		for (int i = 0; i < expectedOrderItems.size(); i++) {
-			OrderItem expectedOrderItem = expectedOrderItems.get(i);
-			OrderItem actualOrderItem = actualOrderItems.get(i);
-
-			assertEquals(expectedOrderItem.getOrderItemType(), actualOrderItem.getOrderItemType());
-			assertEquals(expectedOrderItem.getDescription(), actualOrderItem.getDescription());
-			assertEquals(expectedOrderItem.getPrice(), actualOrderItem.getPrice());
-		}
+		assertEquals(expectedOrderItems, actualOrderItems);
 	}
 
 	@Test

@@ -6,38 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientConstants {
-	public static final Client FELIPE = Client.builder()
-		.name("Ferme")
-		.phoneNumber("21986861613")
-		.neighborhood("Tijuca")
-		.address("Rua Silva Perez 39/21")
-		.reference("Amigo do Jaca")
-		.build();
+	public static final Client FELIPE = new Client(1L, "Ferme", "21986861613", "Tijuca", "Rua Silva Perez 39/21", "Amigo do Jaca", null);
+	public static final Client JOAO = new Client(2L, "João", "21986831413", "Méier", "Rua Adolfo 2334", "Irmão do Jorel", null);
+	public static final Client RONALDO = new Client(3L, "Ronaldo", "21982831413", "Penha", "Rua Silva Cruz 33/200", "Pai do Sandro", null);
 
-	public static final Client FELIPE_WITH_ID = Client.builder()
-		.id(1L)
-		.name("Ferme")
-		.phoneNumber("21986861613")
-		.neighborhood("Tijuca")
-		.address("Rua Silva Perez 39/21")
-		.reference("Amigo do Jaca")
-		.build();
-
-	public static final Client JOAO = Client.builder()
-		.name("João")
-		.phoneNumber("21986831413")
-		.neighborhood("Méier")
-		.address("Rua Adolfo 2334")
-		.reference("Irmão do Jorel")
-		.build();
-
-	public static final Client RONALDO = Client.builder()
-		.name("Ronaldo")
-		.phoneNumber("21982831413")
-		.neighborhood("Penha")
-		.address("Rua Silva Cruz 33/200")
-		.reference("Pai do Sandro")
-		.build();
+	public static final Client EMPTY_CLIENT = new Client();
+	public static final Client INVALID_CLIENT = new Client(null, "234423232", "21986861613333", "", "", "", null);
 
 	public static final List<Client> CLIENTS = new ArrayList<>() {
 		{
@@ -46,13 +20,4 @@ public class ClientConstants {
 			add(RONALDO);
 		}
 	};
-
-	public static final Client EMPTY_CLIENT = new Client();
-	public static final Client INVALID_CLIENT = Client.builder()
-		.name("")
-		.phoneNumber("21986861613333")
-		.neighborhood("")
-		.address("")
-		.reference("")
-		.build();
 }

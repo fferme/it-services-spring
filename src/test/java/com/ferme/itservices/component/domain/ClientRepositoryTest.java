@@ -36,11 +36,7 @@ public class ClientRepositoryTest {
 		Client sut = testEntityManager.find(Client.class, client.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getName()).isEqualTo(FELIPE.getName());
-		assertThat(sut.getPhoneNumber()).isEqualTo(FELIPE.getPhoneNumber());
-		assertThat(sut.getNeighborhood()).isEqualTo(FELIPE.getNeighborhood());
-		assertThat(sut.getAddress()).isEqualTo(FELIPE.getAddress());
-		assertThat(sut.getReference()).isEqualTo(FELIPE.getReference());
+		assertThat(sut).isEqualTo(client);
 	}
 
 	@Test

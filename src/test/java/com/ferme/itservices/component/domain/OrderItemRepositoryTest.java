@@ -1,5 +1,6 @@
 package com.ferme.itservices.component.domain;
 
+import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderItemRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -39,9 +40,7 @@ public class OrderItemRepositoryTest {
 		OrderItem sut = testEntityManager.find(OrderItem.class, orderItem.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getOrderItemType()).isEqualTo(ORDERITEM_A.getOrderItemType());
-		assertThat(sut.getDescription()).isEqualTo(ORDERITEM_A.getDescription());
-		assertThat(sut.getPrice()).isEqualTo(ORDERITEM_A.getPrice());
+		assertThat(sut).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test
@@ -62,7 +61,13 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
+		OrderItem orderItem = testEntityManager.persistFlushFind(
+			OrderItem.builder()
+				.orderItemType(OrderItemType.MANPOWER)
+				.description("Testando")
+				.price(90.0)
+				.build()
+		);
 
 		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItem.getId());
 

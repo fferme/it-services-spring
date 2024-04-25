@@ -39,12 +39,7 @@ public class OrderRepositoryTest {
 		Order sut = testEntityManager.find(Order.class, order.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut.getProblems()).isEqualTo(order.getProblems());
-		assertThat(sut.getDeviceName()).isEqualTo(order.getDeviceName());
-		assertThat(sut.getDeviceSN()).isEqualTo(order.getDeviceSN());
-		assertThat(sut.getClient()).isEqualTo(order.getClient());
-		assertThat(sut.getOrderItems()).isEqualTo(order.getOrderItems());
-		assertThat(sut.getTotalPrice()).isEqualTo(order.getTotalPrice());
+		assertThat(sut).isEqualTo(ORDER_A);
 	}
 
 	@Test
