@@ -4,16 +4,13 @@ import com.ferme.itservices.models.OrderItem;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.ferme.itservices.common.OrderItemConstants.*;
-import static java.util.Objects.requireNonNull;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -21,51 +18,41 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class OrderItemIT {
 	@Autowired
-	private TestRestTemplate restTemplate;
+	private WebTestClient webTestClient;
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsCreated() {
-		ResponseEntity<OrderItem> sut = restTemplate.postForEntity("/api/orderItems", ORDERITEM_A, OrderItem.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-		assertThat(requireNonNull(sut.getBody()).getId()).isNotNull();
-		assertThat(sut.getBody().getOrderItemType()).isEqualTo(ORDERITEM_A.getOrderItemType());
-		assertThat(sut.getBody().getDescription()).isEqualTo(ORDERITEM_A.getDescription());
-		assertThat(sut.getBody().getPrice()).isEqualTo(ORDERITEM_A.getPrice());
-		assertThat(sut.getBody().getOrders()).isEqualTo(ORDERITEM_A.getOrders());
+		webTestClient.post().uri("/api/orderItems").bodyValue(ORDERITEM_A)
+			.exchange().expectStatus().isCreated()
+			.expectBody(OrderItem.class).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test
 	public void createOrderItem_WithInvalidData_ReturnsUnprocessableEntity() {
-		ResponseEntity<OrderItem> sut = restTemplate.postForEntity("/api/orderItems", INVALID_ORDERITEM, OrderItem.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+		webTestClient.post().uri("/api/orderItems")
+			.bodyValue(INVALID_ORDERITEM).exchange()
+			.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	@Test
 	public void getOrderItem_WithExistingId_ReturnsOrderItem() {
-		ResponseEntity<OrderItem> sut = restTemplate.getForEntity("/api/orderItems/1", OrderItem.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(sut.getBody()).isEqualTo(ORDERITEM_A);
+		webTestClient.get().uri("/api/orderItems/" + ORDERITEM_A.getId())
+			.exchange().expectStatus().isOk()
+			.expectBody(OrderItem.class).isEqualTo(ORDERITEM_A);
 	}
 
 	@Test
 	public void listOrderItems_ReturnsAllOrderItems() {
-		ResponseEntity<OrderItem[]> sut = restTemplate.getForEntity("/api/orderItems", OrderItem[].class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(sut.getBody()).hasSize(3);
-		assertThat(sut.getBody()[0]).isEqualTo(ORDERITEM_C);
-		assertThat(sut.getBody()[1]).isEqualTo(ORDERITEM_B);
-		assertThat(sut.getBody()[2]).isEqualTo(ORDERITEM_A);
+		webTestClient.get().uri("/api/orderItems")
+			.accept(MediaType.APPLICATION_JSON).exchange()
+			.expectStatus().isOk()
+			.expectBodyList(OrderItem.class).hasSize(3).contains(ORDERITEM_A, ORDERITEM_B, ORDERITEM_C);
 	}
 
 	@Test
 	public void removeOrderItem_ReturnsNoContent() {
-		ResponseEntity<Void> sut = restTemplate.exchange("/api/orderItems/" + ORDERITEM_A.getId(), HttpMethod.DELETE, null, Void.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+		webTestClient.delete().uri("/api/orderItems/" + ORDERITEM_A.getId())
+			.exchange().expectStatus().isNoContent();
 	}
 
 }

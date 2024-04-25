@@ -4,17 +4,13 @@ import com.ferme.itservices.models.Client;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.Objects;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static com.ferme.itservices.common.ClientConstants.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -22,60 +18,48 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class ClientIT {
 	@Autowired
-	private TestRestTemplate restTemplate;
+	private WebTestClient webTestClient;
 
 	@Test
 	public void createClient_WithValidData_ReturnsCreated() {
-		ResponseEntity<Client> sut = restTemplate.postForEntity("/api/clients", JOAO, Client.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-		assertThat(Objects.requireNonNull(sut.getBody()).getId()).isNotNull();
-		assertThat(sut.getBody().getName()).isEqualTo(JOAO.getName());
-		assertThat(sut.getBody().getPhoneNumber()).isEqualTo(JOAO.getPhoneNumber());
-		assertThat(sut.getBody().getNeighborhood()).isEqualTo(JOAO.getNeighborhood());
-		assertThat(sut.getBody().getAddress()).isEqualTo(JOAO.getAddress());
-		assertThat(sut.getBody().getReference()).isEqualTo(JOAO.getReference());
-		assertThat(sut.getBody().getOrders()).isEqualTo(JOAO.getOrders());
+		webTestClient.post().uri("/api/clients").bodyValue(FELIPE)
+			.exchange().expectStatus().isCreated()
+			.expectBody(Client.class).isEqualTo(FELIPE);
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ReturnsUnprocessableEntity() {
-		ResponseEntity<Client> sut = restTemplate.postForEntity("/api/clients", INVALID_CLIENT, Client.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+		webTestClient.post()
+			.uri("/api/clients")
+			.bodyValue(INVALID_CLIENT).exchange()
+			.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	@Test
 	public void getClient_WithExistingId_ReturnsClient() {
-		ResponseEntity<Client> sut = restTemplate.getForEntity("/api/clients/1", Client.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(sut.getBody()).isEqualTo(FELIPE);
+		webTestClient.get().uri("/api/clients/" + FELIPE.getId())
+			.exchange().expectStatus().isOk()
+			.expectBody(Client.class).isEqualTo(FELIPE);
 	}
 
 	@Test
 	public void getClientByName_WithExistingName_ReturnsClient() {
-		ResponseEntity<Client> sut = restTemplate.getForEntity("/api/clients/name/" + FELIPE.getName(), Client.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(sut.getBody()).isEqualTo(FELIPE);
+		webTestClient.get().uri("/api/clients/name/" + FELIPE.getName())
+			.exchange().expectStatus().isOk()
+			.expectBody(Client.class).isEqualTo(FELIPE);
 	}
 
 	@Test
 	public void listClients_ReturnsAllClients() {
-		ResponseEntity<Client[]> sut = restTemplate.getForEntity("/api/clients", Client[].class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(sut.getBody()).hasSize(3);
-		assertThat(sut.getBody()[0]).isEqualTo(FELIPE);
-		assertThat(sut.getBody()[1]).isEqualTo(JOAO);
-		assertThat(sut.getBody()[2]).isEqualTo(RONALDO);
+		webTestClient.get().uri("/api/clients")
+			.accept(MediaType.APPLICATION_JSON).exchange()
+			.expectStatus().isOk()
+			.expectBodyList(Client.class).hasSize(3).contains(FELIPE, JOAO, RONALDO);
 	}
 
 	@Test
 	public void removeClient_ReturnsNoContent() {
-		ResponseEntity<Void> sut = restTemplate.exchange("/api/clients/" + FELIPE.getId(), HttpMethod.DELETE, null, Void.class);
-
-		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+		webTestClient.delete().uri("/api/clients/" + FELIPE.getId())
+			.exchange().expectStatus().isNoContent();
 	}
 }
