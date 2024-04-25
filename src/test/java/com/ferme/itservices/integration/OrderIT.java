@@ -14,13 +14,20 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 
 import static com.ferme.itservices.common.OrderConstants.ORDER_A;
+import static com.ferme.itservices.common.OrderConstants.ORDER_A_WITH_ID;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(
+	scripts = {
+		"/scripts/import_clients.sql",
+		"/scripts/import_orderItems.sql",
+		"/scripts/import_orders.sql"
+	}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class OrderIT {
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -51,6 +58,22 @@ public class OrderIT {
 			assertEquals(expectedOrderItem.getDescription(), sutOrderItem.getDescription());
 			assertEquals(expectedOrderItem.getPrice(), sutOrderItem.getPrice());
 		}
+	}
+
+	@Test
+	public void getOrder_ReturnsOrder() {
+		ResponseEntity<Order> sut = restTemplate.getForEntity("/api/orders/1", Order.class);
+
+		assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		assertThat(requireNonNull(sut.getBody()).getHeader()).isEqualTo(ORDER_A_WITH_ID.getHeader());
+		assertThat(requireNonNull(sut.getBody()).getDeviceName()).isEqualTo(ORDER_A_WITH_ID.getDeviceName());
+		assertThat(requireNonNull(sut.getBody()).getDeviceSN()).isEqualTo(ORDER_A_WITH_ID.getDeviceSN());
+		assertThat(requireNonNull(sut.getBody()).getProblems()).isEqualTo(ORDER_A_WITH_ID.getProblems());
+		assertThat(requireNonNull(sut.getBody()).getTotalPrice()).isEqualTo(ORDER_A_WITH_ID.getTotalPrice());
+
+		assertThat(sut.getBody().getClient()).isEqualTo(ORDER_A_WITH_ID.getClient());
+		assertThat(sut.getBody().getOrderItems()).isEqualTo(ORDER_A_WITH_ID.getOrderItems());
 	}
 
 }

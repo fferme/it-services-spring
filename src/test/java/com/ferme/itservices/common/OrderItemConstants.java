@@ -25,6 +25,27 @@ public class OrderItemConstants {
 		.price(26.00)
 		.build();
 
+	public static final OrderItem ORDERITEM_A_WITH_ID = OrderItem.builder()
+		.id(1L)
+		.orderItemType(OrderItemType.PART_BUYOUT)
+		.description("SSD de 240Gb")
+		.price(80.0)
+		.build();
+
+	public static final OrderItem ORDERITEM_B_WITH_ID = OrderItem.builder()
+		.id(2L)
+		.orderItemType(OrderItemType.MANPOWER)
+		.description("Limpeza completa")
+		.price(80.0)
+		.build();
+
+	public static final OrderItem ORDERITEM_C_WITH_ID = OrderItem.builder()
+		.id(3L)
+		.orderItemType(OrderItemType.CARRIAGE_GOING)
+		.description("Ilha da Gigóia")
+		.price(26.00)
+		.build();
+
 	public static final OrderItem INVALID_ORDERITEM = OrderItem.builder()
 		.orderItemType(null)
 		.description("")
@@ -38,6 +59,14 @@ public class OrderItemConstants {
 			add(ORDERITEM_A);
 			add(ORDERITEM_B);
 			add(ORDERITEM_C);
+		}
+	};
+
+	public static final List<OrderItem> ORDER_ITEMS_WITH_IDS = new ArrayList<>() {
+		{
+			add(ORDERITEM_A_WITH_ID);
+			add(ORDERITEM_B_WITH_ID);
+			add(ORDERITEM_C_WITH_ID);
 		}
 	};
 

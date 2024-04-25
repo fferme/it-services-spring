@@ -7,6 +7,7 @@ import java.util.List;
 
 import static com.ferme.itservices.common.ClientConstants.*;
 import static com.ferme.itservices.common.OrderItemConstants.ORDER_ITEMS;
+import static com.ferme.itservices.common.OrderItemConstants.ORDER_ITEMS_WITH_IDS;
 
 public class OrderConstants {
 	public static final Order ORDER_A = Order.builder()
@@ -34,6 +35,15 @@ public class OrderConstants {
 		.client(JOAO)
 		.orderItems(ORDER_ITEMS)
 		.totalPrice(1000.0)
+		.build();
+
+	public static final Order ORDER_A_WITH_ID = Order.builder()
+		.deviceName("Asus Notebook AB9299")
+		.deviceSN("91839021")
+		.problems("Erro ao iniciar sistema")
+		.client(FELIPE_WITH_ID)
+		.orderItems(ORDER_ITEMS_WITH_IDS)
+		.totalPrice(100.0)
 		.build();
 
 	public static final List<Order> ORDERS = new ArrayList<>() {

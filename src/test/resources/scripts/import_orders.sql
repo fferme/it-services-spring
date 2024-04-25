@@ -23,7 +23,7 @@ INSERT INTO rel_order_order_items (order_id, order_item_id)
 VALUES (2, 2);
 
 INSERT INTO rel_order_order_items (order_id, order_item_id)
-VALUES (3, 3);
+VALUES (2, 3);
 
 INSERT INTO rel_order_order_items (order_id, order_item_id)
 VALUES (3, 1);

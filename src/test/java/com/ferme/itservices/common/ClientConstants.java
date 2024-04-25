@@ -14,6 +14,15 @@ public class ClientConstants {
 		.reference("Amigo do Jaca")
 		.build();
 
+	public static final Client FELIPE_WITH_ID = Client.builder()
+		.id(1L)
+		.name("Ferme")
+		.phoneNumber("21986861613")
+		.neighborhood("Tijuca")
+		.address("Rua Silva Perez 39/21")
+		.reference("Amigo do Jaca")
+		.build();
+
 	public static final Client JOAO = Client.builder()
 		.name("João")
 		.phoneNumber("21986831413")
