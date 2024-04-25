@@ -1,5 +1,5 @@
 INSERT INTO orders (id, device_name, device_sn, problems, client_id, total_price)
-VALUES (1, 'Asus Notebook AB9299', '91839021', 'Erro ao iniciar sistema', 1, 100.00);
+VALUES (1, 'Asus Notebook AB9299', '91839021', 'Erro ao iniciar sistema', 1, 1000.00);
 
 INSERT INTO orders (id, device_name, device_sn, problems, client_id, total_price)
 VALUES (2, 'Asus Notebook AB9499', '91233301', 'Erro ao iniciar sistema', 2, 1000.00);
