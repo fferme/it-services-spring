@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit;
+package com.ferme.itservices.orderItem;
 
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderItemRepository;
@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.OrderItemConstants.INVALID_ORDERITEM;
-import static com.ferme.itservices.common.OrderItemConstants.ORDERITEM_A;
+import static com.ferme.itservices.orderItem.OrderItemConstants.INVALID_ORDERITEM;
+import static com.ferme.itservices.orderItem.OrderItemConstants.ORDERITEM_A;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;

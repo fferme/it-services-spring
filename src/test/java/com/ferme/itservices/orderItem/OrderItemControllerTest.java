@@ -1,4 +1,4 @@
-package com.ferme.itservices.component.web;
+package com.ferme.itservices.orderItem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.controllers.OrderItemController;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.OrderItemConstants.*;
+import static com.ferme.itservices.orderItem.OrderItemConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;

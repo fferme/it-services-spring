@@ -1,12 +1,12 @@
-package com.ferme.itservices.common;
+package com.ferme.itservices.order;
 
 import com.ferme.itservices.models.Order;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ferme.itservices.common.ClientConstants.*;
-import static com.ferme.itservices.common.OrderItemConstants.ORDER_ITEMS;
+import static com.ferme.itservices.client.ClientConstants.*;
+import static com.ferme.itservices.orderItem.OrderItemConstants.ORDER_ITEMS;
 
 public class OrderConstants {
 	public static final Order ORDER_A = new Order(1L, "Asus Notebook AB9299", "91839021", "Erro ao iniciar sistema", FELIPE, ORDER_ITEMS, 1000.0);
