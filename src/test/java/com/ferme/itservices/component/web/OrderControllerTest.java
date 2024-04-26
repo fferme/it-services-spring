@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class OrderControllerTest {
 	private OrderService orderService;
 
 	@Test
-	public void createOrder_ValidData_ReturnsCreated() throws Exception {
+	public void createOrder_WithValidData_ReturnsCreated() throws Exception {
 		when(orderService.create(any(Order.class))).thenReturn(ORDER_A);
 
 		MvcResult mvcResult = mockMvc.perform(
@@ -62,8 +63,8 @@ public class OrderControllerTest {
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
 		Order order = objectMapper.readValue(responseBody, Order.class);
 
-		List<OrderItem> actualOrderItems = order.getOrderItems();
-		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
+		List<OrderItem> actualOrderItems = new ArrayList<>(order.getOrderItems());
+		List<OrderItem> expectedOrderItems = new ArrayList<>(ORDER_A.getOrderItems());
 
 		assertEquals(expectedOrderItems, actualOrderItems);
 	}
@@ -112,8 +113,8 @@ public class OrderControllerTest {
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
 		Order order = objectMapper.readValue(responseBody, Order.class);
 
-		List<OrderItem> actualOrderItems = order.getOrderItems();
-		List<OrderItem> expectedOrderItems = ORDER_A.getOrderItems();
+		List<OrderItem> actualOrderItems = new ArrayList<>(order.getOrderItems());
+		List<OrderItem> expectedOrderItems = new ArrayList<>(ORDER_A.getOrderItems());
 
 		assertEquals(expectedOrderItems, actualOrderItems);
 	}
