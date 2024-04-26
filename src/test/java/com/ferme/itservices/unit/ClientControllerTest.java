@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.controllers.ClientController;
@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.ferme.itservices.client.ClientConstants.*;
+import static com.ferme.itservices.common.ClientConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;

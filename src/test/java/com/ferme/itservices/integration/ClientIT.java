@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.integration;
 
 import com.ferme.itservices.models.Client;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static com.ferme.itservices.client.ClientConstants.*;
+import static com.ferme.itservices.common.ClientConstants.*;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

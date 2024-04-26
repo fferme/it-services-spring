@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.unit;
 
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.repositories.OrderRepository;
@@ -12,8 +12,8 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.order.OrderConstants.INVALID_ORDER;
-import static com.ferme.itservices.order.OrderConstants.ORDER_A;
+import static com.ferme.itservices.common.OrderConstants.INVALID_ORDER;
+import static com.ferme.itservices.common.OrderConstants.ORDER_A;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
