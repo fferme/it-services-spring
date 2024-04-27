@@ -1,4 +1,4 @@
-package com.ferme.itservices.common;
+package com.ferme.itservices.orderItem;
 
 import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.models.OrderItem;

@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit;
+package com.ferme.itservices.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.controllers.OrderController;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.OrderConstants.*;
+import static com.ferme.itservices.order.OrderConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

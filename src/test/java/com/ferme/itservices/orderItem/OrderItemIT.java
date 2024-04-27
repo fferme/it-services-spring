@@ -1,4 +1,4 @@
-package com.ferme.itservices.integration;
+package com.ferme.itservices.orderItem;
 
 import com.ferme.itservices.models.OrderItem;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static com.ferme.itservices.common.OrderItemConstants.*;
+import static com.ferme.itservices.orderItem.OrderItemConstants.*;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

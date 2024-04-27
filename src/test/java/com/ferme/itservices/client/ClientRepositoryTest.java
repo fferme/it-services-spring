@@ -1,4 +1,4 @@
-package com.ferme.itservices.unit;
+package com.ferme.itservices.client;
 
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ferme.itservices.common.ClientConstants.*;
+import static com.ferme.itservices.client.ClientConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

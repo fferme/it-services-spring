@@ -1,4 +1,4 @@
-package com.ferme.itservices.integration;
+package com.ferme.itservices.order;
 
 import com.ferme.itservices.models.Order;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static com.ferme.itservices.common.OrderConstants.*;
+import static com.ferme.itservices.order.OrderConstants.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
