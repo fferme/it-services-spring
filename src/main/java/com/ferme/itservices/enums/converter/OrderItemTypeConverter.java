@@ -8,9 +8,9 @@ import jakarta.persistence.Converter;
 public class OrderItemTypeConverter implements AttributeConverter<OrderItemType, String> {
 
 	public static OrderItemType convertOrderItemTypeValue(String value) {
-		return (value == null)
-			? null
-			: switch (value) {
+		if (value == null) { throw new IllegalArgumentException("Value cannot be null"); }
+
+		return switch (value) {
 			case "Compra de Peça" -> OrderItemType.PART_BUYOUT;
 			case "Troca de Peça" -> OrderItemType.PART_EXCHANGE;
 			case "Mão de Obra" -> OrderItemType.MANPOWER;
@@ -23,17 +23,13 @@ public class OrderItemTypeConverter implements AttributeConverter<OrderItemType,
 
 	@Override
 	public String convertToDatabaseColumn(OrderItemType orderItemType) {
-		return (orderItemType == null)
-			? null
-			: orderItemType.getValue();
+		if (orderItemType == null) { throw new IllegalArgumentException("Invalid order item type: null"); }
+
+		return orderItemType.getValue();
 	}
 
 	@Override
 	public OrderItemType convertToEntityAttribute(String value) {
-		if (value == null) {
-			return null;
-		}
-
 		for (OrderItemType itemType : OrderItemType.values()) {
 			if (itemType.getValue().equals(value)) {
 				return itemType;
@@ -42,5 +38,6 @@ public class OrderItemTypeConverter implements AttributeConverter<OrderItemType,
 
 		throw new IllegalArgumentException("Invalid order item type: " + value);
 	}
+
 
 }
