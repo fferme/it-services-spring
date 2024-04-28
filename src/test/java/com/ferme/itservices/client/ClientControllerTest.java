@@ -18,6 +18,7 @@ import java.util.Optional;
 import static com.ferme.itservices.client.ClientConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -74,8 +75,33 @@ public class ClientControllerTest {
 	}
 
 	@Test
+	public void updateClient_WithValidDataAndId_ReturnsOk() throws Exception {
+		when(clientService.update(eq(NEW_CLIENT.getId()), any())).thenReturn(NEW_CLIENT);
+
+		mockMvc
+			.perform(
+				put("/api/clients/1")
+					.content(objectMapper.writeValueAsString(NEW_CLIENT))
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$").value(NEW_CLIENT));
+	}
+
+	@Test
+	public void updateClient_WithUnexistentId_ReturnsNotFound() throws Exception {
+		when(clientService.update(eq(5L), any())).thenReturn(null);
+
+		mockMvc
+			.perform(
+				put("/api/clients/5")
+					.content(objectMapper.writeValueAsString(NEW_CLIENT))
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
 	public void getClient_ByExistingId_ReturnsClient() throws Exception {
-		when(clientService.findById(1L)).thenReturn(Optional.ofNullable(FELIPE));
+		when(clientService.findById(1L)).thenReturn(Optional.of(FELIPE));
 
 		mockMvc.perform(get("/api/clients/1"))
 			.andExpect(status().isOk())
@@ -137,5 +163,12 @@ public class ClientControllerTest {
 		mockMvc
 			.perform(delete("/api/clients/1"))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void removeAllClients_ReturnsNoContent() throws Exception {
+		mockMvc
+			.perform(delete("/api/clients"))
+			.andExpect(status().isNoContent());
 	}
 }

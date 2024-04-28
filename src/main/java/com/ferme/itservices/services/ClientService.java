@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -65,10 +66,12 @@ public class ClientService {
 		clientRepository.deleteAll();
 	}
 
+	@Generated
 	public List<Client> exportDataToClient() throws IOException {
 		return clientRepository.saveAll(readJsonData());
 	}
 
+	@Generated
 	private static List<Client> readJsonData() {
 		List<Client> clients = new ArrayList<>();
 

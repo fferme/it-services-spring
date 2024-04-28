@@ -1,5 +1,6 @@
 package com.ferme.itservices.client;
 
+import com.ferme.itservices.exceptions.RecordNotFoundException;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
 import com.ferme.itservices.services.ClientService;
@@ -9,14 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static com.ferme.itservices.client.ClientConstants.EMPTY_CLIENT;
-import static com.ferme.itservices.client.ClientConstants.FELIPE;
+import static com.ferme.itservices.client.ClientConstants.*;
+import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +45,27 @@ public class ClientServiceTest {
 	}
 
 	@Test
+	public void updateClient_WithExistingClient_ReturnsUpdatedClient() {
+		when(clientRepository.findById(FELIPE.getId())).thenReturn(java.util.Optional.of(FELIPE));
+		when(clientRepository.save(FELIPE)).thenReturn(FELIPE);
+
+		Client updatedClient = clientService.update(FELIPE.getId(), NEW_CLIENT);
+
+		assertEquals(NEW_CLIENT.getNeighborhood(), updatedClient.getNeighborhood());
+		assertEquals(NEW_CLIENT.getAddress(), updatedClient.getAddress());
+		assertEquals(NEW_CLIENT.getReference(), updatedClient.getReference());
+	}
+
+	@Test
+	public void updateClient_WithUnexistingClient_ReturnsRecordNotFoundException() {
+		when(clientRepository.findById(9L)).thenReturn(empty());
+
+		assertThrows(RecordNotFoundException.class, () -> {
+			clientService.update(9L, NEW_CLIENT);
+		});
+	}
+
+	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
 		when(clientRepository.findById(1L)).thenReturn(Optional.of(FELIPE));
 
@@ -56,7 +77,7 @@ public class ClientServiceTest {
 
 	@Test
 	public void getClient_ByUnexistingId_ReturnsEmpty() {
-		when(clientRepository.findById(1L)).thenReturn(Optional.empty());
+		when(clientRepository.findById(1L)).thenReturn(empty());
 
 		Optional<Client> sut = clientService.findById(1L);
 
@@ -75,7 +96,7 @@ public class ClientServiceTest {
 
 	@Test
 	public void getClient_ByUnexistingName_ReturnsClient() {
-		when(clientRepository.findByName("Unexisting name")).thenReturn(Optional.empty());
+		when(clientRepository.findByName("Unexisting name")).thenReturn(empty());
 
 		Optional<Client> sut = clientService.findByName("Unexisting name");
 
@@ -97,6 +118,31 @@ public class ClientServiceTest {
 	}
 
 	@Test
+	public void listClients_ReturnsEmptyList_WhenNoClientsExist() {
+		when(clientRepository.findAll()).thenReturn(new ArrayList<>());
+
+		List<Client> sut = clientService.listAll();
+
+		assertThat(sut).isEmpty();
+	}
+
+	@Test
+	public void listClients_ReturnsSortedClientsByName() {
+		List<Client> clients = new ArrayList<Client>() {
+			{ add(RONALDO); }
+
+			{ add(FELIPE); }
+
+			{ add(JOAO); }
+		};
+		when(clientRepository.findAll()).thenReturn(clients);
+
+		List<Client> sut = clientService.listAll();
+
+		assertThat(sut).isSortedAccordingTo(Comparator.comparing(Client::getName));
+	}
+
+	@Test
 	public void listClients_ReturnsNoClients() {
 		when(clientRepository.findAll()).thenReturn(Collections.emptyList());
 
@@ -115,5 +161,10 @@ public class ClientServiceTest {
 		doThrow(new RuntimeException()).when(clientRepository).deleteById(1L);
 
 		assertThatThrownBy(() -> clientService.deleteById(1L)).isInstanceOf(RuntimeException.class);
+	}
+
+	@Test
+	public void deleteAllClients_doesNotThrowAnyException() {
+		assertThatCode(() -> clientService.deleteAll()).doesNotThrowAnyException();
 	}
 }

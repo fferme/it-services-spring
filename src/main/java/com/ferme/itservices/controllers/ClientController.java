@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -168,6 +169,7 @@ public class ClientController {
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
+	@Generated
 	@PostMapping("/import")
 	public ResponseEntity<List<Client>> importClients() throws IOException {
 		List<Client> clients = clientService.exportDataToClient();
