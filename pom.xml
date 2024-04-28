@@ -217,10 +217,10 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
                 <configuration>
                     <excludes>
                         <exclude>com/ferme/itservices/ItServicesApplication.class</exclude>
-                        <exclude>com/ferme/itservices/models</exclude>
                         <exclude>com/ferme/itservices/models</exclude>
                     </excludes>
                 </configuration>

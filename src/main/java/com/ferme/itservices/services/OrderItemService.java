@@ -12,6 +12,7 @@ import com.ferme.itservices.repositories.OrderItemRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -50,6 +51,7 @@ public class OrderItemService {
 		orderItemRepository.deleteAll();
 	}
 
+	@Generated
 	private static List<OrderItem> readJsonData() {
 		List<OrderItem> orderItems = new ArrayList<>();
 
@@ -84,6 +86,7 @@ public class OrderItemService {
 		return orderItems;
 	}
 
+	@Generated
 	public List<OrderItem> exportDataToOrderItem() throws IOException {
 		return orderItemRepository.saveAll(readJsonData());
 	}

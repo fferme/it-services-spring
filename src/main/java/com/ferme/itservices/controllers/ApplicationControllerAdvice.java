@@ -3,6 +3,7 @@ package com.ferme.itservices.controllers;
 import com.ferme.itservices.exceptions.RecordAlreadyExistsException;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import lombok.Generated;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+@Generated
 @RestControllerAdvice
 public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler {
 
