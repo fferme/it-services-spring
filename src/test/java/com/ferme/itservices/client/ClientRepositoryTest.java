@@ -45,7 +45,6 @@ public class ClientRepositoryTest {
 		assertThatThrownBy(() -> clientRepository.save(INVALID_CLIENT)).isInstanceOf(RuntimeException.class);
 	}
 
-
 	@Test
 	public void createClient_WithExistingPhoneNumber_ThrowsException() {
 		Client client = testEntityManager.persistFlushFind(FELIPE);
@@ -91,7 +90,7 @@ public class ClientRepositoryTest {
 
 	@Sql(scripts = "/scripts/import_clients.sql")
 	@Test
-	public void listClients_ReturnsClients() {
+	public void listClients_WhenClientsExists_ReturnsAllClients() {
 		List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isNotEmpty();
@@ -99,19 +98,27 @@ public class ClientRepositoryTest {
 	}
 
 	@Test
-	public void listClients_ReturnsNoClients() {
+	public void listClients_WhenClientsDoesNotExist_ReturnsEmptyList() {
 		List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isEmpty();
 	}
 
 	@Test
-	public void removeClient_WithExistingId_RemovesClientFromDatabase() {
+	public void deleteClient_WithExistingId_DeletesClientFromDatabase() {
 		Client client = testEntityManager.persistFlushFind(FELIPE);
 
 		clientRepository.deleteById(FELIPE.getId());
 
 		Client removedClient = testEntityManager.find(Client.class, FELIPE.getId());
 		assertThat(removedClient).isNull();
+	}
+
+	@Test
+	public void deleteClient_WithNonExistingId_DoesNotDeleteAnything() {
+		clientRepository.deleteById(-1L);
+
+		Client nonExistingClient = testEntityManager.find(Client.class, -1L);
+		assertThat(nonExistingClient).isNull();
 	}
 }

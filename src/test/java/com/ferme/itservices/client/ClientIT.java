@@ -10,7 +10,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.Comparator;
+import java.util.List;
+
 import static com.ferme.itservices.client.ClientConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,16 +54,34 @@ public class ClientIT {
 	}
 
 	@Test
-	public void listClients_ReturnsAllClients() {
-		webTestClient.get().uri("/api/clients")
+	public void listClients_ReturnsAllClientsSortedByName() {
+		List<Client> actualClients = webTestClient.get().uri("/api/clients")
 			.accept(MediaType.APPLICATION_JSON).exchange()
 			.expectStatus().isOk()
-			.expectBodyList(Client.class).hasSize(3).contains(FELIPE, JOAO, RONALDO);
+			.expectBodyList(Client.class)
+			.returnResult().getResponseBody();
+
+		List<Client> sortedExpectedClients = CLIENTS.stream()
+			.sorted(Comparator.comparing(Client::getName))
+			.toList();
+
+		assert actualClients != null;
+		List<Client> sortedActualClients = actualClients.stream()
+			.sorted(Comparator.comparing(Client::getName))
+			.toList();
+
+		assertThat(sortedActualClients).containsExactlyElementsOf(sortedExpectedClients);
 	}
 
 	@Test
 	public void removeClient_ReturnsNoContent() {
 		webTestClient.delete().uri("/api/clients/" + FELIPE.getId())
+			.exchange().expectStatus().isNoContent();
+	}
+
+	@Test
+	public void removeClients_ReturnsNoContent() {
+		webTestClient.delete().uri("/api/clients")
 			.exchange().expectStatus().isNoContent();
 	}
 }

@@ -10,7 +10,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 import static com.ferme.itservices.client.ClientConstants.*;
 import static java.util.Optional.empty;
@@ -104,49 +107,26 @@ public class ClientServiceTest {
 	}
 
 	@Test
-	public void listClients_ReturnsAllClients() {
-		List<Client> clients = new ArrayList<>() {
-			{ add(FELIPE); }
-		};
-		when(clientRepository.findAll()).thenReturn(clients);
+	public void listClients_WhenClientsExists_ReturnsAllClientsSortedByName() {
+		when(clientRepository.findAll()).thenReturn(CLIENTS);
 
-		List<Client> sut = clientRepository.findAll();
+		List<Client> sut = clientService.listAll();
 
 		assertThat(sut).isNotEmpty();
-		assertThat(sut).hasSize(1);
-		assertThat(sut.getFirst()).isEqualTo(FELIPE);
-	}
-
-	@Test
-	public void listClients_ReturnsEmptyList_WhenNoClientsExist() {
-		when(clientRepository.findAll()).thenReturn(new ArrayList<>());
-
-		List<Client> sut = clientService.listAll();
-
-		assertThat(sut).isEmpty();
-	}
-
-	@Test
-	public void listClients_ReturnsSortedClientsByName() {
-		List<Client> clients = new ArrayList<Client>() {
-			{ add(RONALDO); }
-
-			{ add(FELIPE); }
-
-			{ add(JOAO); }
-		};
-		when(clientRepository.findAll()).thenReturn(clients);
-
-		List<Client> sut = clientService.listAll();
-
+		assertThat(sut).hasSize(CLIENTS.size());
+		assertThat(sut.get(0)).isEqualTo(FELIPE);
+		;
+		assertThat(sut.get(1)).isEqualTo(JOAO);
+		;
+		assertThat(sut.get(2)).isEqualTo(RONALDO);
 		assertThat(sut).isSortedAccordingTo(Comparator.comparing(Client::getName));
 	}
 
 	@Test
-	public void listClients_ReturnsNoClients() {
-		when(clientRepository.findAll()).thenReturn(Collections.emptyList());
+	public void listClients_WhenClientsDoesNotExist_ReturnsEmptyList() {
+		when(clientRepository.findAll()).thenReturn(new ArrayList<>());
 
-		List<Client> sut = clientRepository.findAll();
+		List<Client> sut = clientService.listAll();
 
 		assertThat(sut).isEmpty();
 	}
