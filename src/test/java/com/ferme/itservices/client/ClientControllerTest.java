@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.ferme.itservices.client.ClientConstants.*;
+import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -130,17 +131,23 @@ public class ClientControllerTest {
 	}
 
 	@Test
-	public void listClients_ReturnsClients() throws Exception {
+	public void listClients_WhenClientsExists_ReturnsAllClientsSortedByName() throws Exception {
 		when(clientService.listAll()).thenReturn(CLIENTS);
 
 		mockMvc
 			.perform(get("/api/clients"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$", hasSize(3)));
+			.andExpect(jsonPath("$", hasSize(3)))
+			.andExpect(jsonPath("$[*].name", containsInRelativeOrder(
+				FELIPE.getName(),
+				JOAO.getName(),
+				RONALDO.getName()
+			)));
+		;
 	}
 
 	@Test
-	public void listClients_ReturnsNoClients() throws Exception {
+	public void listClients_WhenClientsDoesNotExists_ReturnsAllClientsSortedByName() throws Exception {
 		when(clientService.listAll()).thenReturn(Collections.emptyList());
 
 		mockMvc

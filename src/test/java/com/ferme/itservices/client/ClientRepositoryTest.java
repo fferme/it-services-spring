@@ -121,4 +121,5 @@ public class ClientRepositoryTest {
 		Client nonExistingClient = testEntityManager.find(Client.class, -1L);
 		assertThat(nonExistingClient).isNull();
 	}
+
 }

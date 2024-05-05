@@ -115,9 +115,7 @@ public class ClientServiceTest {
 		assertThat(sut).isNotEmpty();
 		assertThat(sut).hasSize(CLIENTS.size());
 		assertThat(sut.get(0)).isEqualTo(FELIPE);
-		;
 		assertThat(sut.get(1)).isEqualTo(JOAO);
-		;
 		assertThat(sut.get(2)).isEqualTo(RONALDO);
 		assertThat(sut).isSortedAccordingTo(Comparator.comparing(Client::getName));
 	}

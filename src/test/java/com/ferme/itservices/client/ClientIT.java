@@ -40,6 +40,14 @@ public class ClientIT {
 	}
 
 	@Test
+	public void updateClient_WithValidData_ReturnsUpdatedClient() {
+		webTestClient.put()
+			.uri("/api/clients/1")
+			.bodyValue(NEW_CLIENT).exchange()
+			.expectStatus().isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
 	public void getClient_WithExistingId_ReturnsClient() {
 		webTestClient.get().uri("/api/clients/" + FELIPE.getId())
 			.exchange().expectStatus().isOk()
