@@ -10,7 +10,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.util.Comparator;
+import java.util.List;
+
 import static com.ferme.itservices.orderItem.OrderItemConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -35,6 +39,14 @@ public class OrderItemIT {
 	}
 
 	@Test
+	public void updateOrderItem_WithValidData_ReturnsUpdatedOrderItem() {
+		webTestClient.put()
+			.uri("/api/orderItems/1")
+			.bodyValue(NEW_ORDERITEM).exchange()
+			.expectStatus().isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
 	public void getOrderItem_WithExistingId_ReturnsOrderItem() {
 		webTestClient.get().uri("/api/orderItems/" + ORDERITEM_A.getId())
 			.exchange().expectStatus().isOk()
@@ -42,11 +54,23 @@ public class OrderItemIT {
 	}
 
 	@Test
-	public void listOrderItems_ReturnsAllOrderItems() {
-		webTestClient.get().uri("/api/orderItems")
+	public void listOrderItems_ReturnsAllOrderItemsSortedByDescription() {
+		List<OrderItem> actualOrderItems = webTestClient.get().uri("/api/orderItems")
 			.accept(MediaType.APPLICATION_JSON).exchange()
 			.expectStatus().isOk()
-			.expectBodyList(OrderItem.class).hasSize(3).contains(ORDERITEM_A, ORDERITEM_B, ORDERITEM_C);
+			.expectBodyList(OrderItem.class)
+			.returnResult().getResponseBody();
+
+		List<OrderItem> sortedExpectedOrderItems = ORDER_ITEMS.stream()
+			.sorted(Comparator.comparing(OrderItem::getDescription))
+			.toList();
+
+		assert actualOrderItems != null;
+		List<OrderItem> sortedActualOrderItems = actualOrderItems.stream()
+			.sorted(Comparator.comparing(OrderItem::getDescription))
+			.toList();
+
+		assertThat(sortedActualOrderItems).containsExactlyElementsOf(sortedExpectedOrderItems);
 	}
 
 	@Test
@@ -54,5 +78,12 @@ public class OrderItemIT {
 		webTestClient.delete().uri("/api/orderItems/" + ORDERITEM_A.getId())
 			.exchange().expectStatus().isNoContent();
 	}
+
+	@Test
+	public void removeOrderItems_ReturnsNoContent() {
+		webTestClient.delete().uri("/api/orderItems")
+			.exchange().expectStatus().isNoContent();
+	}
+
 
 }

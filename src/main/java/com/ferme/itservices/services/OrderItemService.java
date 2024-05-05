@@ -95,7 +95,8 @@ public class OrderItemService {
 		return orderItemRepository.findById(id)
 			.map(orderItemFound -> {
 				orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(
-				updatedOrderItem.getOrderItemType().getValue()));
+					updatedOrderItem.getOrderItemType().getValue())
+				);
 				orderItemFound.setDescription(updatedOrderItem.getDescription());
 				orderItemFound.setPrice(updatedOrderItem.getPrice());
 

@@ -16,8 +16,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.ferme.itservices.orderItem.OrderItemConstants.*;
+import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -77,6 +79,29 @@ public class OrderItemControllerTest {
 	}
 
 	@Test
+	public void updateOrderItem_WithValidDataAndId_ReturnsOk() throws Exception {
+		when(orderItemService.update(eq(NEW_ORDERITEM.getId()), any())).thenReturn(NEW_ORDERITEM);
+
+		mockMvc.perform(put("/api/orderItems/1")
+			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM))
+			                .contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.orderItemType").value(NEW_ORDERITEM.getOrderItemType().getValue()))
+			.andExpect(jsonPath("$.description").value(NEW_ORDERITEM.getDescription()))
+			.andExpect(jsonPath("$.price").value(NEW_ORDERITEM.getPrice()));
+	}
+
+	@Test
+	public void updateOrderItem_WithUnexistentId_ReturnsNotFound() throws Exception {
+		when(orderItemService.update(eq(5L), any())).thenReturn(null);
+
+		mockMvc.perform(put("/api/orderItems/5")
+			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM))
+			                .contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() throws Exception {
 		when(orderItemService.findById(1L)).thenReturn(Optional.of(ORDERITEM_A));
 
@@ -95,13 +120,17 @@ public class OrderItemControllerTest {
 	}
 
 	@Test
-	public void listOrderItems_ReturnsOrderItems() throws Exception {
+	public void listOrderItems_WhenOrderItemExists_ReturnsAllOrderItemsSortedByDescription() throws Exception {
 		when(orderItemService.listAll()).thenReturn(ORDER_ITEMS);
 
-		mockMvc
-			.perform(get("/api/orderItems"))
+		mockMvc.perform(get("/api/orderItems"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$", hasSize(3)));
+			.andExpect(jsonPath("$", hasSize(3)))
+			.andExpect(jsonPath("$[*].description", containsInRelativeOrder(
+				ORDERITEM_A.getDescription(),
+				ORDERITEM_B.getDescription(),
+				ORDERITEM_C.getDescription()
+			)));
 	}
 
 	@Test
@@ -113,7 +142,6 @@ public class OrderItemControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$", hasSize(0)));
 	}
-
 
 	@Test
 	public void removeOrderItem_WithExistingId_ReturnsNoContent() throws Exception {
@@ -129,5 +157,12 @@ public class OrderItemControllerTest {
 		mockMvc
 			.perform(delete("/api/orderItems/1"))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void removeAllOrderItems_ReturnsNoContent() throws Exception {
+		mockMvc
+			.perform(delete("/api/orderItems"))
+			.andExpect(status().isNoContent());
 	}
 }

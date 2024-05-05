@@ -11,6 +11,13 @@ public class OrderItemConstants {
 	public static final OrderItem ORDERITEM_B = new OrderItem(2L, OrderItemType.MANPOWER, "Limpeza completa", 80.0, null);
 	public static final OrderItem ORDERITEM_C = new OrderItem(3L, OrderItemType.CARRIAGE_GOING, "Ilha da Gigóia", 26.00, null);
 
+	public static final OrderItem NEW_ORDERITEM = OrderItem.builder()
+		.id(1L)
+		.orderItemType(OrderItemType.CARRIAGE_BACK)
+		.description("New Description")
+		.price(1000.0)
+		.build();
+
 	public static final OrderItem INVALID_ORDERITEM = new OrderItem(null, null, "", -55.0, null);
 	public static final OrderItem EMPTY_ORDERITEM = new OrderItem();
 

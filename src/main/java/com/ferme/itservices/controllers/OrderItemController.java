@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -148,6 +149,7 @@ public class OrderItemController {
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
+	@Generated
 	@PostMapping("/import")
 	public ResponseEntity<List<OrderItem>> importOrderItems() throws IOException {
 		List<OrderItem> orderItems = orderItemService.exportDataToOrderItem();
