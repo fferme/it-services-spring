@@ -54,6 +54,14 @@ public class OrderIT {
 	}
 
 	@Test
+	public void updateOrder_WithValidData_ReturnsUpdatedOrder() {
+		webTestClient.put()
+			.uri("/api/orders/1")
+			.bodyValue(NEW_ORDER).exchange()
+			.expectStatus().isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() {
 		webTestClient.get().uri("/api/orders/" + ORDER_A.getId())
 			.exchange()
@@ -82,6 +90,12 @@ public class OrderIT {
 	@Test
 	public void removeOrder_ReturnsNoContent() {
 		webTestClient.delete().uri("/api/orders/" + ORDER_A.getId())
+			.exchange().expectStatus().isNoContent();
+	}
+
+	@Test
+	public void removeOrders_ReturnsNoContent() {
+		webTestClient.delete().uri("/api/orders")
 			.exchange().expectStatus().isNoContent();
 	}
 }

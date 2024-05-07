@@ -52,11 +52,11 @@ public class OrderItemServiceTest {
 		when(orderItemRepository.findById(ORDERITEM_A.getId())).thenReturn(java.util.Optional.of(ORDERITEM_A));
 		when(orderItemRepository.save(ORDERITEM_A)).thenReturn(ORDERITEM_A);
 
-		OrderItem updatedOrderItem = orderItemService.update(ORDERITEM_A.getId(), NEW_ORDERITEM);
+		OrderItem updatedOrderItem = orderItemService.update(ORDERITEM_A.getId(), NEW_ORDERITEM_A);
 
-		assertEquals(NEW_ORDERITEM.getOrderItemType(), updatedOrderItem.getOrderItemType());
-		assertEquals(NEW_ORDERITEM.getDescription(), updatedOrderItem.getDescription());
-		assertEquals(NEW_ORDERITEM.getPrice(), updatedOrderItem.getPrice());
+		assertEquals(NEW_ORDERITEM_A.getOrderItemType(), updatedOrderItem.getOrderItemType());
+		assertEquals(NEW_ORDERITEM_A.getDescription(), updatedOrderItem.getDescription());
+		assertEquals(NEW_ORDERITEM_A.getPrice(), updatedOrderItem.getPrice());
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class OrderItemServiceTest {
 		when(orderItemRepository.findById(9L)).thenReturn(empty());
 
 		assertThrows(RecordNotFoundException.class, () -> {
-			orderItemService.update(9L, NEW_ORDERITEM);
+			orderItemService.update(9L, NEW_ORDERITEM_A);
 		});
 	}
 

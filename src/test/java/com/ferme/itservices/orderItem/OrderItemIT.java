@@ -42,7 +42,7 @@ public class OrderItemIT {
 	public void updateOrderItem_WithValidData_ReturnsUpdatedOrderItem() {
 		webTestClient.put()
 			.uri("/api/orderItems/1")
-			.bodyValue(NEW_ORDERITEM).exchange()
+			.bodyValue(NEW_ORDERITEM_A).exchange()
 			.expectStatus().isEqualTo(HttpStatus.OK);
 	}
 

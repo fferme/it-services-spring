@@ -80,15 +80,15 @@ public class OrderItemControllerTest {
 
 	@Test
 	public void updateOrderItem_WithValidDataAndId_ReturnsOk() throws Exception {
-		when(orderItemService.update(eq(NEW_ORDERITEM.getId()), any())).thenReturn(NEW_ORDERITEM);
+		when(orderItemService.update(eq(NEW_ORDERITEM_A.getId()), any())).thenReturn(NEW_ORDERITEM_A);
 
 		mockMvc.perform(put("/api/orderItems/1")
-			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM))
+			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM_A))
 			                .contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.orderItemType").value(NEW_ORDERITEM.getOrderItemType().getValue()))
-			.andExpect(jsonPath("$.description").value(NEW_ORDERITEM.getDescription()))
-			.andExpect(jsonPath("$.price").value(NEW_ORDERITEM.getPrice()));
+			.andExpect(jsonPath("$.orderItemType").value(NEW_ORDERITEM_A.getOrderItemType().getValue()))
+			.andExpect(jsonPath("$.description").value(NEW_ORDERITEM_A.getDescription()))
+			.andExpect(jsonPath("$.price").value(NEW_ORDERITEM_A.getPrice()));
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class OrderItemControllerTest {
 		when(orderItemService.update(eq(5L), any())).thenReturn(null);
 
 		mockMvc.perform(put("/api/orderItems/5")
-			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM))
+			                .content(objectMapper.writeValueAsString(NEW_ORDERITEM_A))
 			                .contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 	}

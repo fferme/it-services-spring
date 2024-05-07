@@ -25,6 +25,7 @@ import static com.ferme.itservices.order.OrderConstants.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -96,6 +97,31 @@ public class OrderControllerTest {
 	}
 
 	@Test
+	public void updateOrder_WithValidDataAndId_ReturnsOk() throws Exception {
+		when(orderService.update(eq(NEW_ORDER.getId()), any())).thenReturn(NEW_ORDER);
+
+		mockMvc
+			.perform(
+				put("/api/orders/1")
+					.content(objectMapper.writeValueAsString(NEW_ORDER))
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$").value(NEW_ORDER));
+	}
+
+	@Test
+	public void updateOrder_WithUnexistentId_ReturnsNotFound() throws Exception {
+		when(orderService.update(eq(5L), any())).thenReturn(null);
+
+		mockMvc
+			.perform(
+				put("/api/orders/5")
+					.content(objectMapper.writeValueAsString(NEW_ORDER))
+					.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() throws Exception {
 		when(orderService.findById(1L)).thenReturn(Optional.of(ORDER_A));
 
@@ -126,7 +152,7 @@ public class OrderControllerTest {
 	}
 
 	@Test
-	public void listOrders_ReturnsOrders() throws Exception {
+	public void listOrders_WhenOrdersExists_ReturnsOrders() throws Exception {
 		when(orderService.listAll()).thenReturn(ORDERS);
 
 		mockMvc
@@ -136,7 +162,7 @@ public class OrderControllerTest {
 	}
 
 	@Test
-	public void listOrders_ReturnsNoOrders() throws Exception {
+	public void listOrders_WhenOrdersDoesNotExists_ReturnsEmptyList() throws Exception {
 		when(orderService.listAll()).thenReturn(Collections.emptyList());
 
 		mockMvc
@@ -159,5 +185,12 @@ public class OrderControllerTest {
 		mockMvc
 			.perform(delete("/api/orders/1"))
 			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void removeAllOrders_ReturnsNoContent() throws Exception {
+		mockMvc
+			.perform(delete("/api/orders"))
+			.andExpect(status().isNoContent());
 	}
 }
