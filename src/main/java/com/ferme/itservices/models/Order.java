@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -46,30 +47,30 @@ public class Order implements Serializable {
 	@JoinColumn(name = "client_id")
 	private Client client;
 
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//	@JoinTable(
-//		name = "rel_order_orderItems",
-//		joinColumns = {
-//			@JoinColumn(name = "order_id", referencedColumnName = "id")
-//		},
-//		inverseJoinColumns = {
-//			@JoinColumn(name = "orderItem_id", referencedColumnName = "id")
-//		}
-//	)
-//	private List<OrderItem> orderItems;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinTable(
+		name = "rel_order_orderItems",
+		joinColumns = {
+			@JoinColumn(name = "order_id", referencedColumnName = "id")
+		},
+		inverseJoinColumns = {
+			@JoinColumn(name = "orderItem_id", referencedColumnName = "id")
+		}
+	)
+	private List<OrderItem> orderItems;
 
 	@DecimalMin(value = "0.0", message = "Total price must be minimum 0.0")
 	@DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
 	@Column(length = 7, nullable = false)
 	private Double totalPrice = 0.0;
 
-//	@PrePersist
-//	@PreUpdate
-//	private void calculateTotal() {
-//		if (!orderItems.isEmpty()) {
-//			this.totalPrice = orderItems.stream()
-//				.mapToDouble(OrderItem::getPrice)
-//				.sum();
-//		}
-//	}
+	@PrePersist
+	@PreUpdate
+	private void calculateTotal() {
+		if (!orderItems.isEmpty()) {
+			this.totalPrice = orderItems.stream()
+				.mapToDouble(OrderItem::getPrice)
+				.sum();
+		}
+	}
 }

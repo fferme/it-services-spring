@@ -3,6 +3,7 @@ package com.ferme.itservices.services;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.models.Order;
+import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,14 @@ public class OrderService {
 		Client client = entityManager.merge(order.getClient());
 		order.setClient(client);
 
+		List<OrderItem> orderItems = order.getOrderItems();
+		List<OrderItem> newOrderItems = new ArrayList<>();
+		for (OrderItem orderItem : orderItems) {
+			orderItem = entityManager.merge(orderItem);
+			newOrderItems.add(orderItem);
+		}
+		order.setOrderItems(newOrderItems);
+
 		return orderRepository.save(order);
 	}
 
@@ -46,7 +56,7 @@ public class OrderService {
 				orderFound.setDeviceSN(updatedOrder.getDeviceSN());
 				orderFound.setProblems(updatedOrder.getProblems());
 				orderFound.setClient(updatedOrder.getClient());
-				//orderFound.setOrderItems(updatedOrder.getOrderItems());
+				orderFound.setOrderItems(updatedOrder.getOrderItems());
 
 				return orderRepository.save(orderFound);
 
