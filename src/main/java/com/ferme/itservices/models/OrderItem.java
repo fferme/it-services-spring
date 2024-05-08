@@ -1,17 +1,18 @@
 package com.ferme.itservices.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.enums.converter.OrderItemTypeConverter;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,9 +31,8 @@ public class OrderItem implements Serializable {
 	@Column(length = 30, nullable = false)
 	private OrderItemType orderItemType;
 
-	@NotBlank
-	@Size(min = 3, max = 70, message = "Description must be minimum 5 characters")
-	@Column(length = 70, nullable = false, unique = true)
+	@Size(max = 70)
+	@Column(length = 70)
 	private String description;
 
 	@DecimalMin(value = "0.0", message = "Price must be minimum 0.0")
@@ -40,7 +40,7 @@ public class OrderItem implements Serializable {
 	@Column(length = 7, nullable = false)
 	private Double price;
 
-	@JsonIgnore
-	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
-	private List<Order> orders;
+//	@JsonIgnore
+//	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
+//	private List<Order> orders;
 }

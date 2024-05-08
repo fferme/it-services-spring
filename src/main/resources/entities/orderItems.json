@@ -55,12 +55,12 @@
     "price": 70.00
   },
   {
-    "orderItemType": "Transporte",
-    "description": "Ida",
+    "orderItemType": "Transporte Ida",
+    "description": "Praia do Flamengo",
     "price": 0.0
   },
   {
-    "orderItemType": "Transporte",
+    "orderItemType": "Transporte Volta",
     "description": "Volta",
     "price": 0.0
   }

@@ -1,15 +1,16 @@
 package com.ferme.itservices.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -41,38 +42,34 @@ public class Order implements Serializable {
 	@Column(length = 250)
 	private String problems;
 
-	@NotNull
-	@Valid
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "client_id")
 	private Client client;
 
-	@NotNull
-	@Valid
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(
-		name = "rel_order_orderItems",
-		joinColumns = {
-			@JoinColumn(name = "order_id", referencedColumnName = "id")
-		},
-		inverseJoinColumns = {
-			@JoinColumn(name = "orderItem_id", referencedColumnName = "id")
-		}
-	)
-	private List<OrderItem> orderItems;
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+//	@JoinTable(
+//		name = "rel_order_orderItems",
+//		joinColumns = {
+//			@JoinColumn(name = "order_id", referencedColumnName = "id")
+//		},
+//		inverseJoinColumns = {
+//			@JoinColumn(name = "orderItem_id", referencedColumnName = "id")
+//		}
+//	)
+//	private List<OrderItem> orderItems;
 
 	@DecimalMin(value = "0.0", message = "Total price must be minimum 0.0")
 	@DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
 	@Column(length = 7, nullable = false)
 	private Double totalPrice = 0.0;
 
-	@PrePersist
-	@PreUpdate
-	private void calculateTotal() {
-		if (!orderItems.isEmpty()) {
-			this.totalPrice = orderItems.stream()
-				.mapToDouble(OrderItem::getPrice)
-				.sum();
-		}
-	}
+//	@PrePersist
+//	@PreUpdate
+//	private void calculateTotal() {
+//		if (!orderItems.isEmpty()) {
+//			this.totalPrice = orderItems.stream()
+//				.mapToDouble(OrderItem::getPrice)
+//				.sum();
+//		}
+//	}
 }

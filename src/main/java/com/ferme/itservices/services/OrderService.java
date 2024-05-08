@@ -1,8 +1,11 @@
 package com.ferme.itservices.services;
 
 import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Client;
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.repositories.OrderRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,6 +19,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class OrderService {
+	private EntityManager entityManager;
+
 	private final OrderRepository orderRepository;
 
 	public List<Order> listAll() {
@@ -26,7 +31,11 @@ public class OrderService {
 		return orderRepository.findById(id);
 	}
 
-	public Order create(@Valid @NotNull Order order) {
+	@Transactional
+	public Order create(Order order) {
+		Client client = entityManager.merge(order.getClient());
+		order.setClient(client);
+
 		return orderRepository.save(order);
 	}
 
@@ -37,7 +46,7 @@ public class OrderService {
 				orderFound.setDeviceSN(updatedOrder.getDeviceSN());
 				orderFound.setProblems(updatedOrder.getProblems());
 				orderFound.setClient(updatedOrder.getClient());
-            orderFound.setOrderItems(updatedOrder.getOrderItems());
+				//orderFound.setOrderItems(updatedOrder.getOrderItems());
 
 				return orderRepository.save(orderFound);
 

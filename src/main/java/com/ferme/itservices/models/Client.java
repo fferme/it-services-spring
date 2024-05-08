@@ -49,6 +49,6 @@ public class Client implements Serializable {
 	private String reference;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "client", cascade = CascadeType.MERGE)
 	private List<Order> orders;
 }
