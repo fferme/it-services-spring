@@ -17,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,11 +36,11 @@ public class OrderItemService {
 		return orderItemRepository.save(orderItem);
 	}
 
-	public Optional<OrderItem> findById(@Valid @NotNull Long id) {
+	public Optional<OrderItem> findById(@Valid @NotNull UUID id) {
 		return orderItemRepository.findById(id);
 	}
 
-	public void deleteById(@NotNull Long id) {
+	public void deleteById(@NotNull UUID id) {
 		orderItemRepository.deleteById(id);
 	}
 
@@ -91,7 +88,7 @@ public class OrderItemService {
 		return orderItemRepository.saveAll(readJsonData());
 	}
 
-	public OrderItem update(@NotNull Long id, @Valid @NotNull OrderItem updatedOrderItem) {
+	public OrderItem update(@NotNull UUID id, @Valid @NotNull OrderItem updatedOrderItem) {
 		return orderItemRepository.findById(id)
 			.map(orderItemFound -> {
 				orderItemFound.setOrderItemType(OrderItemTypeConverter.convertOrderItemTypeValue(

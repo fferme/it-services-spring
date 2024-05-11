@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Validated
 @Service
@@ -29,7 +30,7 @@ public class OrderService {
 		return orderRepository.findAll();
 	}
 
-	public Optional<Order> findById(@Valid @NotNull Long id) {
+	public Optional<Order> findById(@Valid @NotNull UUID id) {
 		return orderRepository.findById(id);
 	}
 
@@ -49,7 +50,7 @@ public class OrderService {
 		return orderRepository.save(order);
 	}
 
-	public Order update(@NotNull Long id, @Valid @NotNull Order updatedOrder) {
+	public Order update(@NotNull UUID id, @Valid @NotNull Order updatedOrder) {
 		return orderRepository.findById(id)
 			.map(orderFound -> {
 				orderFound.setDeviceName(updatedOrder.getDeviceName());
@@ -63,7 +64,7 @@ public class OrderService {
 			}).orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
 	}
 
-	public void deleteById(@NotNull Long id) {
+	public void deleteById(@NotNull UUID id) {
 		orderRepository.deleteById(id);
 	}
 

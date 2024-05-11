@@ -16,6 +16,7 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -56,7 +57,7 @@ public class OrderController {
 				})
 		})
 	@GetMapping("/{id}")
-	public ResponseEntity<Order> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<Order> findById(@PathVariable("id") UUID id) {
 		return orderService.findById(id)
 			.map(ResponseEntity::ok)
 			.orElseGet(() -> ResponseEntity.notFound().build());
@@ -93,7 +94,7 @@ public class OrderController {
 				})
 		})
 	@PutMapping("/{id}")
-	public ResponseEntity<Order> update(@PathVariable("id") Long id, @RequestBody @Valid Order updatedOrder) {
+	public ResponseEntity<Order> update(@PathVariable("id") UUID id, @RequestBody @Valid Order updatedOrder) {
 		Order modifiedOrder = orderService.update(id, updatedOrder);
 		return (modifiedOrder != null)
 			? ResponseEntity.ok(modifiedOrder)
@@ -113,7 +114,7 @@ public class OrderController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
 		orderService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}

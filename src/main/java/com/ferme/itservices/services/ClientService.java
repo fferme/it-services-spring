@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +31,7 @@ public class ClientService {
 			.collect(Collectors.toList());
 	}
 
-	public Optional<Client> findById(@Valid @NotNull Long id) {
+	public Optional<Client> findById(@Valid @NotNull UUID id) {
 		return clientRepository.findById(id);
 	}
 
@@ -46,9 +43,10 @@ public class ClientService {
 		return clientRepository.save(client);
 	}
 
-	public Client update(@NotNull Long id, @Valid @NotNull Client newClient) {
+	public Client update(@NotNull UUID id, @Valid @NotNull Client newClient) {
 		return clientRepository.findById(id)
 			.map(clientFound -> {
+				clientFound.setName(newClient.getName());
 				clientFound.setNeighborhood(newClient.getNeighborhood());
 				clientFound.setAddress(newClient.getAddress());
 				clientFound.setReference(newClient.getReference());
@@ -58,7 +56,7 @@ public class ClientService {
 			}).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
 	}
 
-	public void deleteById(@NotNull Long id) {
+	public void deleteById(@NotNull UUID id) {
 		clientRepository.deleteById(id);
 	}
 

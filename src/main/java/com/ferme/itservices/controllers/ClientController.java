@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -60,7 +61,7 @@ public class ClientController {
 				})
 		})
 	@GetMapping("/{id}")
-	public ResponseEntity<Client> findById(@PathVariable("id") Long id) {
+	public ResponseEntity<Client> findById(@PathVariable("id") UUID id) {
 		return clientService.findById(id).map(ResponseEntity::ok)
 			.orElseGet(() -> ResponseEntity.notFound().build());
 	}
@@ -115,7 +116,7 @@ public class ClientController {
 				})
 		})
 	@PutMapping("/{id}")
-	public ResponseEntity<Client> update(@PathVariable("id") Long id, @RequestBody @Valid Client updatedClient) {
+	public ResponseEntity<Client> update(@PathVariable("id") UUID id, @RequestBody @Valid Client updatedClient) {
 		Client modifiedClient = clientService.update(id, updatedClient);
 		return (modifiedClient != null)
 			? ResponseEntity.ok(modifiedClient)
@@ -135,7 +136,7 @@ public class ClientController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
 		clientService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
