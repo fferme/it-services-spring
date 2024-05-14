@@ -6,20 +6,25 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-@SuperBuilder
+@Builder
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @Entity(name = "orders")
 @Table(name = "orders")
-public class Order extends BaseEntity implements Serializable {
+public class Order implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	private UUID id;
+
 	@Size(max = 95)
 	@Column(length = 95, updatable = false)
 	private final String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
@@ -65,15 +70,8 @@ public class Order extends BaseEntity implements Serializable {
 	private Double totalPrice = 0.0;
 
 	@PrePersist
-	protected void onPrePersist() {
-		if (getCreatedOn() == null) { setCreatedOn(LocalDateTime.now()); }
-		if (getUpdatedOn() == null) { setUpdatedOn(LocalDateTime.now()); }
-		calculateTotal();
-	}
-
 	@PreUpdate
 	protected void onPreUpdate() {
-		setUpdatedOn(LocalDateTime.now());
 		calculateTotal();
 	}
 

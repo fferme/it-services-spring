@@ -6,20 +6,25 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-@SuperBuilder
+@Builder
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @Entity(name = "clients")
 @Table(name = "clients")
-public class Client extends BaseEntity implements Serializable {
+public class Client implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	private UUID id;
+
 	@Setter
 	@NotEmpty(message = "Name is required")
 	@Size(min = 4, max = 40, message = "Name must be between 4 and 40 characters")
@@ -51,15 +56,4 @@ public class Client extends BaseEntity implements Serializable {
 	@Size(max = 70)
 	@Column(length = 70)
 	private String reference;
-
-	@PrePersist
-	protected void onPrePersist() {
-		if (getCreatedOn() == null) { setCreatedOn(LocalDateTime.now()); }
-		if (getUpdatedOn() == null) { setUpdatedOn(LocalDateTime.now()); }
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		setUpdatedOn(LocalDateTime.now());
-	}
 }

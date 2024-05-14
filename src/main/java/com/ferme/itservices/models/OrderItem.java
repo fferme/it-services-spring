@@ -9,20 +9,25 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-@SuperBuilder
+@Builder
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
+@ToString
+@EqualsAndHashCode
 @Entity(name = "orderItems")
 @Table(name = "order_Items")
-public class OrderItem extends BaseEntity implements Serializable {
+public class OrderItem implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	private UUID id;
+
 	@Setter
 	@NotNull
 	@Convert(converter = OrderItemTypeConverter.class)
@@ -43,15 +48,4 @@ public class OrderItem extends BaseEntity implements Serializable {
 	@JsonIgnore
 	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
 	private List<Order> orders;
-
-	@PrePersist
-	protected void onPrePersist() {
-		if (getCreatedOn() == null) { setCreatedOn(LocalDateTime.now()); }
-		if (getUpdatedOn() == null) { setUpdatedOn(LocalDateTime.now()); }
-	}
-
-	@PreUpdate
-	protected void onPreUpdate() {
-		setUpdatedOn(LocalDateTime.now());
-	}
 }
