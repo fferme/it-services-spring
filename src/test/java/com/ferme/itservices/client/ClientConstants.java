@@ -1,32 +1,70 @@
 package com.ferme.itservices.client;
 
+import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.models.Client;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
+import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
+
 public class ClientConstants {
-	public static final Client FELIPE = new Client(1L, "Ferme", "21986861613", "Tijuca", "Rua Silva Perez 39/21", "Amigo do Jaca", null);
-	public static final Client JOAO = new Client(2L, "João", "21986831413", "Méier", "Rua Adolfo 2334", "Irmão do Jorel", null);
-	public static final Client RONALDO = new Client(3L, "Ronaldo", "21982831413", "Penha", "Rua Silva Cruz 33/200", "Pai do Sandro", null);
+	public static final Client CLIENT_A = Client.builder()
+		.name("Felipe")
+		.phoneNumber("21986861613")
+		.neighborhood("Tijuca")
+		.address("Rua Silva Perez 39/21")
+		.reference("Amigo do Jaca")
+		.build();
+	public static final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+
+	public static final Client CLIENT_B = Client.builder()
+		.name("João")
+		.phoneNumber("21986831413")
+		.neighborhood("Méier")
+		.address("Rua Adolfo 2334")
+		.reference("Irmão do Jorel")
+		.build();
+	public static final ClientDTO CLIENT_B_DTO = toClientDTO(CLIENT_B);
+
+	public static final Client CLIENT_C = Client.builder()
+		.name("Ronaldo")
+		.phoneNumber("21982831413")
+		.neighborhood("Penha")
+		.address("Rua Silva Cruz 33/200")
+		.reference("Pai do Sandro")
+		.build();
+	public static final ClientDTO CLIENT_C_DTO = toClientDTO(CLIENT_C);
 
 	public static final Client NEW_CLIENT = Client.builder()
-		.id(1L)
 		.name("New Name")
 		.phoneNumber("21989653626")
 		.neighborhood("New Neighborhood")
 		.address("New Address")
 		.reference("New Reference")
 		.build();
+	public static final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
 
 	public static final Client EMPTY_CLIENT = new Client();
-	public static final Client INVALID_CLIENT = new Client(null, "234423232", "21986861613333", "", "", "", null);
+	public static final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
+
+	public static final Client INVALID_CLIENT = Client.builder()
+		.name("234423232")
+		.phoneNumber("21986861613333")
+		.neighborhood("")
+		.address("")
+		.reference("")
+		.build();
+	public static final ClientDTO INVALID_CLIENT_DTO = toClientDTO(INVALID_CLIENT);
 
 	public static final List<Client> CLIENTS = new ArrayList<>() {
 		{
-			add(FELIPE);
-			add(JOAO);
-			add(RONALDO);
+			add(CLIENT_A);
+			add(CLIENT_B);
+			add(CLIENT_C);
 		}
 	};
+	public static final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
+
 }
