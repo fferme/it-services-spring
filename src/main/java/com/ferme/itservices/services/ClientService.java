@@ -3,6 +3,7 @@ package com.ferme.itservices.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
@@ -15,43 +16,56 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.ferme.itservices.dtos.mappers.ClientMapper.*;
 
 @Service
 @AllArgsConstructor
 public class ClientService {
 	private final ClientRepository clientRepository;
 
-	public List<Client> listAll() {
+	public List<ClientDTO> listAll() {
 		List<Client> clients = clientRepository.findAll();
 
-		return clients.stream()
+		return toClientDTOList(
+			clients.stream()
 			.sorted(Comparator.comparing(Client::getName))
-			.collect(Collectors.toList());
+				.collect(Collectors.toList())
+		);
 	}
 
-	public Optional<Client> findById(@Valid @NotNull UUID id) {
-		return clientRepository.findById(id);
+	public ClientDTO findById(@Valid @NotNull UUID id) {
+		Client client = clientRepository.findById(id)
+			.orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
+
+		return toClientDTO(client);
 	}
 
-	public Optional<Client> findByName(@NotBlank String name) {
-		return clientRepository.findByName(name);
+	public ClientDTO findByName(@NotBlank String name) {
+		Client client = clientRepository.findByName(name)
+			.orElseThrow(() -> new RecordNotFoundException(Client.class, name));
+
+		return toClientDTO(client);
 	}
 
-	public Client create(Client client) {
-		return clientRepository.save(client);
+	public ClientDTO create(ClientDTO clientDTO) {
+		return toClientDTO(clientRepository.save(toClient(clientDTO)));
 	}
 
-	public Client update(@NotNull UUID id, @Valid @NotNull Client newClient) {
+	public ClientDTO update(@NotNull UUID id, @Valid @NotNull ClientDTO newClientDTO) {
 		return clientRepository.findById(id)
 			.map(clientFound -> {
-				clientFound.setName(newClient.getName());
-				clientFound.setNeighborhood(newClient.getNeighborhood());
-				clientFound.setAddress(newClient.getAddress());
-				clientFound.setReference(newClient.getReference());
+				clientFound.setName(newClientDTO.name());
+				clientFound.setNeighborhood(newClientDTO.neighborhood());
+				clientFound.setAddress(newClientDTO.address());
+				clientFound.setReference(newClientDTO.reference());
 
-				return clientRepository.save(clientFound);
+				return toClientDTO(clientRepository.save(clientFound));
 
 			}).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
 	}
@@ -65,8 +79,8 @@ public class ClientService {
 	}
 
 	@Generated
-	public List<Client> exportDataToClient() throws IOException {
-		return clientRepository.saveAll(readJsonData());
+	public List<ClientDTO> exportDataToClient() throws IOException {
+		return toClientDTOList(clientRepository.saveAll(readJsonData()));
 	}
 
 	@Generated

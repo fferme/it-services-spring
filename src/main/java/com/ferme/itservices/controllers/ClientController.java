@@ -1,5 +1,6 @@
 package com.ferme.itservices.controllers;
 
+import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.services.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,8 +43,8 @@ public class ClientController {
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
-	public ResponseEntity<List<Client>> listAll() {
-		List<Client> clients = clientService.listAll();
+	public ResponseEntity<List<ClientDTO>> listAll() {
+		List<ClientDTO> clients = clientService.listAll();
 		return ResponseEntity.ok(clients);
 	}
 
@@ -61,9 +62,12 @@ public class ClientController {
 				})
 		})
 	@GetMapping("/{id}")
-	public ResponseEntity<Client> findById(@PathVariable("id") UUID id) {
-		return clientService.findById(id).map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	public ResponseEntity<ClientDTO> findById(@PathVariable("id") UUID id) {
+		ClientDTO clientDTO = clientService.findById(id);
+
+		return (clientDTO != null)
+			? ResponseEntity.ok(clientDTO)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Recupera cliente pelo nome", method = "GET")
@@ -80,9 +84,12 @@ public class ClientController {
 				})
 		})
 	@GetMapping("/name/{name}")
-	public ResponseEntity<Client> findByName(@PathVariable("name") @NotEmpty String name) {
-		return clientService.findByName(name).map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	public ResponseEntity<ClientDTO> findByName(@PathVariable("name") @NotEmpty String name) {
+		ClientDTO clientDTO = clientService.findByName(name);
+
+		return (clientDTO != null)
+			? ResponseEntity.ok(clientDTO)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Salva novo cliente", method = "POST")
@@ -98,9 +105,9 @@ public class ClientController {
 				})
 		})
 	@PostMapping
-	public ResponseEntity<Client> create(@RequestBody @Valid Client client) {
-		Client createdClient = clientService.create(client);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
+	public ResponseEntity<ClientDTO> create(@RequestBody @Valid ClientDTO clientDTO) {
+		ClientDTO createdClientDTO = clientService.create(clientDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdClientDTO);
 	}
 
 	@Operation(summary = "Atualiza cliente existente", method = "PUT")
@@ -116,10 +123,11 @@ public class ClientController {
 				})
 		})
 	@PutMapping("/{id}")
-	public ResponseEntity<Client> update(@PathVariable("id") UUID id, @RequestBody @Valid Client updatedClient) {
-		Client modifiedClient = clientService.update(id, updatedClient);
-		return (modifiedClient != null)
-			? ResponseEntity.ok(modifiedClient)
+	public ResponseEntity<ClientDTO> update(@PathVariable("id") UUID id, @RequestBody @Valid ClientDTO updatedClientDTO) {
+		ClientDTO modifiedClientDTO = clientService.update(id, updatedClientDTO);
+
+		return (modifiedClientDTO != null)
+			? ResponseEntity.ok(modifiedClientDTO)
 			: ResponseEntity.notFound().build();
 	}
 
@@ -136,7 +144,7 @@ public class ClientController {
 				})
 		})
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remove(@PathVariable("id") UUID id) {
+	public ResponseEntity<Void> deleteById(@PathVariable("id") UUID id) {
 		clientService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -153,7 +161,7 @@ public class ClientController {
 				})
 		})
 	@DeleteMapping
-	public ResponseEntity<Void> remove() {
+	public ResponseEntity<Void> deleteAll() {
 		clientService.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
@@ -172,8 +180,8 @@ public class ClientController {
 		})
 	@Generated
 	@PostMapping("/import")
-	public ResponseEntity<List<Client>> importClients() throws IOException {
-		List<Client> clients = clientService.exportDataToClient();
-		return ResponseEntity.status(HttpStatus.CREATED).body(clients);
+	public ResponseEntity<List<ClientDTO>> importClients() throws IOException {
+		List<ClientDTO> clientsDTO = clientService.exportDataToClient();
+		return ResponseEntity.status(HttpStatus.CREATED).body(clientsDTO);
 	}
 }
