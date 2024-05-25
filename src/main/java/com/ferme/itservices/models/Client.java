@@ -6,8 +6,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,9 +22,11 @@ import java.util.UUID;
 @Entity(name = "clients")
 @Table(name = "clients")
 public class Client implements Serializable {
+	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	@JdbcTypeCode(Types.VARCHAR)
+	@Column(name = "id", updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
 	private UUID id;
 
 	@Setter
