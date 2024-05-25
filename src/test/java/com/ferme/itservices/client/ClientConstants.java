@@ -5,6 +5,7 @@ import com.ferme.itservices.models.Client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
 import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
@@ -50,8 +51,8 @@ public class ClientConstants {
 	public static final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
 
 	public static final Client INVALID_CLIENT = Client.builder()
-		.name("234423232")
-		.phoneNumber("21986861613333")
+		.name("2")
+		.phoneNumber("2198686161saewq3333")
 		.neighborhood("")
 		.address("")
 		.reference("")
@@ -67,4 +68,7 @@ public class ClientConstants {
 	};
 	public static final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
 
+	public static final UUID CLIENT_A_UUID = UUID.fromString("d6a0eb46-d011-4fb1-95ab-44f6d415d9bf");
+	public static final UUID CLIENT_B_UUID = UUID.fromString("88e3c5f7-d0c1-4829-b5e0-61541f9aa2dc");
+	public static final UUID CLIENT_C_UUID = UUID.fromString("2e8d5d11-61d7-4976-b5c9-54adfea13e5b");
 }

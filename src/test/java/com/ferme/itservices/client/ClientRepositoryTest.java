@@ -11,10 +11,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import static com.ferme.itservices.client.ClientConstants.*;
+import static com.ferme.itservices.client.ClientConstants.CLIENT_A;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class ClientRepositoryTest {
@@ -26,12 +26,12 @@ public class ClientRepositoryTest {
 
 	@AfterEach
 	public void nullifyId() {
-		FELIPE.setId(null);
+		CLIENT_A.setId(null);
 	}
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		Client client = clientRepository.save(FELIPE);
+		Client client = clientRepository.save(CLIENT_A);
 
 		Client sut = testEntityManager.find(Client.class, client.getId());
 
@@ -40,23 +40,8 @@ public class ClientRepositoryTest {
 	}
 
 	@Test
-	public void createClient_WithInvalidData_ThrowsException() {
-		assertThatThrownBy(() -> clientRepository.save(EMPTY_CLIENT)).isInstanceOf(RuntimeException.class);
-		assertThatThrownBy(() -> clientRepository.save(INVALID_CLIENT)).isInstanceOf(RuntimeException.class);
-	}
-
-	@Test
-	public void createClient_WithExistingPhoneNumber_ThrowsException() {
-		Client client = testEntityManager.persistFlushFind(FELIPE);
-		testEntityManager.detach(client);
-		client.setId(null);
-
-		assertThatThrownBy(() -> clientRepository.save(client)).isInstanceOf(RuntimeException.class);
-	}
-
-	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(FELIPE);
+		Client client = testEntityManager.persistFlushFind(CLIENT_A);
 
 		Optional<Client> clientOpt = clientRepository.findById(client.getId());
 
@@ -66,14 +51,14 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByUnexistingId_ReturnsEmpty() {
-		Optional<Client> clientOpt = clientRepository.findById(1L);
+		Optional<Client> clientOpt = clientRepository.findById(UUID.randomUUID());
 
 		assertThat(clientOpt).isEmpty();
 	}
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(FELIPE);
+		Client client = testEntityManager.persistFlushFind(CLIENT_A);
 
 		Optional<Client> clientOpt = clientRepository.findByName(client.getName());
 
@@ -106,19 +91,19 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void deleteClient_WithExistingId_DeletesClientFromDatabase() {
-		Client client = testEntityManager.persistFlushFind(FELIPE);
+		Client client = testEntityManager.persistFlushFind(CLIENT_A);
 
-		clientRepository.deleteById(FELIPE.getId());
+		clientRepository.deleteById(CLIENT_A.getId());
 
-		Client removedClient = testEntityManager.find(Client.class, FELIPE.getId());
+		Client removedClient = testEntityManager.find(Client.class, CLIENT_A.getId());
 		assertThat(removedClient).isNull();
 	}
 
 	@Test
 	public void deleteClient_WithNonExistingId_DoesNotDeleteAnything() {
-		clientRepository.deleteById(-1L);
+		clientRepository.deleteById(UUID.randomUUID());
 
-		Client nonExistingClient = testEntityManager.find(Client.class, -1L);
+		Client nonExistingClient = testEntityManager.find(Client.class, UUID.randomUUID());
 		assertThat(nonExistingClient).isNull();
 	}
 

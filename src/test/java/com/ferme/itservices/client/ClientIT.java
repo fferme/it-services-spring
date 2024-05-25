@@ -1,6 +1,6 @@
 package com.ferme.itservices.client;
 
-import com.ferme.itservices.models.Client;
+import com.ferme.itservices.dtos.ClientDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +12,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ferme.itservices.client.ClientConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,9 +27,14 @@ public class ClientIT {
 
 	@Test
 	public void createClient_WithValidData_ReturnsCreated() {
-		webTestClient.post().uri("/api/clients").bodyValue(FELIPE)
+		webTestClient.post().uri("/api/clients").bodyValue(NEW_CLIENT_DTO)
 			.exchange().expectStatus().isCreated()
-			.expectBody(Client.class).isEqualTo(FELIPE);
+			.expectBody()
+			.jsonPath("$.name").isEqualTo(NEW_CLIENT_DTO.name())
+			.jsonPath("$.phoneNumber").isEqualTo(NEW_CLIENT_DTO.phoneNumber())
+			.jsonPath("$.neighborhood").isEqualTo(NEW_CLIENT_DTO.neighborhood())
+			.jsonPath("$.address").isEqualTo(NEW_CLIENT_DTO.address())
+			.jsonPath("$.reference").isEqualTo(NEW_CLIENT_DTO.reference());
 	}
 
 	@Test
@@ -42,48 +48,74 @@ public class ClientIT {
 	@Test
 	public void updateClient_WithValidData_ReturnsUpdatedClient() {
 		webTestClient.put()
-			.uri("/api/clients/1")
+			.uri("/api/clients/" + CLIENT_A_UUID)
 			.bodyValue(NEW_CLIENT).exchange()
 			.expectStatus().isEqualTo(HttpStatus.OK);
 	}
 
 	@Test
 	public void getClient_WithExistingId_ReturnsClient() {
-		webTestClient.get().uri("/api/clients/" + FELIPE.getId())
+		webTestClient.get().uri("/api/clients/" + CLIENT_A_UUID)
 			.exchange().expectStatus().isOk()
-			.expectBody(Client.class).isEqualTo(FELIPE);
+			.expectBody()
+			.jsonPath("$.name").isEqualTo(CLIENT_A_DTO.name())
+			.jsonPath("$.phoneNumber").isEqualTo(CLIENT_A_DTO.phoneNumber())
+			.jsonPath("$.neighborhood").isEqualTo(CLIENT_A_DTO.neighborhood())
+			.jsonPath("$.address").isEqualTo(CLIENT_A_DTO.address())
+			.jsonPath("$.reference").isEqualTo(CLIENT_A_DTO.reference());
 	}
 
 	@Test
 	public void getClientByName_WithExistingName_ReturnsClient() {
-		webTestClient.get().uri("/api/clients/name/" + FELIPE.getName())
+		webTestClient.get().uri("/api/clients/name/" + CLIENT_A_DTO.name())
 			.exchange().expectStatus().isOk()
-			.expectBody(Client.class).isEqualTo(FELIPE);
+			.expectBody()
+			.jsonPath("$.name").isEqualTo(CLIENT_A_DTO.name())
+			.jsonPath("$.phoneNumber").isEqualTo(CLIENT_A_DTO.phoneNumber())
+			.jsonPath("$.neighborhood").isEqualTo(CLIENT_A_DTO.neighborhood())
+			.jsonPath("$.address").isEqualTo(CLIENT_A_DTO.address())
+			.jsonPath("$.reference").isEqualTo(CLIENT_A_DTO.reference());
 	}
 
 	@Test
 	public void listClients_ReturnsAllClientsSortedByName() {
-		List<Client> actualClients = webTestClient.get().uri("/api/clients")
+		List<ClientDTO> actualClients = webTestClient.get().uri("/api/clients")
 			.accept(MediaType.APPLICATION_JSON).exchange()
 			.expectStatus().isOk()
-			.expectBodyList(Client.class)
+			.expectBodyList(ClientDTO.class)
 			.returnResult().getResponseBody();
 
-		List<Client> sortedExpectedClients = CLIENTS.stream()
-			.sorted(Comparator.comparing(Client::getName))
-			.toList();
-
 		assert actualClients != null;
-		List<Client> sortedActualClients = actualClients.stream()
-			.sorted(Comparator.comparing(Client::getName))
-			.toList();
+		List<ClientDTO> sortedActualClients = actualClients.stream()
+			.sorted(Comparator.comparing(ClientDTO::name))
+			.map(clientDTO -> ClientDTO.builder()
+				.name(clientDTO.name())
+				.phoneNumber(clientDTO.phoneNumber())
+				.neighborhood(clientDTO.neighborhood())
+				.address(clientDTO.address())
+				.reference(clientDTO.reference())
+				.build()
+			)
+			.collect(Collectors.toList());
+
+		List<ClientDTO> sortedExpectedClients = CLIENTS_DTO.stream()
+			.sorted(Comparator.comparing(ClientDTO::name))
+			.map(clientDTO -> ClientDTO.builder()
+				.name(clientDTO.name())
+				.phoneNumber(clientDTO.phoneNumber())
+				.neighborhood(clientDTO.neighborhood())
+				.address(clientDTO.address())
+				.reference(clientDTO.reference())
+				.build()
+			)
+			.collect(Collectors.toList());
 
 		assertThat(sortedActualClients).containsExactlyElementsOf(sortedExpectedClients);
 	}
 
 	@Test
 	public void removeClient_ReturnsNoContent() {
-		webTestClient.delete().uri("/api/clients/" + FELIPE.getId())
+		webTestClient.delete().uri("/api/clients/" + CLIENT_A_UUID)
 			.exchange().expectStatus().isNoContent();
 	}
 
