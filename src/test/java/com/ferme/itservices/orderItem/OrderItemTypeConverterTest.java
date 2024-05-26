@@ -16,18 +16,18 @@ public class OrderItemTypeConverterTest {
 	private OrderItemTypeConverter converter;
 
 	@Test
-	public void convertOrderItemTypeValue_WithValidValue_ReturnsOrderItemType() {
-		assertEquals(OrderItemType.PART_BUYOUT, OrderItemTypeConverter.convertOrderItemTypeValue(OrderItemType.PART_BUYOUT.getValue()));
-		assertEquals(OrderItemType.PART_EXCHANGE, OrderItemTypeConverter.convertOrderItemTypeValue(OrderItemType.PART_EXCHANGE.getValue()));
-		assertEquals(OrderItemType.MANPOWER, OrderItemTypeConverter.convertOrderItemTypeValue(OrderItemType.MANPOWER.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_GOING, OrderItemTypeConverter.convertOrderItemTypeValue(OrderItemType.CARRIAGE_GOING.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_BACK, OrderItemTypeConverter.convertOrderItemTypeValue(OrderItemType.CARRIAGE_BACK.getValue()));
+	public void convertOrderItemTypeValue_WithValidValue_ReturnsToOrderItemType() {
+		assertEquals(OrderItemType.PART_BUYOUT, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.PART_BUYOUT.getValue()));
+		assertEquals(OrderItemType.PART_EXCHANGE, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.PART_EXCHANGE.getValue()));
+		assertEquals(OrderItemType.MANPOWER, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.MANPOWER.getValue()));
+		assertEquals(OrderItemType.CARRIAGE_GOING, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.CARRIAGE_GOING.getValue()));
+		assertEquals(OrderItemType.CARRIAGE_BACK, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.CARRIAGE_BACK.getValue()));
 	}
 
 	@Test
-	public void convertOrderItemTypeValue_WithInvalidValue_ReturnsIllegalArgumentException() {
-		assertThrows(IllegalArgumentException.class, () -> OrderItemTypeConverter.convertOrderItemTypeValue(null));
-		assertThrows(IllegalArgumentException.class, () -> OrderItemTypeConverter.convertOrderItemTypeValue("Invalid"));
+	public void convertToOrderItemTypeValue_WithInvalid_ReturnsIllegalArgumentException() {
+		assertThrows(IllegalArgumentException.class, () -> OrderItemTypeConverter.convertToOrderItemType(null));
+		assertThrows(IllegalArgumentException.class, () -> OrderItemTypeConverter.convertToOrderItemType("Invalid"));
 	}
 
 	@Test

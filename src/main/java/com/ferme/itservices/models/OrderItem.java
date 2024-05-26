@@ -9,8 +9,10 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,9 +25,11 @@ import java.util.UUID;
 @Entity(name = "orderItems")
 @Table(name = "order_Items")
 public class OrderItem implements Serializable {
+	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	@JdbcTypeCode(Types.VARCHAR)
+	@Column(name = "id", updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
 	private UUID id;
 
 	@Setter
@@ -35,8 +39,8 @@ public class OrderItem implements Serializable {
 	private OrderItemType orderItemType;
 
 	@Setter
-	@Size(max = 70)
-	@Column(length = 70)
+	@Size(max = 50)
+	@Column(length = 50, unique = true)
 	private String description;
 
 	@Setter

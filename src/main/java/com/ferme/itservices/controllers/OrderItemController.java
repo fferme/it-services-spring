@@ -1,5 +1,6 @@
 package com.ferme.itservices.controllers;
 
+import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.services.OrderItemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
 import org.springframework.http.HttpStatus;
@@ -40,9 +42,9 @@ public class OrderItemController {
 				})
 		})
 	@GetMapping
-	public ResponseEntity<List<OrderItem>> listAll() {
-		List<OrderItem> orderItems = orderItemService.listAll();
-		return ResponseEntity.ok(orderItems);
+	public ResponseEntity<List<OrderItemDTO>> listAll() {
+		List<OrderItemDTO> orderItemsDTO = orderItemService.listAll();
+		return ResponseEntity.ok(orderItemsDTO);
 	}
 
 	@Operation(summary = "Recupera item de pedido pelo ID", method = "GET")
@@ -59,10 +61,34 @@ public class OrderItemController {
 				})
 		})
 	@GetMapping("/{id}")
-	public ResponseEntity<OrderItem> findById(@PathVariable("id") UUID id) {
-		return orderItemService.findById(id)
-			.map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	public ResponseEntity<OrderItemDTO> findById(@PathVariable("id") UUID id) {
+		OrderItemDTO orderItemDTO = orderItemService.findById(id);
+
+		return (orderItemDTO != null)
+			? ResponseEntity.ok(orderItemDTO)
+			: ResponseEntity.notFound().build();
+	}
+
+	@Operation(summary = "Recupera item de ordem de serviço pela descrição", method = "GET")
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "200", description = "Sucesso ao recuperar ordem de serviço pela descrição",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = OrderItem.class))}),
+			@ApiResponse(responseCode = "400", description = "Descrição informado inválido", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Item de ordem de serviço não encontrado com descrição informada", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Erro interno do servidor",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
+	@GetMapping("/name/{name}")
+	public ResponseEntity<OrderItemDTO> findByDescription(@PathVariable("description") @NotEmpty String description) {
+		OrderItemDTO orderItemDTO = orderItemService.findByDescription(description);
+
+		return (orderItemDTO != null)
+			? ResponseEntity.ok(orderItemDTO)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Cria novo item de pedido", method = "POST")
@@ -78,9 +104,9 @@ public class OrderItemController {
 				})
 		})
 	@PostMapping
-	public ResponseEntity<OrderItem> create(@RequestBody @Valid OrderItem orderItem) {
-		OrderItem createdOrderItem = orderItemService.create(orderItem);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderItem);
+	public ResponseEntity<OrderItemDTO> create(@RequestBody @Valid OrderItemDTO orderItemDTO) {
+		OrderItemDTO createdOrderItemDTO = orderItemService.create(orderItemDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderItemDTO);
 	}
 
 	@Operation(summary = "Atualiza item de pedido existente", method = "PUT")
@@ -96,10 +122,11 @@ public class OrderItemController {
 				})
 		})
 	@PutMapping("/{id}")
-	public ResponseEntity<OrderItem> update(@PathVariable("id") UUID id, @RequestBody @Valid OrderItem updatedOrderItem) {
-		OrderItem modifiedOrderItem = orderItemService.update(id, updatedOrderItem);
-		return (modifiedOrderItem != null)
-			? ResponseEntity.ok(modifiedOrderItem)
+	public ResponseEntity<OrderItemDTO> update(@PathVariable("id") UUID id, @RequestBody @Valid OrderItemDTO updatedOrderItemDTO) {
+		OrderItemDTO modifiedOrderItemDTO = orderItemService.update(id, updatedOrderItemDTO);
+
+		return (modifiedOrderItemDTO != null)
+			? ResponseEntity.ok(modifiedOrderItemDTO)
 			: ResponseEntity.notFound().build();
 	}
 
@@ -152,8 +179,8 @@ public class OrderItemController {
 		})
 	@Generated
 	@PostMapping("/import")
-	public ResponseEntity<List<OrderItem>> importOrderItems() throws IOException {
-		List<OrderItem> orderItems = orderItemService.exportDataToOrderItem();
-		return ResponseEntity.status(HttpStatus.CREATED).body(orderItems);
+	public ResponseEntity<List<OrderItemDTO>> importOrderItems() throws IOException {
+		List<OrderItemDTO> orderItemDTOs = orderItemService.exportDataToOrderItem();
+		return ResponseEntity.status(HttpStatus.CREATED).body(orderItemDTOs);
 	}
 }

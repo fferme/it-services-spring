@@ -7,7 +7,7 @@ import jakarta.persistence.Converter;
 @Converter(autoApply = true)
 public class OrderItemTypeConverter implements AttributeConverter<OrderItemType, String> {
 
-	public static OrderItemType convertOrderItemTypeValue(String value) {
+	public static OrderItemType convertToOrderItemType(String value) {
 		if (value == null) { throw new IllegalArgumentException("Value cannot be null"); }
 
 		return switch (value) {
