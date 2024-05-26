@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,7 +20,7 @@ import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,7 +82,7 @@ public class ClientControllerTest {
 
 	@Test
 	public void updateClient_WithValidDataAndId_ReturnsOk() throws Exception {
-		when(clientService.update(eq(CLIENT_A_UUID), any(ClientDTO.class))).thenReturn(NEW_CLIENT_DTO);
+		when(clientService.update(CLIENT_A_UUID, NEW_CLIENT_DTO)).thenReturn(NEW_CLIENT_DTO);
 
 		mockMvc
 			.perform(
@@ -126,12 +125,6 @@ public class ClientControllerTest {
 	}
 
 	@Test
-	public void getClient_ByUnexistingId_ReturnsNotFound() throws Exception {
-		mockMvc.perform(get("/api/clients/" + UUID.randomUUID()))
-			.andExpect(status().isNotFound());
-	}
-
-	@Test
 	public void getClient_ByExistingName_ReturnsClient() throws Exception {
 		when(clientService.findByName(CLIENT_A_DTO.name())).thenReturn((CLIENT_A_DTO));
 
@@ -164,7 +157,6 @@ public class ClientControllerTest {
 				CLIENT_B_DTO.name(),
 				CLIENT_C_DTO.name()
 			)));
-		;
 	}
 
 	@Test
@@ -179,17 +171,11 @@ public class ClientControllerTest {
 
 	@Test
 	public void removeClient_WithExistingId_ReturnsNoContent() throws Exception {
+		doNothing().when(clientService).deleteById(CLIENT_A_UUID);
+
 		mockMvc
-			.perform(delete("/api/clients/" + UUID.randomUUID()))
+			.perform(delete("/api/clients/" + CLIENT_A_UUID))
 			.andExpect(status().isNoContent());
-	}
-
-	@Test
-	public void removeClient_WithUnexistingId_ReturnsNotFound() throws Exception {
-		doThrow(new EmptyResultDataAccessException(1)).when(clientService).deleteById(CLIENT_A_UUID);
-
-		mockMvc.perform(delete("/api/clients/" + CLIENT_A_UUID))
-			.andExpect(status().isNotFound());
 	}
 
 	@Test

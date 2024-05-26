@@ -2,56 +2,60 @@ package com.ferme.itservices.client;
 
 import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
-import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
 import com.ferme.itservices.services.ClientService;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static com.ferme.itservices.client.ClientConstants.*;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ClientServiceTest {
+class ClientServiceTest {
 	@InjectMocks
 	private ClientService clientService;
 
 	@Mock
 	private ClientRepository clientRepository;
 
+	@AfterAll
+	public static void reset() {
+		clearAllCaches();
+	}
+
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		when(clientRepository.save(Mockito.any(Client.class))).thenReturn(CLIENT_A);
+		when(clientRepository.save(CLIENT_A)).thenReturn(CLIENT_A);
 
 		ClientDTO sut = clientService.create(CLIENT_A_DTO);
 
-		assertThat(sut).isEqualTo(toClientDTO(CLIENT_A));
+		assertThat(sut).isEqualTo(CLIENT_A_DTO);
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ThrowsException() {
 		when(clientRepository.save(EMPTY_CLIENT)).thenThrow(RuntimeException.class);
+		when(clientRepository.save(INVALID_CLIENT)).thenThrow(RuntimeException.class);
 
 		assertThatThrownBy(() -> clientService.create(EMPTY_CLIENT_DTO)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> clientService.create(INVALID_CLIENT_DTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
 	public void updateClient_WithExistingClient_ReturnsUpdatedClient() {
-		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(Optional.of(CLIENT_A));
-		when(clientRepository.save(CLIENT_A)).thenReturn(CLIENT_A);
+		when(clientRepository.findById(CLIENT_WITH_ID.getId())).thenReturn(Optional.of(CLIENT_WITH_ID));
+		when(clientRepository.save(CLIENT_WITH_ID)).thenReturn(CLIENT_WITH_ID);
 
-		ClientDTO updatedClientDTO = clientService.update(CLIENT_A.getId(), NEW_CLIENT_DTO);
+		ClientDTO updatedClientDTO = clientService.update(CLIENT_WITH_ID.getId(), NEW_CLIENT_DTO);
 
 		assertEquals(NEW_CLIENT.getNeighborhood(), updatedClientDTO.neighborhood());
 		assertEquals(NEW_CLIENT.getAddress(), updatedClientDTO.address());
@@ -60,16 +64,16 @@ public class ClientServiceTest {
 
 	@Test
 	public void updateClient_WithUnexistingClient_ThrowsRecordNotFoundException() {
-		assertThrows(RecordNotFoundException.class, () -> {
-			clientService.update(UUID.randomUUID(), NEW_CLIENT_DTO);
-		});
+		assertThrows(RecordNotFoundException.class, () ->
+			clientService.update(UUID.randomUUID(), NEW_CLIENT_DTO)
+		);
 	}
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(Optional.of(CLIENT_A));
+		when(clientRepository.findById(CLIENT_A_UUID)).thenReturn(Optional.of(CLIENT_A));
 
-		ClientDTO sut = clientService.findById(CLIENT_A.getId());
+		ClientDTO sut = clientService.findById(CLIENT_A_UUID);
 
 		assertThat(sut).isNotNull();
 		assertThat(sut).isEqualTo(CLIENT_A_DTO);
@@ -87,7 +91,7 @@ public class ClientServiceTest {
 		ClientDTO sut = clientService.findByName(CLIENT_A.getName());
 
 		assertThat(sut).isNotNull();
-		//assertThat(sut).isEqualTo(CLIENT_A_DTO);
+		assertThat(sut).isEqualTo(CLIENT_A_DTO);
 	}
 
 	@Test
@@ -110,7 +114,7 @@ public class ClientServiceTest {
 	}
 
 	@Test
-	public void listClients_WhenClientsDoesNotExist_ReturnsEmptyList() {
+	public void listClients_WhenClientsDoesNotExists_ReturnsEmptyList() {
 		when(clientRepository.findAll()).thenReturn(new ArrayList<>());
 
 		List<ClientDTO> sut = clientService.listAll();
