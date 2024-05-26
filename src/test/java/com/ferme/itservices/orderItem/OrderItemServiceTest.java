@@ -1,7 +1,7 @@
 package com.ferme.itservices.orderItem;
 
+import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
-import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderItemRepository;
 import com.ferme.itservices.services.OrderItemService;
 import org.junit.jupiter.api.Test;
@@ -10,13 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.ferme.itservices.orderItem.OrderItemConstants.*;
-import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,100 +31,89 @@ public class OrderItemServiceTest {
 	public void createOrderItem_WithValidData_ReturnsClient() {
 		when(orderItemRepository.save(ORDERITEM_A)).thenReturn(ORDERITEM_A);
 
-		OrderItem sut = orderItemService.create(ORDERITEM_A);
+		OrderItemDTO sut = orderItemService.create(ORDERITEM_A_DTO);
 
-		assertThat(sut).isEqualTo(ORDERITEM_A);
+		assertThat(sut.orderItemType()).isEqualTo(ORDERITEM_A_DTO.orderItemType());
+		assertThat(sut.description()).isEqualTo(ORDERITEM_A_DTO.description());
+		assertThat(sut.price()).isEqualTo(ORDERITEM_A_DTO.price());
 	}
 
 	@Test
 	public void createOrderItem_WithInvalidData_ThrowsException() {
+		when(orderItemRepository.save(EMPTY_ORDERITEM)).thenThrow(RuntimeException.class);
 		when(orderItemRepository.save(INVALID_ORDERITEM)).thenThrow(RuntimeException.class);
 
-		assertThatThrownBy(() -> orderItemService.create(INVALID_ORDERITEM)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemService.create(EMPTY_ORDERITEM_DTO)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemService.create(INVALID_ORDERITEM_DTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
 	public void updateOrderItem_WithExistingOrderItem_ReturnsUpdatedOrderItem() {
-		when(orderItemRepository.findById(ORDERITEM_A.getId())).thenReturn(java.util.Optional.of(ORDERITEM_A));
-		when(orderItemRepository.save(ORDERITEM_A)).thenReturn(ORDERITEM_A);
+		when(orderItemRepository.findById(ORDERITEM_WITH_ID.getId())).thenReturn(Optional.of(ORDERITEM_WITH_ID));
+		when(orderItemRepository.save(ORDERITEM_WITH_ID)).thenReturn(ORDERITEM_WITH_ID);
 
-		OrderItem updatedOrderItem = orderItemService.update(ORDERITEM_A.getId(), NEW_ORDERITEM_A);
+		OrderItemDTO updatedOrderItemDTO = orderItemService.update(ORDERITEM_WITH_ID.getId(), NEW_ORDERITEM_DTO);
 
-		assertEquals(NEW_ORDERITEM_A.getOrderItemType(), updatedOrderItem.getOrderItemType());
-		assertEquals(NEW_ORDERITEM_A.getDescription(), updatedOrderItem.getDescription());
-		assertEquals(NEW_ORDERITEM_A.getPrice(), updatedOrderItem.getPrice());
+		assertEquals(NEW_ORDERITEM_DTO.orderItemType(), updatedOrderItemDTO.orderItemType());
+		assertEquals(NEW_ORDERITEM_DTO.description(), updatedOrderItemDTO.description());
+		assertEquals(NEW_ORDERITEM_DTO.price(), updatedOrderItemDTO.price());
 	}
 
 	@Test
 	public void updateOrderItem_WithUnexistingOrderItem_ReturnsRecordNotFoundException() {
-		when(orderItemRepository.findById(9L)).thenReturn(empty());
-
 		assertThrows(RecordNotFoundException.class, () -> {
-			orderItemService.update(9L, NEW_ORDERITEM_A);
+			orderItemService.update(UUID.randomUUID(), NEW_ORDERITEM_DTO);
 		});
 	}
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(1L)).thenReturn(Optional.of(ORDERITEM_A));
+		when(orderItemRepository.findById(ORDERITEM_A_UUID)).thenReturn(Optional.of(ORDERITEM_A));
 
-		Optional<OrderItem> sut = orderItemService.findById(1L);
+		OrderItemDTO sut = orderItemService.findById(ORDERITEM_A_UUID);
 
-		assertThat(sut).isNotEmpty();
-		assertThat(sut.get()).isEqualTo(ORDERITEM_A);
+		assertThat(sut).isNotNull();
+		assertThat(sut).isEqualTo(ORDERITEM_A_DTO);
 	}
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(1L)).thenReturn(Optional.empty());
-
-		Optional<OrderItem> sut = orderItemService.findById(1L);
-
-		assertThat(sut).isEmpty();
+		assertThatThrownBy(() -> orderItemService.findById(UUID.randomUUID())).isInstanceOf(RecordNotFoundException.class);
 	}
 
 	@Test
 	public void listOrderItems_WhenOrderItemExists_ReturnsAllOrderItemsSortedByDescription() {
 		when(orderItemRepository.findAll()).thenReturn(ORDER_ITEMS);
 
-		List<OrderItem> sut = orderItemService.listAll();
+		List<OrderItemDTO> sut = orderItemService.listAll();
 
 		assertThat(sut).isNotEmpty();
 		assertThat(sut).hasSize(ORDER_ITEMS.size());
-		assertThat(sut.get(0)).isEqualTo(ORDERITEM_C);
-		assertThat(sut.get(1)).isEqualTo(ORDERITEM_B);
-		assertThat(sut.get(2)).isEqualTo(ORDERITEM_A);
-		assertThat(sut).isSortedAccordingTo(Comparator.comparing(OrderItem::getDescription));
+		assertThat(sut.get(0)).isEqualTo(ORDERITEM_A_DTO);
+		assertThat(sut.get(1)).isEqualTo(ORDERITEM_B_DTO);
+		assertThat(sut.get(2)).isEqualTo(ORDERITEM_C_DTO);
+		assertThat(sut).isSortedAccordingTo(Comparator.comparing(OrderItemDTO::description));
 	}
 
 	@Test
-	public void listOrderItems_ReturnsSortedOrderItemsByDescription() {
-		when(orderItemRepository.findAll()).thenReturn(ORDER_ITEMS);
+	public void listOrderItems_WhenOrderItemsDoesNotExists_ReturnsNoOrderItems() {
+		when(orderItemRepository.findAll()).thenReturn(new ArrayList<>());
 
-		List<OrderItem> sut = orderItemService.listAll();
-
-		assertThat(sut).isSortedAccordingTo(Comparator.comparing(OrderItem::getDescription));
-	}
-
-	@Test
-	public void listOrderItems_ReturnsNoOrderItems() {
-		when(orderItemRepository.findAll()).thenReturn(Collections.emptyList());
-
-		List<OrderItem> sut = orderItemRepository.findAll();
+		List<OrderItemDTO> sut = orderItemService.listAll();
 
 		assertThat(sut).isEmpty();
 	}
 
 	@Test
 	public void deleteOrderItem_WithExistingId_doesNotThrowAnyException() {
-		assertThatCode(() -> orderItemService.deleteById(1L)).doesNotThrowAnyException();
+		assertThatCode(() -> orderItemService.deleteById(UUID.randomUUID())).doesNotThrowAnyException();
 	}
 
 	@Test
 	public void deleteOrderItem_WithUnexistingId_ThrowsException() {
-		doThrow(new RuntimeException()).when(orderItemRepository).deleteById(1L);
+		doThrow(new RuntimeException()).when(orderItemRepository).deleteById(UUID.randomUUID());
 
-		assertThatThrownBy(() -> orderItemService.deleteById(1L)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemService.deleteById(UUID.randomUUID())).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test

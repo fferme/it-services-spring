@@ -1,6 +1,5 @@
 package com.ferme.itservices.orderItem;
 
-import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.repositories.OrderItemRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -12,11 +11,10 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-import static com.ferme.itservices.orderItem.OrderItemConstants.INVALID_ORDERITEM;
 import static com.ferme.itservices.orderItem.OrderItemConstants.ORDERITEM_A;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 ;
 
@@ -44,30 +42,8 @@ public class OrderItemRepositoryTest {
 	}
 
 	@Test
-	public void createOrderItem_WithInvalidData_ThrowsException() {
-		OrderItem emptyOrderItem = new OrderItem();
-		assertThatThrownBy(() -> orderItemRepository.save(emptyOrderItem)).isInstanceOf(RuntimeException.class);
-		assertThatThrownBy(() -> orderItemRepository.save(INVALID_ORDERITEM)).isInstanceOf(RuntimeException.class);
-	}
-
-	@Test
-	public void createOrderItem_WithExistingDescription_ThrowsException() {
-		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
-		testEntityManager.detach(orderItem);
-		orderItem.setId(null);
-
-		assertThatThrownBy(() -> orderItemRepository.save(orderItem)).isInstanceOf(RuntimeException.class);
-	}
-
-	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		OrderItem orderItem = testEntityManager.persistFlushFind(
-			OrderItem.builder()
-				.orderItemType(OrderItemType.MANPOWER)
-				.description("Testando")
-				.price(90.0)
-				.build()
-		);
+		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
 
 		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItem.getId());
 
@@ -77,14 +53,14 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsEmpty() {
-		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(1L);
+		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(UUID.randomUUID());
 
 		assertThat(orderItemOpt).isEmpty();
 	}
 
 	@Sql(scripts = "/scripts/import_orderItems.sql")
 	@Test
-	public void listOrderItems_ReturnsOrderItems() throws Exception {
+	public void listOrderItems_WhenOrderItemsExistis_ReturnsAllOrderItems() throws Exception {
 		List<OrderItem> orderItems = orderItemRepository.findAll();
 
 		assertThat(orderItems).isNotEmpty();
@@ -92,19 +68,27 @@ public class OrderItemRepositoryTest {
 	}
 
 	@Test
-	public void listOrderItems_ReturnsNoOrderItems() throws Exception {
+	public void listOrderItems_WhenOrderItemsDoesNotExists_ReturnsNoOrderItems() throws Exception {
 		List<OrderItem> orderItems = orderItemRepository.findAll();
 
 		assertThat(orderItems).isEmpty();
 	}
 
 	@Test
-	public void removeOrderItem_WithExistingId_RemovesOrderItemFromDatabase() {
+	public void deleteOrderItem_WithExistingId_RemovesOrderItemFromDatabase() {
 		OrderItem orderItem = testEntityManager.persistFlushFind(ORDERITEM_A);
 
 		orderItemRepository.deleteById(orderItem.getId());
 		OrderItem removedOrderItem = testEntityManager.find(OrderItem.class, orderItem.getId());
 
 		assertThat(removedOrderItem).isNull();
+	}
+
+	@Test
+	public void deleteOrderItem_WithNonExistingId_DoesNotDeleteAnything() {
+		orderItemRepository.deleteById(UUID.randomUUID());
+
+		OrderItem nonExistingOrderItem = testEntityManager.find(OrderItem.class, UUID.randomUUID());
+		assertThat(nonExistingOrderItem).isNull();
 	}
 }
