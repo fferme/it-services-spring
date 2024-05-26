@@ -11,6 +11,8 @@ import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
 import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
 
 public class ClientConstants {
+
+	public static final UUID CLIENT_A_UUID = UUID.fromString("d6a0eb46-d011-4fb1-95ab-44f6d415d9bf");
 	public static final Client CLIENT_A = Client.builder()
 		.name("Felipe")
 		.phoneNumber("21986861613")
@@ -47,6 +49,15 @@ public class ClientConstants {
 		.build();
 	public static final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
 
+	public static final Client CLIENT_WITH_ID = Client.builder()
+		.id(UUID.fromString("f589bb9a-3c55-459d-8781-cbf8020a6ec6"))
+		.name("João UUID")
+		.phoneNumber("21984453626")
+		.neighborhood("Saara")
+		.address("Rua Silva Mourão")
+		.reference("Irmão do pai")
+		.build();
+
 	public static final Client EMPTY_CLIENT = new Client();
 	public static final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
 
@@ -67,8 +78,4 @@ public class ClientConstants {
 		}
 	};
 	public static final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
-
-	public static final UUID CLIENT_A_UUID = UUID.fromString("d6a0eb46-d011-4fb1-95ab-44f6d415d9bf");
-	public static final UUID CLIENT_B_UUID = UUID.fromString("88e3c5f7-d0c1-4829-b5e0-61541f9aa2dc");
-	public static final UUID CLIENT_C_UUID = UUID.fromString("2e8d5d11-61d7-4976-b5c9-54adfea13e5b");
 }
