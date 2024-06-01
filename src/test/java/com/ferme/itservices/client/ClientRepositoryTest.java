@@ -1,23 +1,31 @@
 package com.ferme.itservices.client;
 
+import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.ferme.itservices.client.ClientConstants.CLIENT_A;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Transactional
 public class ClientRepositoryTest {
+	private final ClientConstants clientConstants = ClientConstants.getInstance();
+
+	private final Client client = clientConstants.CLIENT;
+	private final Client newClient = clientConstants.NEW_CLIENT;
+
 	@Autowired
 	private ClientRepository clientRepository;
 
@@ -25,13 +33,15 @@ public class ClientRepositoryTest {
 	private TestEntityManager testEntityManager;
 
 	@AfterEach
-	public void nullifyId() {
-		CLIENT_A.setId(null);
+	public void cleanup() {
+		client.setId(null);
+		Mockito.clearAllCaches();
+		Mockito.clearInvocations();
 	}
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		Client client = clientRepository.save(CLIENT_A);
+		Client client = clientRepository.save(newClient);
 
 		Client sut = testEntityManager.find(Client.class, client.getId());
 
@@ -41,7 +51,7 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(CLIENT_A);
+		Client client = testEntityManager.persistFlushFind(newClient);
 
 		Optional<Client> clientOpt = clientRepository.findById(client.getId());
 
@@ -58,12 +68,12 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(CLIENT_A);
+		Client clientGet = testEntityManager.persistFlushFind(client);
 
-		Optional<Client> clientOpt = clientRepository.findByName(client.getName());
+		Optional<Client> clientOpt = clientRepository.findByName(clientGet.getName());
 
 		assertThat(clientOpt).isNotEmpty();
-		assertThat(clientOpt.orElse(null)).isEqualTo(client);
+		assertThat(clientOpt.orElse(null)).isEqualTo(clientGet);
 	}
 
 	@Test
@@ -91,11 +101,11 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void deleteClient_WithExistingId_DeletesClientFromDatabase() {
-		Client client = testEntityManager.persistFlushFind(CLIENT_A);
+		Client clientDel = testEntityManager.persistFlushFind(client);
 
-		clientRepository.deleteById(CLIENT_A.getId());
+		clientRepository.deleteById(client.getId());
+		Client removedClient = testEntityManager.find(Client.class, clientDel.getId());
 
-		Client removedClient = testEntityManager.find(Client.class, CLIENT_A.getId());
 		assertThat(removedClient).isNull();
 	}
 

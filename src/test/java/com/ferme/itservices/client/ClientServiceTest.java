@@ -1,48 +1,63 @@
 package com.ferme.itservices.client;
 
+import com.ferme.itservices.client.utils.ClientAssertions;
+import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
 import com.ferme.itservices.services.ClientService;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import static com.ferme.itservices.client.ClientConstants.*;
+import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
+import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
+import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
+	private final ClientConstants clientConstants = ClientConstants.getInstance();
+	private final ClientAssertions clientAssertions = ClientAssertions.getInstance();
+
 	@InjectMocks
 	private ClientService clientService;
 
 	@Mock
 	private ClientRepository clientRepository;
 
-	@AfterAll
-	public static void reset() {
-		clearAllCaches();
-	}
-
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		when(clientRepository.save(CLIENT_A)).thenReturn(CLIENT_A);
+		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
+		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
 
-		ClientDTO sut = clientService.create(CLIENT_A_DTO);
+		when(clientRepository.save(NEW_CLIENT)).thenReturn(NEW_CLIENT);
 
-		assertThat(sut).isEqualTo(CLIENT_A_DTO);
+		ClientDTO sut = clientService.create(NEW_CLIENT_DTO);
+
+		clientAssertions.assertClientProps(NEW_CLIENT_DTO, sut);
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ThrowsException() {
+		final Client EMPTY_CLIENT = clientConstants.EMPTY_CLIENT;
+		final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
+
+		final Client INVALID_CLIENT = clientConstants.INVALID_CLIENT;
+		final ClientDTO INVALID_CLIENT_DTO = toClientDTO(INVALID_CLIENT);
+
 		when(clientRepository.save(EMPTY_CLIENT)).thenThrow(RuntimeException.class);
 		when(clientRepository.save(INVALID_CLIENT)).thenThrow(RuntimeException.class);
 
@@ -52,10 +67,15 @@ class ClientServiceTest {
 
 	@Test
 	public void updateClient_WithExistingClient_ReturnsUpdatedClient() {
-		when(clientRepository.findById(CLIENT_WITH_ID.getId())).thenReturn(Optional.of(CLIENT_WITH_ID));
-		when(clientRepository.save(CLIENT_WITH_ID)).thenReturn(CLIENT_WITH_ID);
+		final Client CLIENT_A = clientConstants.CLIENT;
 
-		ClientDTO updatedClientDTO = clientService.update(CLIENT_WITH_ID.getId(), NEW_CLIENT_DTO);
+		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
+		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+
+		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(Optional.of(CLIENT_A));
+		when(clientRepository.save(CLIENT_A)).thenReturn(CLIENT_A);
+
+		ClientDTO updatedClientDTO = clientService.update(CLIENT_A.getId(), NEW_CLIENT_DTO);
 
 		assertEquals(NEW_CLIENT.getNeighborhood(), updatedClientDTO.neighborhood());
 		assertEquals(NEW_CLIENT.getAddress(), updatedClientDTO.address());
@@ -64,6 +84,9 @@ class ClientServiceTest {
 
 	@Test
 	public void updateClient_WithUnexistingClient_ThrowsRecordNotFoundException() {
+		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
+		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+
 		assertThrows(RecordNotFoundException.class, () ->
 			clientService.update(UUID.randomUUID(), NEW_CLIENT_DTO)
 		);
@@ -71,12 +94,14 @@ class ClientServiceTest {
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		when(clientRepository.findById(CLIENT_A_UUID)).thenReturn(Optional.of(CLIENT_A));
+		final Client CLIENT_A = clientConstants.CLIENT;
+		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
 
-		ClientDTO sut = clientService.findById(CLIENT_A_UUID);
+		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(of(CLIENT_A));
 
-		assertThat(sut).isNotNull();
-		assertThat(sut).isEqualTo(CLIENT_A_DTO);
+		ClientDTO sut = clientService.findById(CLIENT_A.getId());
+
+		clientAssertions.assertClientProps(CLIENT_A_DTO, sut);
 	}
 
 	@Test
@@ -86,12 +111,14 @@ class ClientServiceTest {
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		when(clientRepository.findByName(CLIENT_A.getName())).thenReturn(Optional.of(CLIENT_A));
+		final Client CLIENT_A = clientConstants.CLIENT;
+		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+
+		when(clientRepository.findByName(CLIENT_A.getName())).thenReturn(of(CLIENT_A));
 
 		ClientDTO sut = clientService.findByName(CLIENT_A.getName());
 
-		assertThat(sut).isNotNull();
-		assertThat(sut).isEqualTo(CLIENT_A_DTO);
+		clientAssertions.assertClientProps(CLIENT_A_DTO, sut);
 	}
 
 	@Test
@@ -101,16 +128,14 @@ class ClientServiceTest {
 
 	@Test
 	public void listClients_WhenClientsExists_ReturnsAllClientsSortedByName() {
+		final List<Client> CLIENTS = clientConstants.CLIENTS;
+		final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
+
 		when(clientRepository.findAll()).thenReturn(CLIENTS);
 
 		List<ClientDTO> sut = clientService.listAll();
 
-		assertThat(sut).isNotEmpty();
-		assertThat(sut).hasSize(CLIENTS.size());
-		assertThat(sut.get(0)).isEqualTo(CLIENT_A_DTO);
-		assertThat(sut.get(1)).isEqualTo(CLIENT_B_DTO);
-		assertThat(sut.get(2)).isEqualTo(CLIENT_C_DTO);
-		assertThat(sut).isSortedAccordingTo(Comparator.comparing(ClientDTO::name));
+		clientAssertions.assertClientListProps(CLIENTS_DTO, sut);
 	}
 
 	@Test

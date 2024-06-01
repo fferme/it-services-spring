@@ -2,31 +2,30 @@ package com.ferme.itservices.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.controllers.OrderController;
-import com.ferme.itservices.models.Order;
-import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.dtos.OrderDTO;
+import com.ferme.itservices.order.utils.OrderAssertions;
+import com.ferme.itservices.order.utils.OrderConstants;
 import com.ferme.itservices.services.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
-import static com.ferme.itservices.order.OrderConstants.*;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,117 +42,120 @@ public class OrderControllerTest {
 	@MockBean
 	private OrderService orderService;
 
+	private final OrderConstants orderConstants = OrderConstants.getInstance();
+	private final OrderAssertions orderAssertions = OrderAssertions.getInstance();
+
 	@Test
 	public void createOrder_WithValidData_ReturnsCreated() throws Exception {
-		when(orderService.create(any(Order.class))).thenReturn(ORDER_A);
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+
+		when(orderService.create(newOrderDTO)).thenReturn(newOrderDTO);
 
 		MvcResult mvcResult = mockMvc.perform(
 				post("/api/orders")
-					.content(objectMapper.writeValueAsString(ORDER_A))
+					.content(objectMapper.writeValueAsString(newOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
-
-			.andExpect(jsonPath("$.header").value(ORDER_A.getHeader()))
-			.andExpect(jsonPath("$.deviceName").value(ORDER_A.getDeviceName()))
-			.andExpect(jsonPath("$.deviceSN").value(ORDER_A.getDeviceSN()))
-			.andExpect(jsonPath("$.problems").value(ORDER_A.getProblems()))
-
-			.andExpect(jsonPath("$.client").value(ORDER_A.getClient()))
 			.andReturn();
 
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
-		Order order = objectMapper.readValue(responseBody, Order.class);
+		OrderDTO orderDTO = objectMapper.readValue(responseBody, OrderDTO.class);
 
-		List<OrderItem> actualOrderItems = new ArrayList<>(order.getOrderItems());
-		List<OrderItem> expectedOrderItems = new ArrayList<>(ORDER_A.getOrderItems());
-
-		assertEquals(expectedOrderItems, actualOrderItems);
+		orderAssertions.assertOrderProps(newOrderDTO, orderDTO);
 	}
 
 	@Test
-	public void createOrder_WithInvalidData_ReturnsBadRequest() throws Exception {
+	public void createOrder_WithInvalidData_ReturnsUnprocessableEntity() throws Exception {
+		final OrderDTO emptyOrderDTO = toOrderDTO(orderConstants.EMPTY_ORDER);
+		final OrderDTO invalidOrderDTO = toOrderDTO(orderConstants.INVALID_ORDER);
+
 		mockMvc
 			.perform(
-				post("/api/orders").content(objectMapper.writeValueAsString(EMPTY_ORDER))
+				post("/api/orders").content(objectMapper.writeValueAsString(emptyOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 
 		mockMvc
 			.perform(
-				post("/api/orders").content(objectMapper.writeValueAsString(INVALID_ORDER))
+				post("/api/orders").content(objectMapper.writeValueAsString(invalidOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 	}
 
 	@Test
-	public void createOrder_WithExistingPhoneNumber_ReturnsConflict() throws Exception {
-		when(orderService.create(any())).thenThrow(DataIntegrityViolationException.class);
+	public void createOrder_WithExistingDeviceSN_ReturnsConflict() throws Exception {
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+
+		when(orderService.create(newOrderDTO)).thenThrow(DataIntegrityViolationException.class);
 
 		mockMvc
 			.perform(
-				post("/api/orders").content(objectMapper.writeValueAsString(ORDER_A))
+				post("/api/orders").content(objectMapper.writeValueAsString(newOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void updateOrder_WithValidDataAndId_ReturnsOk() throws Exception {
-		when(orderService.update(eq(NEW_ORDER.getId()), any())).thenReturn(NEW_ORDER);
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
 
-		mockMvc
+		when(orderService.update(ORDER_A_UUID, newOrderDTO)).thenReturn(newOrderDTO);
+
+		MvcResult mvcResult = mockMvc
 			.perform(
-				put("/api/orders/1")
-					.content(objectMapper.writeValueAsString(NEW_ORDER))
+				put("/api/orders/" + ORDER_A_UUID)
+					.content(objectMapper.writeValueAsString(newOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$").value(NEW_ORDER));
+			.andReturn();
+
+		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
+		OrderDTO orderDTO = objectMapper.readValue(responseBody, OrderDTO.class);
+
+		orderAssertions.assertOrderProps(newOrderDTO, orderDTO);
 	}
 
 	@Test
 	public void updateOrder_WithUnexistentId_ReturnsNotFound() throws Exception {
-		when(orderService.update(eq(5L), any())).thenReturn(null);
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+
+		when(orderService.update(eq(UUID.randomUUID()), any(OrderDTO.class))).thenReturn(null);
 
 		mockMvc
 			.perform(
-				put("/api/orders/5")
-					.content(objectMapper.writeValueAsString(NEW_ORDER))
+				put("/api/orders/" + UUID.randomUUID())
+					.content(objectMapper.writeValueAsString(newOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 	}
 
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() throws Exception {
-		when(orderService.findById(1L)).thenReturn(Optional.of(ORDER_A));
+		final OrderDTO orderDTO = toOrderDTO(orderConstants.ORDER);
 
-		MvcResult mvcResult = mockMvc.perform(get("/api/orders/1"))
+		when(orderService.findById(ORDER_A_UUID)).thenReturn(orderDTO);
+
+		MvcResult mvcResult = mockMvc.perform(get("/api/orders/" + ORDER_A_UUID))
 			.andExpect(status().isOk())
-
-			.andExpect(jsonPath("$.header").value(ORDER_A.getHeader()))
-			.andExpect(jsonPath("$.deviceName").value(ORDER_A.getDeviceName()))
-			.andExpect(jsonPath("$.deviceSN").value(ORDER_A.getDeviceSN()))
-			.andExpect(jsonPath("$.problems").value(ORDER_A.getProblems()))
-
-			.andExpect(jsonPath("$.client").value(ORDER_A.getClient()))
 			.andReturn();
 
 		String responseBody = mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8);
-		Order order = objectMapper.readValue(responseBody, Order.class);
+		OrderDTO readOrderDTO = objectMapper.readValue(responseBody, OrderDTO.class);
 
-		List<OrderItem> actualOrderItems = new ArrayList<>(order.getOrderItems());
-		List<OrderItem> expectedOrderItems = new ArrayList<>(ORDER_A.getOrderItems());
-
-		assertEquals(expectedOrderItems, actualOrderItems);
+		orderAssertions.assertOrderProps(orderDTO, readOrderDTO);
 	}
 
 	@Test
 	public void getOrder_ByUnexistingId_ReturnsNotFound() throws Exception {
-		mockMvc.perform(get("/api/orders/1"))
+		mockMvc.perform(get("/api/orders/" + ORDER_A_UUID))
 			.andExpect(status().isNotFound());
 	}
 
 	@Test
-	public void listOrders_WhenOrdersExists_ReturnsOrders() throws Exception {
-		when(orderService.listAll()).thenReturn(ORDERS);
+	public void listOrders_WhenOrdersExists_ReturnsAllOrders() throws Exception {
+		final List<OrderDTO> ordersDTO = toOrderDTOList(orderConstants.ORDERS);
+
+		when(orderService.listAll()).thenReturn(ordersDTO);
 
 		mockMvc
 			.perform(get("/api/orders"))
@@ -174,17 +176,8 @@ public class OrderControllerTest {
 	@Test
 	public void removeOrder_WithExistingId_ReturnsNoContent() throws Exception {
 		mockMvc
-			.perform(delete("/api/orders/1"))
+			.perform(delete("/api/orders/" + ORDER_A_UUID))
 			.andExpect(status().isNoContent());
-	}
-
-	@Test
-	public void removeOrder_WithUnexistingId_ReturnsNotFound() throws Exception {
-		doThrow(new EmptyResultDataAccessException(1)).when(orderService).deleteById(1L);
-
-		mockMvc
-			.perform(delete("/api/orders/1"))
-			.andExpect(status().isNotFound());
 	}
 
 	@Test

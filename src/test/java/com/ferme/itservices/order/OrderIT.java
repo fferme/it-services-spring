@@ -1,6 +1,11 @@
 package com.ferme.itservices.order;
 
-import com.ferme.itservices.models.Order;
+import com.ferme.itservices.dtos.ClientDTO;
+import com.ferme.itservices.dtos.OrderDTO;
+import com.ferme.itservices.dtos.OrderItemDTO;
+import com.ferme.itservices.order.utils.OrderAssertions;
+import com.ferme.itservices.order.utils.OrderConstants;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,88 +13,174 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static com.ferme.itservices.order.OrderConstants.*;
+import java.util.List;
+
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(
-	scripts = {
-		"/scripts/import_clients.sql",
-		"/scripts/import_orderItems.sql",
-		"/scripts/import_orders.sql"
-	}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class OrderIT {
 	@Autowired
 	private WebTestClient webTestClient;
 
+	private final OrderConstants orderConstants = OrderConstants.getInstance();
+	private final OrderAssertions orderAssertions = OrderAssertions.getInstance();
+
 	@Test
-	public void createOrder_WithValidData_ReturnsCreated() {
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	public void createOrder_WithNewClientAndOrderItems_ReturnsCreated() {
+		;
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+
 		webTestClient.post().uri("/api/orders")
 			.contentType(MediaType.APPLICATION_JSON)
-			.bodyValue(ORDER_A)
+			.bodyValue(newOrderDTO)
 			.exchange()
 			.expectStatus().isCreated()
-			.expectBody(Order.class)
-			.value(order -> assertThat(order.getId(), notNullValue()))
-			.value(order -> assertThat(order.getDeviceName(), is(ORDER_A.getDeviceName())))
-			.value(order -> assertThat(order.getDeviceSN(), is(ORDER_A.getDeviceSN())))
-			.value(order -> assertThat(order.getProblems(), is(ORDER_A.getProblems())))
-			.value(order -> assertThat(order.getClient(), is(ORDER_A.getClient())))
-			.value(order -> assertThat(order.getOrderItems(), is(ORDER_A.getOrderItems())));
+			.expectBody(OrderDTO.class)
+			.value(orderDTO -> assertThat(orderDTO.id(), notNullValue()))
+			.value(orderDTO -> assertThat(orderDTO.header(), is(newOrderDTO.header())))
+			.value(orderDTO -> assertThat(orderDTO.deviceName(), is(newOrderDTO.deviceName())))
+			.value(orderDTO -> assertThat(orderDTO.deviceSN(), is(newOrderDTO.deviceSN())))
+			.value(orderDTO -> assertThat(orderDTO.issues(), is(newOrderDTO.issues())))
+			.value(orderDTO -> {
+				ClientDTO foundClientDTO = orderDTO.clientDTO();
+				ClientDTO clientDTO = newOrderDTO.clientDTO();
+
+				assertThat(foundClientDTO.name(), is(clientDTO.name()));
+				assertThat(foundClientDTO.phoneNumber(), is(clientDTO.phoneNumber()));
+				assertThat(foundClientDTO.neighborhood(), is(clientDTO.neighborhood()));
+				assertThat(foundClientDTO.address(), is(clientDTO.address()));
+				assertThat(foundClientDTO.reference(), is(clientDTO.reference()));
+
+				List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
+				List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
+
+				assertThat(foundOrderItemsDTO.size(), is(orderItemsDTO.size()));
+				Assertions.assertThat(foundOrderItemsDTO)
+					.usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+					.containsExactlyElementsOf(orderItemsDTO);
+			});
 	}
 
 	@Test
-	public void createOrder_WithInvalidData_ReturnsUnprocessableEntity() {
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_clients.sql", "/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	public void createOrder_WithExistingClientAndOrderItems_ReturnsCreated() {
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_EXISTING_CLIENTS_AND_ORDERITEMS);
+
 		webTestClient.post().uri("/api/orders")
 			.contentType(MediaType.APPLICATION_JSON)
-			.bodyValue(INVALID_ORDER)
+			.bodyValue(newOrderDTO)
+			.exchange()
+			.expectStatus().isCreated()
+			.expectBody(OrderDTO.class)
+			.value(orderDTO -> assertThat(orderDTO.id(), notNullValue()))
+			.value(orderDTO -> assertThat(orderDTO.header(), is(newOrderDTO.header())))
+			.value(orderDTO -> assertThat(orderDTO.deviceName(), is(newOrderDTO.deviceName())))
+			.value(orderDTO -> assertThat(orderDTO.deviceSN(), is(newOrderDTO.deviceSN())))
+			.value(orderDTO -> assertThat(orderDTO.issues(), is(newOrderDTO.issues())))
+			.value(orderDTO -> {
+				ClientDTO foundClientDTO = orderDTO.clientDTO();
+				ClientDTO clientDTO = newOrderDTO.clientDTO();
+
+				assertThat(foundClientDTO.name(), is(clientDTO.name()));
+				assertThat(foundClientDTO.phoneNumber(), is(clientDTO.phoneNumber()));
+				assertThat(foundClientDTO.neighborhood(), is(clientDTO.neighborhood()));
+				assertThat(foundClientDTO.address(), is(clientDTO.address()));
+				assertThat(foundClientDTO.reference(), is(clientDTO.reference()));
+
+				List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
+				List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
+
+				assertThat(foundOrderItemsDTO.size(), is(orderItemsDTO.size()));
+				Assertions.assertThat(foundOrderItemsDTO)
+					.usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
+					.containsExactlyElementsOf(orderItemsDTO);
+			});
+	}
+
+	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	public void createOrder_WithInvalidData_ReturnsUnprocessableEntity() {
+		final OrderDTO invalidOrderDTO = toOrderDTO(orderConstants.INVALID_ORDER);
+
+		webTestClient.post().uri("/api/orders")
+			.contentType(MediaType.APPLICATION_JSON)
+			.bodyValue(invalidOrderDTO)
 			.exchange()
 			.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(
+		scripts = {"/scripts/import_clients.sql", "/scripts/import_orderItems.sql", "/scripts/import_orders.sql"},
+		executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+	)
 	public void updateOrder_WithValidData_ReturnsUpdatedOrder() {
-		webTestClient.put()
-			.uri("/api/orders/1")
-			.bodyValue(NEW_ORDER).exchange()
-			.expectStatus().isEqualTo(HttpStatus.OK);
-	}
+		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
 
-	@Test
-	public void getOrder_ByExistingId_ReturnsOrder() {
-		webTestClient.get().uri("/api/orders/" + ORDER_A.getId())
+		EntityExchangeResult<OrderDTO> result = webTestClient.put()
+			.uri("/api/orders/" + ORDER_A_UUID)
+			.bodyValue(newOrderDTO)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBody(Order.class)
-			.value(order -> assertThat(order.getHeader(), is(ORDER_A.getHeader())))
-			.value(order -> assertThat(order.getDeviceName(), is(ORDER_A.getDeviceName())))
-			.value(order -> assertThat(order.getDeviceSN(), is(ORDER_A.getDeviceSN())))
-			.value(order -> assertThat(order.getProblems(), is(ORDER_A.getProblems())))
-			.value(order -> assertThat(order.getTotalPrice(), is(ORDER_A.getTotalPrice())))
-			.value(order -> assertThat(order.getClient(), is(ORDER_A.getClient())))
-			.value(order -> assertThat(order.getOrderItems(), is(ORDER_A.getOrderItems())));
+			.expectBody(OrderDTO.class)
+			.returnResult();
+
+		orderAssertions.assertOrderProps(newOrderDTO, result.getResponseBody());
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(
+		scripts = {"/scripts/import_clients.sql", "/scripts/import_orderItems.sql", "/scripts/import_orders.sql"},
+		executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+	)
+	public void getOrder_ByExistingId_ReturnsOrder() {
+		final OrderDTO orderDTO = toOrderDTO(orderConstants.ORDER);
+
+		EntityExchangeResult<OrderDTO> result = webTestClient.get().uri("/api/orders/" + orderDTO.id())
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody(OrderDTO.class)
+			.returnResult();
+
+		orderAssertions.assertOrderProps(orderDTO, result.getResponseBody());
+	}
+
+	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(
+		scripts = {"/scripts/import_clients.sql", "/scripts/import_orderItems.sql", "/scripts/import_orders.sql"},
+		executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD
+	)
 	public void listOrders_ReturnsAllOrders() {
-		webTestClient.get().uri("/api/orders")
+		final List<OrderDTO> expectedOrderDTOList = toOrderDTOList(orderConstants.ORDERS);
+
+		List<OrderDTO> actualOrders = webTestClient.get().uri("/api/orders")
 			.accept(MediaType.APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isOk()
-			.expectBodyList(Order.class)
-			.hasSize(3)
-			.contains(ORDER_A, ORDER_B, ORDER_C);
+			.expectBodyList(OrderDTO.class)
+			.returnResult().getResponseBody();
+		assert actualOrders != null;
+
+		Assertions.assertThat(actualOrders).containsExactlyInAnyOrderElementsOf(expectedOrderDTOList);
 	}
 
 	@Test
 	public void removeOrder_ReturnsNoContent() {
-		webTestClient.delete().uri("/api/orders/" + ORDER_A.getId())
+		webTestClient.delete().uri("/api/orders/" + ORDER_A_UUID)
 			.exchange().expectStatus().isNoContent();
 	}
 

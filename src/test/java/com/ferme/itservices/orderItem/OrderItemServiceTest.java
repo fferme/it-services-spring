@@ -2,6 +2,9 @@ package com.ferme.itservices.orderItem;
 
 import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
+import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import com.ferme.itservices.repositories.OrderItemRepository;
 import com.ferme.itservices.services.OrderItemService;
 import org.junit.jupiter.api.Test;
@@ -10,11 +13,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import static com.ferme.itservices.orderItem.OrderItemConstants.*;
+import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
+import static com.ferme.itservices.orderItem.utils.OrderItemConstants.ORDERITEM_A_UUID;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -27,53 +34,68 @@ public class OrderItemServiceTest {
 	@Mock
 	private OrderItemRepository orderItemRepository;
 
+	private static final OrderItemConstants orderItemConstants = OrderItemConstants.getInstance();
+	private static final OrderItemAssertions orderItemAssertions = OrderItemAssertions.getInstance();
+
 	@Test
 	public void createOrderItem_WithValidData_ReturnsClient() {
-		when(orderItemRepository.save(ORDERITEM_A)).thenReturn(ORDERITEM_A);
+		final OrderItem orderItem = orderItemConstants.ORDERITEM;
+		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItem);
 
-		OrderItemDTO sut = orderItemService.create(ORDERITEM_A_DTO);
+		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
 
-		assertThat(sut.orderItemType()).isEqualTo(ORDERITEM_A_DTO.orderItemType());
-		assertThat(sut.description()).isEqualTo(ORDERITEM_A_DTO.description());
-		assertThat(sut.price()).isEqualTo(ORDERITEM_A_DTO.price());
+		OrderItemDTO sut = orderItemService.create(orderItemDTO);
+
+		orderItemAssertions.assertOrderItemProps(orderItemDTO, sut);
 	}
 
 	@Test
 	public void createOrderItem_WithInvalidData_ThrowsException() {
-		when(orderItemRepository.save(EMPTY_ORDERITEM)).thenThrow(RuntimeException.class);
-		when(orderItemRepository.save(INVALID_ORDERITEM)).thenThrow(RuntimeException.class);
+		final OrderItem emptyOrderItem = orderItemConstants.EMPTY_ORDERITEM;
+		final OrderItemDTO emptyOrderItemDTO = toOrderItemDTO(emptyOrderItem);
 
-		assertThatThrownBy(() -> orderItemService.create(EMPTY_ORDERITEM_DTO)).isInstanceOf(RuntimeException.class);
-		assertThatThrownBy(() -> orderItemService.create(INVALID_ORDERITEM_DTO)).isInstanceOf(RuntimeException.class);
+		final OrderItem invalidOrderItem = orderItemConstants.INVALID_ORDERITEM;
+		final OrderItemDTO invalidOrderItemDTO = toOrderItemDTO(invalidOrderItem);
+
+		when(orderItemRepository.save(emptyOrderItem)).thenThrow(RuntimeException.class);
+		when(orderItemRepository.save(invalidOrderItem)).thenThrow(RuntimeException.class);
+
+		assertThatThrownBy(() -> orderItemService.create(emptyOrderItemDTO)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> orderItemService.create(invalidOrderItemDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
 	public void updateOrderItem_WithExistingOrderItem_ReturnsUpdatedOrderItem() {
-		when(orderItemRepository.findById(ORDERITEM_WITH_ID.getId())).thenReturn(Optional.of(ORDERITEM_WITH_ID));
-		when(orderItemRepository.save(ORDERITEM_WITH_ID)).thenReturn(ORDERITEM_WITH_ID);
+		final OrderItem orderItem = orderItemConstants.ORDERITEM;
+		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.NEW_ORDERITEM);
 
-		OrderItemDTO updatedOrderItemDTO = orderItemService.update(ORDERITEM_WITH_ID.getId(), NEW_ORDERITEM_DTO);
+		when(orderItemRepository.findById(orderItem.getId())).thenReturn(Optional.of(orderItem));
+		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
 
-		assertEquals(NEW_ORDERITEM_DTO.orderItemType(), updatedOrderItemDTO.orderItemType());
-		assertEquals(NEW_ORDERITEM_DTO.description(), updatedOrderItemDTO.description());
-		assertEquals(NEW_ORDERITEM_DTO.price(), updatedOrderItemDTO.price());
+		OrderItemDTO updatedOrderItemDTO = orderItemService.update(orderItem.getId(), newOrderItemDTO);
+
+		orderItemAssertions.assertOrderItemProps(updatedOrderItemDTO, newOrderItemDTO);
 	}
 
 	@Test
 	public void updateOrderItem_WithUnexistingOrderItem_ReturnsRecordNotFoundException() {
+		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.NEW_ORDERITEM);
+
 		assertThrows(RecordNotFoundException.class, () -> {
-			orderItemService.update(UUID.randomUUID(), NEW_ORDERITEM_DTO);
+			orderItemService.update(UUID.randomUUID(), newOrderItemDTO);
 		});
 	}
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		when(orderItemRepository.findById(ORDERITEM_A_UUID)).thenReturn(Optional.of(ORDERITEM_A));
+		final OrderItem orderItem = orderItemConstants.ORDERITEM;
+		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItem);
+
+		when(orderItemRepository.findById(ORDERITEM_A_UUID)).thenReturn(Optional.of(orderItem));
 
 		OrderItemDTO sut = orderItemService.findById(ORDERITEM_A_UUID);
 
-		assertThat(sut).isNotNull();
-		assertThat(sut).isEqualTo(ORDERITEM_A_DTO);
+		orderItemAssertions.assertOrderItemProps(orderItemDTO, sut);
 	}
 
 	@Test
@@ -83,16 +105,15 @@ public class OrderItemServiceTest {
 
 	@Test
 	public void listOrderItems_WhenOrderItemExists_ReturnsAllOrderItemsSortedByDescription() {
-		when(orderItemRepository.findAll()).thenReturn(ORDER_ITEMS);
+		final List<OrderItem> orderItems = orderItemConstants.ORDER_ITEMS;
+		final List<OrderItemDTO> orderItemsDTO = toOrderItemDTOList(orderItems);
+
+		when(orderItemRepository.findAll()).thenReturn(orderItems);
 
 		List<OrderItemDTO> sut = orderItemService.listAll();
 
-		assertThat(sut).isNotEmpty();
-		assertThat(sut).hasSize(ORDER_ITEMS.size());
-		assertThat(sut.get(0)).isEqualTo(ORDERITEM_A_DTO);
-		assertThat(sut.get(1)).isEqualTo(ORDERITEM_B_DTO);
-		assertThat(sut.get(2)).isEqualTo(ORDERITEM_C_DTO);
-		assertThat(sut).isSortedAccordingTo(Comparator.comparing(OrderItemDTO::description));
+
+		orderItemAssertions.assertOrderItemListProps(orderItemsDTO, sut);
 	}
 
 	@Test
