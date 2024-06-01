@@ -6,8 +6,10 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
 
 import java.io.Serializable;
+import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,19 +22,20 @@ import java.util.UUID;
 @Entity(name = "orders")
 @Table(name = "orders")
 public class Order implements Serializable {
+	@Setter
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", updatable = false, unique = true, nullable = false)
+	@JdbcTypeCode(Types.VARCHAR)
+	@Column(name = "id", updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
 	private UUID id;
 
 	@Size(max = 95)
-	@Column(length = 95, updatable = false)
+	@Column(length = 95, updatable = false, unique = true)
 	private final String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
 
 	@Setter
-	@NotBlank
-	@Size(min = 4, max = 35, message = "Device name must be minimum 4 characters")
-	@Column(name = "device_name", length = 35, nullable = false)
+	@Size(max = 35, message = "Device name must be maximum 35 characters")
+	@Column(name = "device_name", length = 35)
 	private String deviceName;
 
 	@Setter
@@ -44,7 +47,7 @@ public class Order implements Serializable {
 	@Setter
 	@Size(max = 250)
 	@Column(length = 250)
-	private String problems;
+	private String issues;
 
 	@Setter
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -52,7 +55,7 @@ public class Order implements Serializable {
 	private Client client;
 
 	@Setter
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(
 		name = "rel_order_orderItems",
 		joinColumns = {
@@ -64,22 +67,9 @@ public class Order implements Serializable {
 	)
 	private List<OrderItem> orderItems;
 
+	@Setter
 	@DecimalMin(value = "0.0", message = "Total price must be minimum 0.0")
 	@DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
-	@Column(length = 7, nullable = false)
+	@Column(length = 7, nullable = false, updatable = false)
 	private Double totalPrice = 0.0;
-
-	@PrePersist
-	@PreUpdate
-	protected void onPreUpdate() {
-		calculateTotal();
-	}
-
-	private void calculateTotal() {
-		if (!orderItems.isEmpty()) {
-			this.totalPrice = orderItems.stream()
-				.mapToDouble(OrderItem::getPrice)
-				.sum();
-		}
-	}
 }

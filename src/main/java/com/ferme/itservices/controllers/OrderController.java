@@ -1,5 +1,6 @@
 package com.ferme.itservices.controllers;
 
+import com.ferme.itservices.dtos.OrderDTO;
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,9 +39,9 @@ public class OrderController {
 				})
 		})
 	@GetMapping
-	public ResponseEntity<List<Order>> listAll() {
-		List<Order> orders = orderService.listAll();
-		return ResponseEntity.ok(orders);
+	public ResponseEntity<List<OrderDTO>> listAll() {
+		List<OrderDTO> ordersDTO = orderService.listAll();
+		return ResponseEntity.ok(ordersDTO);
 	}
 
 	@Operation(summary = "Recupera pedido pelo ID", method = "GET")
@@ -57,10 +58,12 @@ public class OrderController {
 				})
 		})
 	@GetMapping("/{id}")
-	public ResponseEntity<Order> findById(@PathVariable("id") UUID id) {
-		return orderService.findById(id)
-			.map(ResponseEntity::ok)
-			.orElseGet(() -> ResponseEntity.notFound().build());
+	public ResponseEntity<OrderDTO> findById(@PathVariable("id") UUID id) {
+		OrderDTO orderDTO = orderService.findById(id);
+
+		return (orderDTO != null)
+			? ResponseEntity.ok(orderDTO)
+			: ResponseEntity.notFound().build();
 	}
 
 	@Operation(summary = "Cria novo pedido", method = "POST")
@@ -76,9 +79,9 @@ public class OrderController {
 				})
 		})
 	@PostMapping
-	public ResponseEntity<Order> create(@RequestBody @Valid Order order) {
-		Order createdOrder = orderService.create(order);
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+	public ResponseEntity<OrderDTO> create(@RequestBody @Valid OrderDTO orderDTO) {
+		OrderDTO createdOrderDTO = orderService.create(orderDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderDTO);
 	}
 
 	@Operation(summary = "Atualiza pedido existente", method = "PUT")
@@ -94,10 +97,10 @@ public class OrderController {
 				})
 		})
 	@PutMapping("/{id}")
-	public ResponseEntity<Order> update(@PathVariable("id") UUID id, @RequestBody @Valid Order updatedOrder) {
-		Order modifiedOrder = orderService.update(id, updatedOrder);
-		return (modifiedOrder != null)
-			? ResponseEntity.ok(modifiedOrder)
+	public ResponseEntity<OrderDTO> update(@PathVariable("id") UUID id, @RequestBody @Valid OrderDTO updatedOrderDTO) {
+		OrderDTO modifiedOrderDTO = orderService.update(id, updatedOrderDTO);
+		return (modifiedOrderDTO != null)
+			? ResponseEntity.ok(modifiedOrderDTO)
 			: ResponseEntity.notFound().build();
 	}
 

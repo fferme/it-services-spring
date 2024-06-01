@@ -63,6 +63,7 @@ public class ClientService {
 		return clientRepository.findById(id)
 			.map(clientFound -> {
 				clientFound.setName(newClientDTO.name());
+				clientFound.setPhoneNumber(newClientDTO.phoneNumber());
 				clientFound.setNeighborhood(newClientDTO.neighborhood());
 				clientFound.setAddress(newClientDTO.address());
 				clientFound.setReference(newClientDTO.reference());
@@ -83,7 +84,6 @@ public class ClientService {
 	}
 
 	@Generated
-	@Transactional(readOnly = true)
 	public List<ClientDTO> exportDataToClient() {
 		return toClientDTOList(clientRepository.saveAll(readClientsJsonData()));
 	}

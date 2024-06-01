@@ -34,4 +34,12 @@ public class OrderItemMapper {
 		}
 		return dtos;
 	}
+
+	public static List<OrderItem> toOrderItemList(List<OrderItemDTO> orderItemsDTO) {
+		List<OrderItem> orderItems = new ArrayList<>();
+		for (OrderItemDTO orderItemDTO : orderItemsDTO) {
+			orderItems.add(toOrderItem(orderItemDTO));
+		}
+		return orderItems;
+	}
 }
