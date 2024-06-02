@@ -3,7 +3,7 @@ package com.ferme.itservices.orderItem;
 import com.ferme.itservices.models.OrderItem;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import com.ferme.itservices.repositories.OrderItemRepository;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +31,9 @@ public class OrderItemRepositoryTest {
 
 	private final OrderItem orderItem = orderItemConstants.ORDERITEM;
 
-	private void nullifyId() { orderItem.setId(null); }
-
-	@AfterEach
+	@BeforeEach
 	public void cleanup() {
-		nullifyId();
+		orderItem.setId(null);
 		Mockito.clearAllCaches();
 		Mockito.clearInvocations();
 	}

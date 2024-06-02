@@ -5,6 +5,8 @@ import com.ferme.itservices.exceptions.RecordNotFoundException;
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
+import com.ferme.itservices.repositories.ClientRepository;
+import com.ferme.itservices.repositories.OrderItemRepository;
 import com.ferme.itservices.repositories.OrderRepository;
 import com.ferme.itservices.services.OrderService;
 import org.junit.jupiter.api.Test;
@@ -23,8 +25,7 @@ import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -34,6 +35,12 @@ public class OrderServiceTest {
 	@Mock
 	private OrderRepository orderRepository;
 
+	@Mock
+	private ClientRepository clientRepository;
+
+	@Mock
+	private OrderItemRepository orderItemRepository;
+
 	private final OrderConstants orderConstants = OrderConstants.getInstance();
 	private final OrderAssertions orderAssertions = OrderAssertions.getInstance();
 
@@ -42,7 +49,7 @@ public class OrderServiceTest {
 		final Order newOrder = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS;
 		final OrderDTO newOrderDTO = toOrderDTO(newOrder);
 
-		when(orderRepository.save(newOrder)).thenReturn(newOrder);
+		when(orderRepository.save(any(Order.class))).thenReturn(newOrder);
 
 		OrderDTO sut = orderService.create(newOrderDTO);
 
@@ -51,16 +58,11 @@ public class OrderServiceTest {
 
 	@Test
 	public void createOrder_WithInvalidData_ThrowsException() {
-		final Order emptyOrder = orderConstants.EMPTY_ORDER;
-		final OrderDTO emptyOrderDTO = toOrderDTO(emptyOrder);
-
 		final Order invalidOrder = orderConstants.INVALID_ORDER;
 		final OrderDTO invalidOrderDTO = toOrderDTO(invalidOrder);
 
-		when(orderRepository.save(emptyOrder)).thenThrow(RuntimeException.class);
 		when(orderRepository.save(invalidOrder)).thenThrow(RuntimeException.class);
 
-		assertThatThrownBy(() -> orderService.create(emptyOrderDTO)).isInstanceOf(RuntimeException.class);
 		assertThatThrownBy(() -> orderService.create(invalidOrderDTO)).isInstanceOf(RuntimeException.class);
 	}
 

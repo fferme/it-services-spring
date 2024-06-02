@@ -1,8 +1,23 @@
-SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE clients
+    DISABLE TRIGGER ALL;
+ALTER TABLE order_items
+    DISABLE TRIGGER ALL;
+ALTER TABLE orders
+    DISABLE TRIGGER ALL;
+ALTER TABLE rel_order_order_items
+    DISABLE TRIGGER ALL;
 
-TRUNCATE clients;
-TRUNCATE order_items;
-TRUNCATE orders;
-TRUNCATE rel_order_order_items;
+-- Limpa as tabelas
+TRUNCATE clients CASCADE;
+TRUNCATE order_items CASCADE;
+TRUNCATE orders CASCADE;
+TRUNCATE rel_order_order_items CASCADE;
 
-SET FOREIGN_KEY_CHECKS = 1;
+ALTER TABLE clients
+    ENABLE TRIGGER ALL;
+ALTER TABLE order_items
+    ENABLE TRIGGER ALL;
+ALTER TABLE orders
+    ENABLE TRIGGER ALL;
+ALTER TABLE rel_order_order_items
+    ENABLE TRIGGER ALL;

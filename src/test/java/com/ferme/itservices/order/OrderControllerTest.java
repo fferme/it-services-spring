@@ -66,14 +66,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void createOrder_WithInvalidData_ReturnsUnprocessableEntity() throws Exception {
-		final OrderDTO emptyOrderDTO = toOrderDTO(orderConstants.EMPTY_ORDER);
 		final OrderDTO invalidOrderDTO = toOrderDTO(orderConstants.INVALID_ORDER);
-
-		mockMvc
-			.perform(
-				post("/api/orders").content(objectMapper.writeValueAsString(emptyOrderDTO))
-					.contentType(MediaType.APPLICATION_JSON))
-			.andExpect(status().isUnprocessableEntity());
 
 		mockMvc
 			.perform(

@@ -3,7 +3,7 @@ package com.ferme.itservices.client;
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.models.Client;
 import com.ferme.itservices.repositories.ClientRepository;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class ClientRepositoryTest {
 	@Autowired
 	private TestEntityManager testEntityManager;
 
-	@AfterEach
+	@BeforeEach
 	public void cleanup() {
 		client.setId(null);
 		Mockito.clearAllCaches();
