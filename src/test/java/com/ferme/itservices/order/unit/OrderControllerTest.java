@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.order.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.controllers.OrderController;

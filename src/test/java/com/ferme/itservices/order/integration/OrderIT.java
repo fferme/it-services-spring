@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.order.integration;
 
 import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.dtos.OrderDTO;

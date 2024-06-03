@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.client.unit;
 
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.models.Client;

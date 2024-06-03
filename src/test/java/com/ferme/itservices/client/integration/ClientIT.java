@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.client.integration;
 
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.dtos.ClientDTO;

@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.order.unit;
 
 import com.ferme.itservices.dtos.OrderDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;

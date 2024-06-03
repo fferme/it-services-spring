@@ -1,4 +1,4 @@
-package com.ferme.itservices.order;
+package com.ferme.itservices.order.unit;
 
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.order.utils.OrderAssertions;

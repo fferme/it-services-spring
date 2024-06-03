@@ -1,4 +1,4 @@
-package com.ferme.itservices.client;
+package com.ferme.itservices.client.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.client.utils.ClientConstants;

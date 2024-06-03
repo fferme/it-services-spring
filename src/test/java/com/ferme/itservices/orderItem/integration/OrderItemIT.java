@@ -1,4 +1,4 @@
-package com.ferme.itservices.orderItem;
+package com.ferme.itservices.orderItem.integration;
 
 import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
