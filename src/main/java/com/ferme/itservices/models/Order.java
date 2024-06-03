@@ -1,5 +1,6 @@
 package com.ferme.itservices.models;
 
+import com.ferme.itservices.utils.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -72,4 +73,13 @@ public class Order implements Serializable {
 	@DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
 	@Column(length = 7, nullable = false, updatable = false)
 	private Double totalPrice = 0.0;
+
+	@PrePersist
+	@PreUpdate
+	private void prePersistAndUpdate() {
+		Price priceInstance = Price.getInstance();
+		final Double price = priceInstance.calculateTotalPrice(this.getOrderItems());
+
+		if (price >= 0) { this.totalPrice = price; }
+	}
 }
