@@ -1,5 +1,6 @@
 package com.ferme.itservices.utils;
 
+import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.models.OrderItem;
 
 import java.util.List;
@@ -19,7 +20,11 @@ public class Price {
 		double totalPrice = 0;
 		if (orderItems != null) {
 			for (OrderItem orderItem : orderItems) {
-				totalPrice += orderItem.getPrice();
+				if (orderItem.getOrderItemType().equals(OrderItemType.DISCOUNT)) {
+					totalPrice -= orderItem.getPrice();
+				} else {
+					totalPrice += orderItem.getPrice();
+				}
 			}
 		}
 		return totalPrice;

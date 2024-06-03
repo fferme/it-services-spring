@@ -22,7 +22,10 @@ public enum OrderItemType {
 	CARRIAGE_GOING("Transporte Ida"),
 
 	@JsonProperty("Transporte Volta")
-	CARRIAGE_BACK("Transporte Volta");
+	CARRIAGE_BACK("Transporte Volta"),
+
+	@JsonProperty("Desconto")
+	DISCOUNT("Desconto");
 
 	private final String value;
 }

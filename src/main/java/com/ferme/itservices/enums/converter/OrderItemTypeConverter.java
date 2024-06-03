@@ -16,6 +16,7 @@ public class OrderItemTypeConverter implements AttributeConverter<OrderItemType,
 			case "Mão de Obra" -> OrderItemType.MANPOWER;
 			case "Transporte Ida" -> OrderItemType.CARRIAGE_GOING;
 			case "Transporte Volta" -> OrderItemType.CARRIAGE_BACK;
+			case "Desconto Volta" -> OrderItemType.DISCOUNT;
 
 			default -> throw new IllegalArgumentException("Invalid order item type: " + value);
 		};
