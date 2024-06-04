@@ -51,9 +51,9 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		Client savedClient = testEntityManager.persistFlushFind(newClient);
+		final Client savedClient = testEntityManager.persistFlushFind(newClient);
 
-		Optional<Client> clientFound = clientRepository.findById(savedClient.getId());
+		final Optional<Client> clientFound = clientRepository.findById(savedClient.getId());
 
 		assertThat(clientFound).isNotEmpty();
 		assertThat(clientFound.orElse(null)).isEqualTo(savedClient);
@@ -61,16 +61,16 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByUnexistingId_ReturnsEmpty() {
-		Optional<Client> clientFound = clientRepository.findById(UUID.randomUUID());
+		final Optional<Client> clientFound = clientRepository.findById(UUID.randomUUID());
 
 		assertThat(clientFound).isEmpty();
 	}
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		Client savedClient = testEntityManager.persistFlushFind(client);
+		final Client savedClient = testEntityManager.persistFlushFind(client);
 
-		Optional<Client> clientFound = clientRepository.findByName(savedClient.getName());
+		final Optional<Client> clientFound = clientRepository.findByName(savedClient.getName());
 
 		assertThat(clientFound).isNotEmpty();
 		assertThat(clientFound.orElse(null)).isEqualTo(savedClient);
@@ -78,7 +78,7 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void getClient_ByUnexistingName_ReturnsEmpty() {
-		Optional<Client> clientFound = clientRepository.findByName("Inexistente");
+		final Optional<Client> clientFound = clientRepository.findByName("Inexistente");
 
 		assertThat(clientFound).isEmpty();
 	}
@@ -86,7 +86,7 @@ public class ClientRepositoryTest {
 	@Sql(scripts = "/scripts/import_clients.sql")
 	@Test
 	public void listClients_WhenClientsExists_ReturnsAllClients() {
-		List<Client> clients = clientRepository.findAll();
+		final List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isNotEmpty();
 		assertThat(clients).hasSize(3);
@@ -94,17 +94,17 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void listClients_WhenClientsDoesNotExist_ReturnsEmptyList() {
-		List<Client> clients = clientRepository.findAll();
+		final List<Client> clients = clientRepository.findAll();
 
 		assertThat(clients).isEmpty();
 	}
 
 	@Test
 	public void deleteClient_WithExistingId_DeletesClientFromDatabase() {
-		Client savedClient = testEntityManager.persistFlushFind(client);
+		final Client savedClient = testEntityManager.persistFlushFind(client);
 
 		clientRepository.deleteById(savedClient.getId());
-		Client removedClient = testEntityManager.find(Client.class, savedClient.getId());
+		final Client removedClient = testEntityManager.find(Client.class, savedClient.getId());
 
 		assertThat(removedClient).isNull();
 	}
@@ -113,7 +113,7 @@ public class ClientRepositoryTest {
 	public void deleteClient_WithNonExistingId_DoesNotDeleteAnything() {
 		clientRepository.deleteById(UUID.randomUUID());
 
-		Client nonExistingClient = testEntityManager.find(Client.class, UUID.randomUUID());
+		final Client nonExistingClient = testEntityManager.find(Client.class, UUID.randomUUID());
 		assertThat(nonExistingClient).isNull();
 	}
 

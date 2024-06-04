@@ -37,7 +37,7 @@ public class OrderIT {
 	@Test
 	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void createOrder_WithNewClientAndOrderItems_ReturnsCreated() {
-		;
+
 		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
 
 		webTestClient.post().uri("/api/orders")
@@ -52,8 +52,8 @@ public class OrderIT {
 			.value(orderDTO -> assertThat(orderDTO.deviceSN(), is(newOrderDTO.deviceSN())))
 			.value(orderDTO -> assertThat(orderDTO.issues(), is(newOrderDTO.issues())))
 			.value(orderDTO -> {
-				ClientDTO foundClientDTO = orderDTO.clientDTO();
-				ClientDTO clientDTO = newOrderDTO.clientDTO();
+				final ClientDTO foundClientDTO = orderDTO.clientDTO();
+				final ClientDTO clientDTO = newOrderDTO.clientDTO();
 
 				assertThat(foundClientDTO.name(), is(clientDTO.name()));
 				assertThat(foundClientDTO.phoneNumber(), is(clientDTO.phoneNumber()));
@@ -61,8 +61,8 @@ public class OrderIT {
 				assertThat(foundClientDTO.address(), is(clientDTO.address()));
 				assertThat(foundClientDTO.reference(), is(clientDTO.reference()));
 
-				List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
-				List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
+				final List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
+				final List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
 
 				assertThat(foundOrderItemsDTO.size(), is(orderItemsDTO.size()));
 				Assertions.assertThat(foundOrderItemsDTO)
@@ -89,8 +89,8 @@ public class OrderIT {
 			.value(orderDTO -> assertThat(orderDTO.deviceSN(), is(newOrderDTO.deviceSN())))
 			.value(orderDTO -> assertThat(orderDTO.issues(), is(newOrderDTO.issues())))
 			.value(orderDTO -> {
-				ClientDTO foundClientDTO = orderDTO.clientDTO();
-				ClientDTO clientDTO = newOrderDTO.clientDTO();
+				final ClientDTO foundClientDTO = orderDTO.clientDTO();
+				final ClientDTO clientDTO = newOrderDTO.clientDTO();
 
 				assertThat(foundClientDTO.name(), is(clientDTO.name()));
 				assertThat(foundClientDTO.phoneNumber(), is(clientDTO.phoneNumber()));
@@ -98,8 +98,8 @@ public class OrderIT {
 				assertThat(foundClientDTO.address(), is(clientDTO.address()));
 				assertThat(foundClientDTO.reference(), is(clientDTO.reference()));
 
-				List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
-				List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
+				final List<OrderItemDTO> foundOrderItemsDTO = orderDTO.orderItemsDTO();
+				final List<OrderItemDTO> orderItemsDTO = newOrderDTO.orderItemsDTO();
 
 				assertThat(foundOrderItemsDTO.size(), is(orderItemsDTO.size()));
 				Assertions.assertThat(foundOrderItemsDTO)
@@ -129,7 +129,7 @@ public class OrderIT {
 	public void updateOrder_WithValidData_ReturnsUpdatedOrder() {
 		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
 
-		EntityExchangeResult<OrderDTO> result = webTestClient.put()
+		final EntityExchangeResult<OrderDTO> result = webTestClient.put()
 			.uri("/api/orders/" + ORDER_A_UUID)
 			.bodyValue(newOrderDTO)
 			.exchange()
@@ -149,7 +149,7 @@ public class OrderIT {
 	public void getOrder_ByExistingId_ReturnsOrder() {
 		final OrderDTO orderDTO = toOrderDTO(orderConstants.ORDER);
 
-		EntityExchangeResult<OrderDTO> result = webTestClient.get().uri("/api/orders/" + orderDTO.id())
+		final EntityExchangeResult<OrderDTO> result = webTestClient.get().uri("/api/orders/" + orderDTO.id())
 			.exchange()
 			.expectStatus().isOk()
 			.expectBody(OrderDTO.class)
@@ -167,7 +167,7 @@ public class OrderIT {
 	public void listOrders_ReturnsAllOrders() {
 		final List<OrderDTO> expectedOrderDTOList = toOrderDTOList(orderConstants.ORDERS);
 
-		List<OrderDTO> actualOrders = webTestClient.get().uri("/api/orders")
+		final List<OrderDTO> actualOrders = webTestClient.get().uri("/api/orders")
 			.accept(MediaType.APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isOk()

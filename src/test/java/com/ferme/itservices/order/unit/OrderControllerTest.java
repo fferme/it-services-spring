@@ -49,7 +49,7 @@ public class OrderControllerTest {
 
 		when(orderService.create(newOrderDTO)).thenReturn(newOrderDTO);
 
-		MvcResult mvcResult = mockMvc.perform(
+		final MvcResult mvcResult = mockMvc.perform(
 				post("/api/orders")
 					.content(objectMapper.writeValueAsString(newOrderDTO))
 					.contentType(MediaType.APPLICATION_JSON))
@@ -92,7 +92,7 @@ public class OrderControllerTest {
 
 		when(orderService.update(ORDER_A_UUID, newOrderDTO)).thenReturn(newOrderDTO);
 
-		MvcResult mvcResult = mockMvc
+		final MvcResult mvcResult = mockMvc
 			.perform(
 				put("/api/orders/" + ORDER_A_UUID)
 					.content(objectMapper.writeValueAsString(newOrderDTO))
@@ -126,7 +126,7 @@ public class OrderControllerTest {
 
 		when(orderService.findById(ORDER_A_UUID)).thenReturn(orderDTO);
 
-		MvcResult mvcResult = mockMvc.perform(get("/api/orders/" + ORDER_A_UUID))
+		final MvcResult mvcResult = mockMvc.perform(get("/api/orders/" + ORDER_A_UUID))
 			.andExpect(status().isOk())
 			.andReturn();
 

@@ -49,7 +49,7 @@ public class OrderServiceTest {
 
 		when(orderRepository.save(any(Order.class))).thenReturn(newOrder);
 
-		OrderDTO sut = orderService.create(newOrderDTO);
+		final OrderDTO sut = orderService.create(newOrderDTO);
 
 		orderAssertions.assertOrderProps(newOrderDTO, sut);
 	}
@@ -72,7 +72,7 @@ public class OrderServiceTest {
 		when(orderRepository.findById(order.getId())).thenReturn(of(order));
 		when(orderRepository.save(order)).thenReturn(order);
 
-		OrderDTO updatedOrderDTO = orderService.update(order.getId(), newOrderDTO);
+		final OrderDTO updatedOrderDTO = orderService.update(order.getId(), newOrderDTO);
 
 		orderAssertions.assertOrderProps(newOrderDTO, updatedOrderDTO);
 	}
@@ -93,7 +93,7 @@ public class OrderServiceTest {
 
 		when(orderRepository.findById(ORDER_A_UUID)).thenReturn(of(order));
 
-		OrderDTO sut = orderService.findById(ORDER_A_UUID);
+		final OrderDTO sut = orderService.findById(ORDER_A_UUID);
 
 		orderAssertions.assertOrderProps(orderDTO, sut);
 	}
@@ -110,7 +110,7 @@ public class OrderServiceTest {
 
 		when(orderRepository.findAll()).thenReturn(orders);
 
-		List<OrderDTO> sut = orderService.listAll();
+		final List<OrderDTO> sut = orderService.listAll();
 
 		orderAssertions.assertOrderListProps(ordersDTO, sut);
 	}
@@ -119,7 +119,7 @@ public class OrderServiceTest {
 	public void listOrders_WhenOrdersDoesNotExists_ReturnsEmptyList() {
 		when(orderRepository.findAll()).thenReturn(new ArrayList<>());
 
-		List<OrderDTO> sut = orderService.listAll();
+		final List<OrderDTO> sut = orderService.listAll();
 
 		assertThat(sut).isEmpty();
 	}

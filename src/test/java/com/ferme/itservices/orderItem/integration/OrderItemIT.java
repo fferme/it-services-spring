@@ -85,18 +85,18 @@ public class OrderItemIT {
 	public void listOrderItems_ReturnsAllOrderItemsSortedByDescription() {
 		final List<OrderItemDTO> orderItemsDTO = toOrderItemDTOList(orderItemConstants.ORDER_ITEMS);
 
-		List<OrderItemDTO> actualOrderItemsDTO = webTestClient.get().uri("/api/orderItems")
+		final List<OrderItemDTO> actualOrderItemsDTO = webTestClient.get().uri("/api/orderItems")
 			.accept(MediaType.APPLICATION_JSON).exchange()
 			.expectStatus().isOk()
 			.expectBodyList(OrderItemDTO.class)
 			.returnResult().getResponseBody();
 
-		List<OrderItemDTO> sortedExpectedOrderItemsDTO = orderItemsDTO.stream()
+		final List<OrderItemDTO> sortedExpectedOrderItemsDTO = orderItemsDTO.stream()
 			.sorted(Comparator.comparing(OrderItemDTO::description))
 			.toList();
 
 		assert actualOrderItemsDTO != null;
-		List<OrderItemDTO> sortedActualOrderItemsDTO = actualOrderItemsDTO.stream()
+		final List<OrderItemDTO> sortedActualOrderItemsDTO = actualOrderItemsDTO.stream()
 			.sorted(Comparator.comparing(OrderItemDTO::description))
 			.toList();
 

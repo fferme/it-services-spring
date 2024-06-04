@@ -40,9 +40,9 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsOrderItem() {
-		OrderItem createdOrderItem = orderItemRepository.save(orderItem);
+		final OrderItem createdOrderItem = orderItemRepository.save(orderItem);
 
-		OrderItem sut = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
+		final OrderItem sut = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
 
 		assertThat(sut).isNotNull();
 		assertThat(sut).isEqualTo(orderItem);
@@ -50,9 +50,9 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
+		final OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
 
-		Optional<OrderItem> foundOrderItem = orderItemRepository.findById(createdOrderItem.getId());
+		final Optional<OrderItem> foundOrderItem = orderItemRepository.findById(createdOrderItem.getId());
 
 		assertThat(foundOrderItem).isNotEmpty();
 		assertThat(foundOrderItem.orElse(null)).isEqualTo(createdOrderItem);
@@ -60,7 +60,7 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsEmpty() {
-		Optional<OrderItem> foundOrderItem = orderItemRepository.findById(UUID.randomUUID());
+		final Optional<OrderItem> foundOrderItem = orderItemRepository.findById(UUID.randomUUID());
 
 		assertThat(foundOrderItem).isEmpty();
 	}
@@ -68,7 +68,7 @@ public class OrderItemRepositoryTest {
 	@Sql(scripts = "/scripts/import_orderItems.sql")
 	@Test
 	public void listOrderItems_WhenOrderItemsExistis_ReturnsAllOrderItems() {
-		List<OrderItem> orderItems = orderItemRepository.findAll();
+		final List<OrderItem> orderItems = orderItemRepository.findAll();
 
 		assertThat(orderItems).isNotEmpty();
 		assertThat(orderItems).hasSize(3);
@@ -76,17 +76,17 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void listOrderItems_WhenOrderItemsDoesNotExists_ReturnsNoOrderItems() {
-		List<OrderItem> orderItems = orderItemRepository.findAll();
+		final List<OrderItem> orderItems = orderItemRepository.findAll();
 
 		assertThat(orderItems).isEmpty();
 	}
 
 	@Test
 	public void deleteOrderItem_WithExistingId_RemovesOrderItemFromDatabase() {
-		OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
+		final OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
 
 		orderItemRepository.deleteById(orderItem.getId());
-		OrderItem removedOrderItem = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
+		final OrderItem removedOrderItem = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
 
 		assertThat(removedOrderItem).isNull();
 	}
@@ -95,7 +95,7 @@ public class OrderItemRepositoryTest {
 	public void deleteOrderItem_WithNonExistingId_DoesNotDeleteAnything() {
 		orderItemRepository.deleteById(UUID.randomUUID());
 
-		OrderItem nonExistingOrderItem = testEntityManager.find(OrderItem.class, UUID.randomUUID());
+		final OrderItem nonExistingOrderItem = testEntityManager.find(OrderItem.class, UUID.randomUUID());
 		assertThat(nonExistingOrderItem).isNull();
 	}
 }

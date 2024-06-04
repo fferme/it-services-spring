@@ -39,12 +39,18 @@ class ClientServiceTest {
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		final Client newClient = clientConstants.NEW_CLIENT;
+		final Client newClient = Client.builder() // This variable is coming dirty
+			.name("New Name")
+			.phoneNumber("21989653626")
+			.neighborhood("New Neighborhood")
+			.address("New Address")
+			.reference("New Reference")
+			.build();
 		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
 		when(clientRepository.save(newClient)).thenReturn(newClient);
 
-		ClientDTO sut = clientService.create(newClientDTO);
+		final ClientDTO sut = clientService.create(newClientDTO);
 
 		clientAssertions.assertClientProps(newClientDTO, sut);
 	}
@@ -73,7 +79,7 @@ class ClientServiceTest {
 		when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
 		when(clientRepository.save(client)).thenReturn(client);
 
-		ClientDTO updatedClientDTO = clientService.update(client.getId(), newClientDTO);
+		final ClientDTO updatedClientDTO = clientService.update(client.getId(), newClientDTO);
 
 		assertEquals(newClient.getNeighborhood(), updatedClientDTO.neighborhood());
 		assertEquals(newClient.getAddress(), updatedClientDTO.address());
@@ -96,7 +102,7 @@ class ClientServiceTest {
 
 		when(clientRepository.findById(client.getId())).thenReturn(of(client));
 
-		ClientDTO sut = clientService.findById(client.getId());
+		final ClientDTO sut = clientService.findById(client.getId());
 
 		clientAssertions.assertClientProps(clientDTO, sut);
 	}
@@ -122,7 +128,7 @@ class ClientServiceTest {
 
 		when(clientRepository.findByName(client.getName())).thenReturn(of(client));
 
-		ClientDTO sut = clientService.findByName(client.getName());
+		final ClientDTO sut = clientService.findByName(client.getName());
 
 		clientAssertions.assertClientProps(clientDTO, sut);
 	}
@@ -139,7 +145,7 @@ class ClientServiceTest {
 
 		when(clientRepository.findAll()).thenReturn(clients);
 
-		List<ClientDTO> sut = clientService.listAll();
+		final List<ClientDTO> sut = clientService.listAll();
 
 		clientAssertions.assertClientListProps(clientsDTO, sut);
 	}
@@ -148,7 +154,7 @@ class ClientServiceTest {
 	public void listClients_WhenClientsDoesNotExists_ReturnsEmptyList() {
 		when(clientRepository.findAll()).thenReturn(new ArrayList<>());
 
-		List<ClientDTO> sut = clientService.listAll();
+		final List<ClientDTO> sut = clientService.listAll();
 
 		assertThat(sut).isEmpty();
 	}

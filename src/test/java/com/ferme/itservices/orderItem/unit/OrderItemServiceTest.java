@@ -43,7 +43,7 @@ public class OrderItemServiceTest {
 
 		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
 
-		OrderItemDTO sut = orderItemService.create(orderItemDTO);
+		final OrderItemDTO sut = orderItemService.create(orderItemDTO);
 
 		orderItemAssertions.assertOrderItemProps(orderItemDTO, sut);
 	}
@@ -71,7 +71,7 @@ public class OrderItemServiceTest {
 		when(orderItemRepository.findById(orderItem.getId())).thenReturn(Optional.of(orderItem));
 		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
 
-		OrderItemDTO updatedOrderItemDTO = orderItemService.update(orderItem.getId(), newOrderItemDTO);
+		final OrderItemDTO updatedOrderItemDTO = orderItemService.update(orderItem.getId(), newOrderItemDTO);
 
 		orderItemAssertions.assertOrderItemProps(updatedOrderItemDTO, newOrderItemDTO);
 	}
@@ -92,7 +92,7 @@ public class OrderItemServiceTest {
 
 		when(orderItemRepository.findById(ORDERITEM_A_UUID)).thenReturn(Optional.of(orderItem));
 
-		OrderItemDTO sut = orderItemService.findById(ORDERITEM_A_UUID);
+		final OrderItemDTO sut = orderItemService.findById(ORDERITEM_A_UUID);
 
 		orderItemAssertions.assertOrderItemProps(orderItemDTO, sut);
 	}
@@ -109,7 +109,7 @@ public class OrderItemServiceTest {
 
 		when(orderItemRepository.findAll()).thenReturn(orderItems);
 
-		List<OrderItemDTO> sut = orderItemService.listAll();
+		final List<OrderItemDTO> sut = orderItemService.listAll();
 
 
 		orderItemAssertions.assertOrderItemListProps(orderItemsDTO, sut);
@@ -119,7 +119,7 @@ public class OrderItemServiceTest {
 	public void listOrderItems_WhenOrderItemsDoesNotExists_ReturnsNoOrderItems() {
 		when(orderItemRepository.findAll()).thenReturn(new ArrayList<>());
 
-		List<OrderItemDTO> sut = orderItemService.listAll();
+		final List<OrderItemDTO> sut = orderItemService.listAll();
 
 		assertThat(sut).isEmpty();
 	}

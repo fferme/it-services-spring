@@ -46,18 +46,18 @@ public class OrderRepositoryTest {
 
 	@Test
 	public void createOrder_WithValidData_ReturnsOrder() {
-		Order savedOrder = orderRepository.save(order);
+		final Order savedOrder = orderRepository.save(order);
 
-		Order sut = testEntityManager.find(Order.class, savedOrder.getId());
+		final Order sut = testEntityManager.find(Order.class, savedOrder.getId());
 
 		assertThat(sut).isNotNull();
 	}
 
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() {
-		Order savedOrder = testEntityManager.persistFlushFind(order);
+		final Order savedOrder = testEntityManager.persistFlushFind(order);
 
-		Optional<Order> foundOrder = orderRepository.findById(savedOrder.getId());
+		final Optional<Order> foundOrder = orderRepository.findById(savedOrder.getId());
 
 		assertThat(foundOrder).isNotEmpty();
 		assertThat(foundOrder.orElse(null)).isEqualTo(savedOrder);
@@ -65,7 +65,7 @@ public class OrderRepositoryTest {
 
 	@Test
 	public void getOrder_ByUnexistingId_ReturnsEmpty() {
-		Optional<Order> foundOrder = orderRepository.findById(UUID.randomUUID());
+		final Optional<Order> foundOrder = orderRepository.findById(UUID.randomUUID());
 
 		assertThat(foundOrder).isEmpty();
 	}
@@ -78,7 +78,7 @@ public class OrderRepositoryTest {
 		})
 	@Test
 	public void listOrders_WhenOrdersExists_ReturnsAllOrders() {
-		List<Order> orders = orderRepository.findAll();
+		final List<Order> orders = orderRepository.findAll();
 
 		assertThat(orders).isNotEmpty();
 		assertThat(orders).hasSize(3);
@@ -86,17 +86,17 @@ public class OrderRepositoryTest {
 
 	@Test
 	public void listOrders_WhenOrdersDoesNotExists_ReturnsEmptyList() {
-		List<Order> orders = orderRepository.findAll();
+		final List<Order> orders = orderRepository.findAll();
 
 		assertThat(orders).isEmpty();
 	}
 
 	@Test
 	public void deleteOrder_WithExistingId_RemovesOrderFromDatabase() {
-		Order savedOrder = testEntityManager.persistFlushFind(order);
+		final Order savedOrder = testEntityManager.persistFlushFind(order);
 
 		orderRepository.deleteById(savedOrder.getId());
-		Order removedOrder = testEntityManager.find(Order.class, savedOrder.getId());
+		final Order removedOrder = testEntityManager.find(Order.class, savedOrder.getId());
 
 		assertThat(removedOrder).isNull();
 	}
@@ -105,7 +105,7 @@ public class OrderRepositoryTest {
 	public void deleteOrder_WithNonExistingId_DoesNotDeleteAnything() {
 		orderRepository.deleteById(UUID.randomUUID());
 
-		Order nonExistingOrder = testEntityManager.find(Order.class, UUID.randomUUID());
+		final Order nonExistingOrder = testEntityManager.find(Order.class, UUID.randomUUID());
 		assertThat(nonExistingOrder).isNull();
 	}
 }
