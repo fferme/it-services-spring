@@ -32,7 +32,7 @@ public class ClientService {
 
 		return toClientDTOList(
 			clients.stream()
-			.sorted(Comparator.comparing(Client::getName))
+				.sorted(Comparator.comparing(Client::getName))
 				.collect(Collectors.toList())
 		);
 	}

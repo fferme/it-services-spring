@@ -22,7 +22,7 @@ public abstract class OrderMapper {
 
 		Client client = null;
 		final ClientDTO orderClientDTO = orderDTO.clientDTO();
-		if (orderClientDTO != null) {	client = toClient(orderClientDTO); }
+		if (orderClientDTO != null) { client = toClient(orderClientDTO); }
 
 		List<OrderItem> orderItems = new ArrayList<>();
 		if (orderDTO.orderItemsDTO() != null) {
@@ -94,12 +94,6 @@ public abstract class OrderMapper {
 
 		return orders.stream()
 			.map(OrderMapper::toOrderDTO)
-			.collect(Collectors.toList());
-	}
-
-	public static List<Order> toOrderList(List<OrderDTO> orderDTOs) {
-		return orderDTOs.stream()
-			.map(OrderMapper::toOrder)
 			.collect(Collectors.toList());
 	}
 }
