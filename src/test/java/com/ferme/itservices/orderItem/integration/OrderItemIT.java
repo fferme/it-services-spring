@@ -1,7 +1,6 @@
 package com.ferme.itservices.orderItem.integration;
 
 import com.ferme.itservices.dtos.OrderItemDTO;
-import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,16 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("it")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class OrderItemIT {
 	@Autowired
 	private WebTestClient webTestClient;
 
 	private static final OrderItemConstants orderItemConstants = OrderItemConstants.getInstance();
-	private static final OrderItemAssertions orderItemAssertions = OrderItemAssertions.getInstance();
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void createOrderItem_WithValidData_ReturnsCreated() {
 		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.NEW_ORDERITEM);
 
@@ -47,6 +44,7 @@ public class OrderItemIT {
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void createOrderItem_WithInvalidData_ReturnsUnprocessableEntity() {
 		final OrderItemDTO invalidOrderItemDTO = toOrderItemDTO(orderItemConstants.INVALID_ORDERITEM);
 
@@ -56,6 +54,8 @@ public class OrderItemIT {
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void updateOrderItem_WithValidData_ReturnsUpdatedOrderItem() {
 		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.ORDERITEM);
 
@@ -66,6 +66,8 @@ public class OrderItemIT {
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getOrderItem_WithExistingId_ReturnsOrderItem() {
 		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.ORDERITEM);
 
@@ -78,6 +80,8 @@ public class OrderItemIT {
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void listOrderItems_ReturnsAllOrderItemsSortedByDescription() {
 		final List<OrderItemDTO> orderItemsDTO = toOrderItemDTOList(orderItemConstants.ORDER_ITEMS);
 
@@ -103,12 +107,16 @@ public class OrderItemIT {
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void removeOrderItem_ReturnsNoContent() {
 		webTestClient.delete().uri("/api/orderItems/" + ORDERITEM_A_UUID)
 			.exchange().expectStatus().isNoContent();
 	}
 
 	@Test
+	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+	@Sql(scripts = {"/scripts/import_orderItems.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void removeOrderItems_ReturnsNoContent() {
 		webTestClient.delete().uri("/api/orderItems")
 			.exchange().expectStatus().isNoContent();

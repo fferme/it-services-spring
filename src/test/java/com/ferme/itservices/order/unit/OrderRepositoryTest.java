@@ -1,7 +1,6 @@
 package com.ferme.itservices.order.unit;
 
 import com.ferme.itservices.models.Order;
-import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
 import com.ferme.itservices.repositories.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +43,6 @@ public class OrderRepositoryTest {
 	}
 
 	private static final OrderConstants orderConstants = OrderConstants.getInstance();
-	private static final OrderAssertions orderAssertions = OrderAssertions.getInstance();
 
 	@Test
 	public void createOrder_WithValidData_ReturnsOrder() {
@@ -59,17 +57,17 @@ public class OrderRepositoryTest {
 	public void getOrder_ByExistingId_ReturnsOrder() {
 		Order savedOrder = testEntityManager.persistFlushFind(order);
 
-		Optional<Order> orderOpt = orderRepository.findById(savedOrder.getId());
+		Optional<Order> foundOrder = orderRepository.findById(savedOrder.getId());
 
-		assertThat(orderOpt).isNotEmpty();
-		assertThat(orderOpt.orElse(null)).isEqualTo(savedOrder);
+		assertThat(foundOrder).isNotEmpty();
+		assertThat(foundOrder.orElse(null)).isEqualTo(savedOrder);
 	}
 
 	@Test
 	public void getOrder_ByUnexistingId_ReturnsEmpty() {
-		Optional<Order> orderOpt = orderRepository.findById(UUID.randomUUID());
+		Optional<Order> foundOrder = orderRepository.findById(UUID.randomUUID());
 
-		assertThat(orderOpt).isEmpty();
+		assertThat(foundOrder).isEmpty();
 	}
 
 	@Sql(
@@ -79,7 +77,7 @@ public class OrderRepositoryTest {
 			"/scripts/import_orders.sql"
 		})
 	@Test
-	public void listOrders_WhenOrdersExists_ReturnsAllOrders() throws Exception {
+	public void listOrders_WhenOrdersExists_ReturnsAllOrders() {
 		List<Order> orders = orderRepository.findAll();
 
 		assertThat(orders).isNotEmpty();
@@ -87,7 +85,7 @@ public class OrderRepositoryTest {
 	}
 
 	@Test
-	public void listOrders_WhenOrdersDoesNotExists_ReturnsEmptyList() throws Exception {
+	public void listOrders_WhenOrdersDoesNotExists_ReturnsEmptyList() {
 		List<Order> orders = orderRepository.findAll();
 
 		assertThat(orders).isEmpty();
@@ -95,10 +93,10 @@ public class OrderRepositoryTest {
 
 	@Test
 	public void deleteOrder_WithExistingId_RemovesOrderFromDatabase() {
-		Order orderPer = testEntityManager.persistFlushFind(order);
+		Order savedOrder = testEntityManager.persistFlushFind(order);
 
-		orderRepository.deleteById(orderPer.getId());
-		Order removedOrder = testEntityManager.find(Order.class, orderPer.getId());
+		orderRepository.deleteById(savedOrder.getId());
+		Order removedOrder = testEntityManager.find(Order.class, savedOrder.getId());
 
 		assertThat(removedOrder).isNull();
 	}

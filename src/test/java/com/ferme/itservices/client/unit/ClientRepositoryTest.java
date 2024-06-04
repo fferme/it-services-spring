@@ -41,46 +41,46 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		Client client = clientRepository.save(newClient);
+		Client savedClient = clientRepository.save(newClient);
 
-		Client sut = testEntityManager.find(Client.class, client.getId());
+		Client sut = testEntityManager.find(Client.class, savedClient.getId());
 
 		assertThat(sut).isNotNull();
-		assertThat(sut).isEqualTo(client);
+		assertThat(sut).isEqualTo(savedClient);
 	}
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		Client client = testEntityManager.persistFlushFind(newClient);
+		Client savedClient = testEntityManager.persistFlushFind(newClient);
 
-		Optional<Client> clientOpt = clientRepository.findById(client.getId());
+		Optional<Client> clientFound = clientRepository.findById(savedClient.getId());
 
-		assertThat(clientOpt).isNotEmpty();
-		assertThat(clientOpt.orElse(null)).isEqualTo(client);
+		assertThat(clientFound).isNotEmpty();
+		assertThat(clientFound.orElse(null)).isEqualTo(savedClient);
 	}
 
 	@Test
 	public void getClient_ByUnexistingId_ReturnsEmpty() {
-		Optional<Client> clientOpt = clientRepository.findById(UUID.randomUUID());
+		Optional<Client> clientFound = clientRepository.findById(UUID.randomUUID());
 
-		assertThat(clientOpt).isEmpty();
+		assertThat(clientFound).isEmpty();
 	}
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		Client clientGet = testEntityManager.persistFlushFind(client);
+		Client savedClient = testEntityManager.persistFlushFind(client);
 
-		Optional<Client> clientOpt = clientRepository.findByName(clientGet.getName());
+		Optional<Client> clientFound = clientRepository.findByName(savedClient.getName());
 
-		assertThat(clientOpt).isNotEmpty();
-		assertThat(clientOpt.orElse(null)).isEqualTo(clientGet);
+		assertThat(clientFound).isNotEmpty();
+		assertThat(clientFound.orElse(null)).isEqualTo(savedClient);
 	}
 
 	@Test
 	public void getClient_ByUnexistingName_ReturnsEmpty() {
-		Optional<Client> clientOpt = clientRepository.findByName("Inexistente");
+		Optional<Client> clientFound = clientRepository.findByName("Inexistente");
 
-		assertThat(clientOpt).isEmpty();
+		assertThat(clientFound).isEmpty();
 	}
 
 	@Sql(scripts = "/scripts/import_clients.sql")
@@ -101,10 +101,10 @@ public class ClientRepositoryTest {
 
 	@Test
 	public void deleteClient_WithExistingId_DeletesClientFromDatabase() {
-		Client clientDel = testEntityManager.persistFlushFind(client);
+		Client savedClient = testEntityManager.persistFlushFind(client);
 
-		clientRepository.deleteById(client.getId());
-		Client removedClient = testEntityManager.find(Client.class, clientDel.getId());
+		clientRepository.deleteById(savedClient.getId());
+		Client removedClient = testEntityManager.find(Client.class, savedClient.getId());
 
 		assertThat(removedClient).isNull();
 	}

@@ -1,11 +1,15 @@
 package com.ferme.itservices.orderItem.utils;
 
+import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.enums.OrderItemType;
 import com.ferme.itservices.models.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 
 
 public class OrderItemConstants {
@@ -30,19 +34,24 @@ public class OrderItemConstants {
 		25.0,
 		null
 	);
+	public final OrderItemDTO ORDERITEM_DTO = toOrderItemDTO(ORDERITEM);
 
 	public final OrderItem NEW_ORDERITEM = OrderItem.builder()
 		.orderItemType(OrderItemType.PART_BUYOUT)
 		.description("Memória RAM")
 		.price(180.0)
 		.build();
+	public final OrderItemDTO NEW_ORDERITEM_DTO = toOrderItemDTO(NEW_ORDERITEM);
 
 	public final OrderItem EMPTY_ORDERITEM = new OrderItem();
+	public final OrderItemDTO EMPTY_ORDERITEM_DTO = toOrderItemDTO(EMPTY_ORDERITEM);
+
 	public final OrderItem INVALID_ORDERITEM = OrderItem.builder()
 		.orderItemType(null)
 		.description("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis semper vitae")
 		.price(-4.0)
 		.build();
+	public final OrderItemDTO INVALID_ORDERITEM_DTO = toOrderItemDTO(INVALID_ORDERITEM);
 
 	public final List<OrderItem> ORDER_ITEMS = new ArrayList<>() {
 		{
@@ -69,6 +78,7 @@ public class OrderItemConstants {
 			));
 		}
 	};
+	public final List<OrderItemDTO> ORDER_ITEMS_DTO = toOrderItemDTOList(ORDER_ITEMS);
 
 	public final List<OrderItem> NEW_ORDER_ITEMS = new ArrayList<>() {
 		{

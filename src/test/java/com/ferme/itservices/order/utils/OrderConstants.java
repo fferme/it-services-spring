@@ -1,12 +1,16 @@
 package com.ferme.itservices.order.utils;
 
 import com.ferme.itservices.client.utils.ClientConstants;
+import com.ferme.itservices.dtos.OrderDTO;
 import com.ferme.itservices.models.Order;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
 
 public class OrderConstants {
 	public static OrderConstants instance;
@@ -35,6 +39,7 @@ public class OrderConstants {
 		orderItemConstants.ORDER_ITEMS,
 		1000.0
 	);
+	public final OrderDTO ORDER_DTO = toOrderDTO(ORDER);
 
 	public final Order NEW_ORDER_CLIENTS_AND_ORDERITEMS = Order.builder()
 		.deviceName("New device name")
@@ -44,6 +49,7 @@ public class OrderConstants {
 		.orderItems(orderItemConstants.NEW_ORDER_ITEMS)
 		.totalPrice(1400.0)
 		.build();
+	public final OrderDTO NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO = toOrderDTO(NEW_ORDER_CLIENTS_AND_ORDERITEMS);
 
 	public final Order NEW_ORDER_EXISTING_CLIENTS_AND_ORDERITEMS = Order.builder()
 		.deviceName("New device name")
@@ -54,8 +60,6 @@ public class OrderConstants {
 		.totalPrice(1400.0)
 		.build();
 
-	public final Order EMPTY_ORDER = new Order();
-
 	public final Order INVALID_ORDER = Order.builder()
 		.deviceName(null)
 		.deviceSN("")
@@ -63,6 +67,7 @@ public class OrderConstants {
 		.client(clientConstants.INVALID_CLIENT)
 		.orderItems(new ArrayList<>())
 		.build();
+	public final OrderDTO INVALID_ORDER_DTO = toOrderDTO(INVALID_ORDER);
 
 	public final List<Order> ORDERS = new ArrayList<>() {
 		{
@@ -102,4 +107,5 @@ public class OrderConstants {
 
 		}
 	};
+	public final List<OrderDTO> ORDERS_DTO = toOrderDTOList(ORDERS);
 }

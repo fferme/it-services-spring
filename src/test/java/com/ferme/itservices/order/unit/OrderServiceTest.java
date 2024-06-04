@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
 import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
@@ -47,7 +45,7 @@ public class OrderServiceTest {
 	@Test
 	public void createOrder_WithValidData_ReturnsOrder() {
 		final Order newOrder = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS;
-		final OrderDTO newOrderDTO = toOrderDTO(newOrder);
+		final OrderDTO newOrderDTO = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO;
 
 		when(orderRepository.save(any(Order.class))).thenReturn(newOrder);
 
@@ -59,7 +57,7 @@ public class OrderServiceTest {
 	@Test
 	public void createOrder_WithInvalidData_ThrowsException() {
 		final Order invalidOrder = orderConstants.INVALID_ORDER;
-		final OrderDTO invalidOrderDTO = toOrderDTO(invalidOrder);
+		final OrderDTO invalidOrderDTO = orderConstants.INVALID_ORDER_DTO;
 
 		when(orderRepository.save(invalidOrder)).thenThrow(RuntimeException.class);
 
@@ -69,7 +67,7 @@ public class OrderServiceTest {
 	@Test
 	public void updateOrder_WithExistingOrder_ReturnsUpdatedOrder() {
 		final Order order = orderConstants.ORDER;
-		final OrderDTO newOrderDTO = toOrderDTO(order);
+		final OrderDTO newOrderDTO = orderConstants.ORDER_DTO;
 
 		when(orderRepository.findById(order.getId())).thenReturn(of(order));
 		when(orderRepository.save(order)).thenReturn(order);
@@ -81,7 +79,7 @@ public class OrderServiceTest {
 
 	@Test
 	public void updateOrder_WithUnexistingOrder_ReturnsRecordNotFoundException() {
-		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+		final OrderDTO newOrderDTO = orderConstants.ORDER_DTO;
 
 		assertThrows(RecordNotFoundException.class, () ->
 			orderService.update(UUID.randomUUID(), newOrderDTO)
@@ -91,7 +89,7 @@ public class OrderServiceTest {
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() {
 		final Order order = orderConstants.ORDER;
-		final OrderDTO orderDTO = toOrderDTO(order);
+		final OrderDTO orderDTO = orderConstants.ORDER_DTO;
 
 		when(orderRepository.findById(ORDER_A_UUID)).thenReturn(of(order));
 
@@ -108,7 +106,7 @@ public class OrderServiceTest {
 	@Test
 	public void listOrders_WhenOrdersExists_ReturnsAllOrders() {
 		final List<Order> orders = orderConstants.ORDERS;
-		final List<OrderDTO> ordersDTO = toOrderDTOList(orders);
+		final List<OrderDTO> ordersDTO = orderConstants.ORDERS_DTO;
 
 		when(orderRepository.findAll()).thenReturn(orders);
 

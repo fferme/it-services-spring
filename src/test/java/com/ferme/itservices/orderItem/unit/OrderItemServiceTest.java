@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTO;
-import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 import static com.ferme.itservices.orderItem.utils.OrderItemConstants.ORDERITEM_A_UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -40,7 +39,7 @@ public class OrderItemServiceTest {
 	@Test
 	public void createOrderItem_WithValidData_ReturnsClient() {
 		final OrderItem orderItem = orderItemConstants.ORDERITEM;
-		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItem);
+		final OrderItemDTO orderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
 
@@ -67,7 +66,7 @@ public class OrderItemServiceTest {
 	@Test
 	public void updateOrderItem_WithExistingOrderItem_ReturnsUpdatedOrderItem() {
 		final OrderItem orderItem = orderItemConstants.ORDERITEM;
-		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.NEW_ORDERITEM);
+		final OrderItemDTO newOrderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemRepository.findById(orderItem.getId())).thenReturn(Optional.of(orderItem));
 		when(orderItemRepository.save(orderItem)).thenReturn(orderItem);
@@ -89,7 +88,7 @@ public class OrderItemServiceTest {
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
 		final OrderItem orderItem = orderItemConstants.ORDERITEM;
-		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItem);
+		final OrderItemDTO orderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemRepository.findById(ORDERITEM_A_UUID)).thenReturn(Optional.of(orderItem));
 
@@ -106,7 +105,7 @@ public class OrderItemServiceTest {
 	@Test
 	public void listOrderItems_WhenOrderItemExists_ReturnsAllOrderItemsSortedByDescription() {
 		final List<OrderItem> orderItems = orderItemConstants.ORDER_ITEMS;
-		final List<OrderItemDTO> orderItemsDTO = toOrderItemDTOList(orderItems);
+		final List<OrderItemDTO> orderItemsDTO = orderItemConstants.ORDER_ITEMS_DTO;
 
 		when(orderItemRepository.findAll()).thenReturn(orderItems);
 

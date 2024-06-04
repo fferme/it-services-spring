@@ -2,7 +2,6 @@ package com.ferme.itservices.client.integration;
 
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.dtos.ClientDTO;
-import com.ferme.itservices.models.Client;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ferme.itservices.client.utils.ClientConstants.CLIENT_A_UUID;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -41,26 +38,25 @@ public class ClientIT {
 
 	@Test
 	public void createClient_WithValidData_ReturnsCreated() {
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
-		webTestClient.post().uri("/api/clients").bodyValue(NEW_CLIENT_DTO)
+		webTestClient.post().uri("/api/clients").bodyValue(newClientDTO)
 			.exchange().expectStatus().isCreated()
 			.expectBody(ClientDTO.class)
-			.value(clientDTO -> assertThat(clientDTO.name(), is(NEW_CLIENT_DTO.name())))
-			.value(clientDTO -> assertThat(clientDTO.phoneNumber(), is(NEW_CLIENT_DTO.phoneNumber())))
-			.value(clientDTO -> assertThat(clientDTO.neighborhood(), is(NEW_CLIENT_DTO.neighborhood())))
-			.value(clientDTO -> assertThat(clientDTO.address(), is(NEW_CLIENT_DTO.address())))
-			.value(clientDTO -> assertThat(clientDTO.reference(), is(NEW_CLIENT_DTO.reference())));
+			.value(clientDTO -> assertThat(clientDTO.name(), is(newClientDTO.name())))
+			.value(clientDTO -> assertThat(clientDTO.phoneNumber(), is(newClientDTO.phoneNumber())))
+			.value(clientDTO -> assertThat(clientDTO.neighborhood(), is(newClientDTO.neighborhood())))
+			.value(clientDTO -> assertThat(clientDTO.address(), is(newClientDTO.address())))
+			.value(clientDTO -> assertThat(clientDTO.reference(), is(newClientDTO.reference())));
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ReturnsUnprocessableEntity() {
-		final Client INVALID_CLIENT = clientConstants.INVALID_CLIENT;
+		final ClientDTO invalidClientDTO = clientConstants.INVALID_CLIENT_DTO;
 
 		webTestClient.post()
 			.uri("/api/clients")
-			.bodyValue(INVALID_CLIENT).exchange()
+			.bodyValue(invalidClientDTO).exchange()
 			.expectStatus().isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
 	}
 
@@ -68,11 +64,11 @@ public class ClientIT {
 	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = {"/scripts/import_clients.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void updateClient_WithValidData_ReturnsUpdatedClient() {
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
 		webTestClient.put()
 			.uri("/api/clients/" + CLIENT_A_UUID)
-			.bodyValue(NEW_CLIENT).exchange()
+			.bodyValue(newClientDTO).exchange()
 			.expectStatus().isEqualTo(HttpStatus.OK);
 	}
 
@@ -80,38 +76,38 @@ public class ClientIT {
 	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = {"/scripts/import_clients.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getClient_WithExistingId_ReturnsClient() {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
+		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
 
 		webTestClient.get().uri("/api/clients/" + clientConstants.CLIENT.getId())
 			.exchange().expectStatus().isOk()
 			.expectBody()
-			.jsonPath("$.name").isEqualTo(clientConstants.CLIENT_A_DTO.name())
-			.jsonPath("$.phoneNumber").isEqualTo(clientConstants.CLIENT_A_DTO.phoneNumber())
-			.jsonPath("$.neighborhood").isEqualTo(clientConstants.CLIENT_A_DTO.neighborhood())
-			.jsonPath("$.address").isEqualTo(clientConstants.CLIENT_A_DTO.address())
-			.jsonPath("$.reference").isEqualTo(clientConstants.CLIENT_A_DTO.reference());
+			.jsonPath("$.name").isEqualTo(clientDTO.name())
+			.jsonPath("$.phoneNumber").isEqualTo(clientDTO.phoneNumber())
+			.jsonPath("$.neighborhood").isEqualTo(clientDTO.neighborhood())
+			.jsonPath("$.address").isEqualTo(clientDTO.address())
+			.jsonPath("$.reference").isEqualTo(clientDTO.reference());
 	}
 
 	@Test
 	@Sql(scripts = {"/scripts/import_clients.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void getClientByName_WithExistingName_ReturnsClient() {
-		webTestClient.get().uri("/api/clients/name/" + clientConstants.CLIENT_A_DTO.name())
+		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
+
+		webTestClient.get().uri("/api/clients/name/" + clientDTO.name())
 			.exchange().expectStatus().isOk()
 			.expectBody()
-			.jsonPath("$.name").isEqualTo(clientConstants.CLIENT_A_DTO.name())
-			.jsonPath("$.phoneNumber").isEqualTo(clientConstants.CLIENT_A_DTO.phoneNumber())
-			.jsonPath("$.neighborhood").isEqualTo(clientConstants.CLIENT_A_DTO.neighborhood())
-			.jsonPath("$.address").isEqualTo(clientConstants.CLIENT_A_DTO.address())
-			.jsonPath("$.reference").isEqualTo(clientConstants.CLIENT_A_DTO.reference());
+			.jsonPath("$.name").isEqualTo(clientDTO.name())
+			.jsonPath("$.phoneNumber").isEqualTo(clientDTO.phoneNumber())
+			.jsonPath("$.neighborhood").isEqualTo(clientDTO.neighborhood())
+			.jsonPath("$.address").isEqualTo(clientDTO.address())
+			.jsonPath("$.reference").isEqualTo(clientDTO.reference());
 	}
 
 	@Test
 	@Sql(scripts = {"/scripts/truncate_tables.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	@Sql(scripts = {"/scripts/import_clients.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 	public void listClients_ReturnsAllClientsSortedByName() {
-		final List<Client> CLIENTS = clientConstants.CLIENTS;
-		final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
+		final List<ClientDTO> clientsDTO = clientConstants.CLIENTS_DTO;
 
 		List<ClientDTO> actualClients = webTestClient.get().uri("/api/clients")
 			.accept(MediaType.APPLICATION_JSON).exchange()
@@ -132,7 +128,7 @@ public class ClientIT {
 			)
 			.collect(Collectors.toList());
 
-		List<ClientDTO> sortedExpectedClients = CLIENTS_DTO.stream()
+		List<ClientDTO> sortedExpectedClients = clientsDTO.stream()
 			.sorted(Comparator.comparing(ClientDTO::name))
 			.map(clientDTO -> ClientDTO.builder()
 				.name(clientDTO.name())

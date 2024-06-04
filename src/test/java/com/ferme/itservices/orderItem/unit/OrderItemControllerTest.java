@@ -17,8 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 
-import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTO;
-import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 import static com.ferme.itservices.orderItem.utils.OrderItemConstants.ORDERITEM_A_UUID;
 import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -45,7 +43,7 @@ public class OrderItemControllerTest {
 	@Test
 	public void createOrder_WithValidData_ReturnsCreated() throws Exception {
 		final OrderItem orderItem = orderItemConstants.ORDERITEM;
-		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItem);
+		final OrderItemDTO orderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemService.create(orderItemDTO)).thenReturn(orderItemDTO);
 
@@ -62,38 +60,38 @@ public class OrderItemControllerTest {
 
 	@Test
 	public void createOrderItem_WithInvalidData_ReturnsBadRequest() throws Exception {
-		final OrderItem emptyOrderItem = orderItemConstants.EMPTY_ORDERITEM;
-		final OrderItem invalidOrderItem = orderItemConstants.INVALID_ORDERITEM;
+		final OrderItemDTO emptyOrderItemDTO = orderItemConstants.EMPTY_ORDERITEM_DTO;
+		final OrderItemDTO invalidOrderItemDTO = orderItemConstants.INVALID_ORDERITEM_DTO;
 
 		mockMvc
 			.perform(
-				post("/api/orderItems").content(objectMapper.writeValueAsString(emptyOrderItem))
+				post("/api/orderItems").content(objectMapper.writeValueAsString(emptyOrderItemDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 
 		mockMvc
 			.perform(
-				post("/api/orderItems").content(objectMapper.writeValueAsString(invalidOrderItem))
+				post("/api/orderItems").content(objectMapper.writeValueAsString(invalidOrderItemDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 	}
 
 	@Test
 	public void createOrderItem_WithExistingDescription_ReturnsConflict() throws Exception {
-		final OrderItem orderItem = orderItemConstants.ORDERITEM;
+		final OrderItemDTO orderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemService.create(any(OrderItemDTO.class))).thenThrow(DataIntegrityViolationException.class);
 
 		mockMvc
 			.perform(
-				post("/api/orderItems").content(objectMapper.writeValueAsString(orderItem))
+				post("/api/orderItems").content(objectMapper.writeValueAsString(orderItemDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void updateOrderItem_WithValidDataAndId_ReturnsOk() throws Exception {
-		final OrderItemDTO newOrderItemDTO = toOrderItemDTO(orderItemConstants.NEW_ORDERITEM);
+		final OrderItemDTO newOrderItemDTO = orderItemConstants.NEW_ORDERITEM_DTO;
 
 		when(orderItemService.update(ORDERITEM_A_UUID, newOrderItemDTO)).thenReturn(newOrderItemDTO);
 
@@ -108,7 +106,7 @@ public class OrderItemControllerTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() throws Exception {
-		final OrderItemDTO orderItemDTO = toOrderItemDTO(orderItemConstants.ORDERITEM);
+		final OrderItemDTO orderItemDTO = orderItemConstants.ORDERITEM_DTO;
 
 		when(orderItemService.findById(ORDERITEM_A_UUID)).thenReturn(orderItemDTO);
 
@@ -130,8 +128,7 @@ public class OrderItemControllerTest {
 
 	@Test
 	public void listOrderItems_WhenOrderItemExists_ReturnsAllOrderItemsSortedByDescription() throws Exception {
-		final List<OrderItem> orderItems = orderItemConstants.ORDER_ITEMS;
-		final List<OrderItemDTO> orderItemsDTO = toOrderItemDTOList(orderItems);
+		final List<OrderItemDTO> orderItemsDTO = orderItemConstants.ORDER_ITEMS_DTO;
 
 		when(orderItemService.listAll()).thenReturn(orderItemsDTO);
 

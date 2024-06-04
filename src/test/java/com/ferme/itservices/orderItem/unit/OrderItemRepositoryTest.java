@@ -40,9 +40,9 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void createOrderItem_WithValidData_ReturnsOrderItem() {
-		OrderItem orderItemCreated = orderItemRepository.save(orderItem);
+		OrderItem createdOrderItem = orderItemRepository.save(orderItem);
 
-		OrderItem sut = testEntityManager.find(OrderItem.class, orderItemCreated.getId());
+		OrderItem sut = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
 
 		assertThat(sut).isNotNull();
 		assertThat(sut).isEqualTo(orderItem);
@@ -50,19 +50,19 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void getOrderItem_ByExistingId_ReturnsOrderItem() {
-		OrderItem orderItemGet = testEntityManager.persistFlushFind(orderItem);
+		OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
 
-		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(orderItemGet.getId());
+		Optional<OrderItem> foundOrderItem = orderItemRepository.findById(createdOrderItem.getId());
 
-		assertThat(orderItemOpt).isNotEmpty();
-		assertThat(orderItemOpt.orElse(null)).isEqualTo(orderItemGet);
+		assertThat(foundOrderItem).isNotEmpty();
+		assertThat(foundOrderItem.orElse(null)).isEqualTo(createdOrderItem);
 	}
 
 	@Test
 	public void getOrderItem_ByUnexistingId_ReturnsEmpty() {
-		Optional<OrderItem> orderItemOpt = orderItemRepository.findById(UUID.randomUUID());
+		Optional<OrderItem> foundOrderItem = orderItemRepository.findById(UUID.randomUUID());
 
-		assertThat(orderItemOpt).isEmpty();
+		assertThat(foundOrderItem).isEmpty();
 	}
 
 	@Sql(scripts = "/scripts/import_orderItems.sql")
@@ -83,10 +83,10 @@ public class OrderItemRepositoryTest {
 
 	@Test
 	public void deleteOrderItem_WithExistingId_RemovesOrderItemFromDatabase() {
-		OrderItem orderItemDel = testEntityManager.persistFlushFind(orderItem);
+		OrderItem createdOrderItem = testEntityManager.persistFlushFind(orderItem);
 
 		orderItemRepository.deleteById(orderItem.getId());
-		OrderItem removedOrderItem = testEntityManager.find(OrderItem.class, orderItemDel.getId());
+		OrderItem removedOrderItem = testEntityManager.find(OrderItem.class, createdOrderItem.getId());
 
 		assertThat(removedOrderItem).isNull();
 	}

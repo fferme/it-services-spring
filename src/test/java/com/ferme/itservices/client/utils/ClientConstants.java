@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
+import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
 
 public class ClientConstants {
 	public static ClientConstants instance;
@@ -33,7 +34,7 @@ public class ClientConstants {
 		null,
 		"Amigo do Jaca"
 	);
-	public ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT);
+	public ClientDTO CLIENT_DTO = toClientDTO(CLIENT);
 
 	public final Client NEW_CLIENT = Client.builder()
 		.name("New Name")
@@ -42,8 +43,11 @@ public class ClientConstants {
 		.address("New Address")
 		.reference("New Reference")
 		.build();
+	public final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
 
 	public final Client EMPTY_CLIENT = new Client();
+	public final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
+
 	public final Client INVALID_CLIENT = Client.builder()
 		.name("2")
 		.phoneNumber("2198686161saewq3333")
@@ -51,6 +55,7 @@ public class ClientConstants {
 		.address("")
 		.reference("")
 		.build();
+	public final ClientDTO INVALID_CLIENT_DTO = toClientDTO(INVALID_CLIENT);
 
 	public final List<Client> CLIENTS = new ArrayList<>() {
 		{
@@ -83,4 +88,5 @@ public class ClientConstants {
 			));
 		}
 	};
+	public final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
 }

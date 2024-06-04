@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
 import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,7 +45,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void createOrder_WithValidData_ReturnsCreated() throws Exception {
-		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+		final OrderDTO newOrderDTO = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO;
 
 		when(orderService.create(newOrderDTO)).thenReturn(newOrderDTO);
 
@@ -66,7 +64,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void createOrder_WithInvalidData_ReturnsUnprocessableEntity() throws Exception {
-		final OrderDTO invalidOrderDTO = toOrderDTO(orderConstants.INVALID_ORDER);
+		final OrderDTO invalidOrderDTO = orderConstants.INVALID_ORDER_DTO;
 
 		mockMvc
 			.perform(
@@ -77,7 +75,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void createOrder_WithExistingDeviceSN_ReturnsConflict() throws Exception {
-		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+		final OrderDTO newOrderDTO = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO;
 
 		when(orderService.create(newOrderDTO)).thenThrow(DataIntegrityViolationException.class);
 
@@ -90,7 +88,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void updateOrder_WithValidDataAndId_ReturnsOk() throws Exception {
-		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+		final OrderDTO newOrderDTO = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO;
 
 		when(orderService.update(ORDER_A_UUID, newOrderDTO)).thenReturn(newOrderDTO);
 
@@ -110,7 +108,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void updateOrder_WithUnexistentId_ReturnsNotFound() throws Exception {
-		final OrderDTO newOrderDTO = toOrderDTO(orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS);
+		final OrderDTO newOrderDTO = orderConstants.NEW_ORDER_CLIENTS_AND_ORDERITEMS_DTO;
 
 		when(orderService.update(eq(UUID.randomUUID()), any(OrderDTO.class))).thenReturn(null);
 
@@ -124,7 +122,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void getOrder_ByExistingId_ReturnsOrder() throws Exception {
-		final OrderDTO orderDTO = toOrderDTO(orderConstants.ORDER);
+		final OrderDTO orderDTO = orderConstants.ORDER_DTO;
 
 		when(orderService.findById(ORDER_A_UUID)).thenReturn(orderDTO);
 
@@ -146,7 +144,7 @@ public class OrderControllerTest {
 
 	@Test
 	public void listOrders_WhenOrdersExists_ReturnsAllOrders() throws Exception {
-		final List<OrderDTO> ordersDTO = toOrderDTOList(orderConstants.ORDERS);
+		final List<OrderDTO> ordersDTO = orderConstants.ORDERS_DTO;
 
 		when(orderService.listAll()).thenReturn(ordersDTO);
 

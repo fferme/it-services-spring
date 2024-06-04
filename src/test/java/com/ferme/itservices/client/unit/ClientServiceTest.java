@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
+import static com.ferme.itservices.client.utils.ClientConstants.CLIENT_A_UUID;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,68 +39,66 @@ class ClientServiceTest {
 
 	@Test
 	public void createClient_WithValidData_ReturnsClient() {
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+		final Client newClient = clientConstants.NEW_CLIENT;
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
-		when(clientRepository.save(NEW_CLIENT)).thenReturn(NEW_CLIENT);
+		when(clientRepository.save(newClient)).thenReturn(newClient);
 
-		ClientDTO sut = clientService.create(NEW_CLIENT_DTO);
+		ClientDTO sut = clientService.create(newClientDTO);
 
-		clientAssertions.assertClientProps(NEW_CLIENT_DTO, sut);
+		clientAssertions.assertClientProps(newClientDTO, sut);
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ThrowsException() {
-		final Client EMPTY_CLIENT = clientConstants.EMPTY_CLIENT;
-		final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
+		final Client emptyClient = clientConstants.EMPTY_CLIENT;
+		final ClientDTO emptyClientDTO = clientConstants.EMPTY_CLIENT_DTO;
 
-		final Client INVALID_CLIENT = clientConstants.INVALID_CLIENT;
-		final ClientDTO INVALID_CLIENT_DTO = toClientDTO(INVALID_CLIENT);
+		final Client invalidClient = clientConstants.INVALID_CLIENT;
+		final ClientDTO invalidClientDTO = clientConstants.INVALID_CLIENT_DTO;
 
-		when(clientRepository.save(EMPTY_CLIENT)).thenThrow(RuntimeException.class);
-		when(clientRepository.save(INVALID_CLIENT)).thenThrow(RuntimeException.class);
+		when(clientRepository.save(emptyClient)).thenThrow(RuntimeException.class);
+		when(clientRepository.save(invalidClient)).thenThrow(RuntimeException.class);
 
-		assertThatThrownBy(() -> clientService.create(EMPTY_CLIENT_DTO)).isInstanceOf(RuntimeException.class);
-		assertThatThrownBy(() -> clientService.create(INVALID_CLIENT_DTO)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> clientService.create(emptyClientDTO)).isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> clientService.create(invalidClientDTO)).isInstanceOf(RuntimeException.class);
 	}
 
 	@Test
 	public void updateClient_WithExistingClient_ReturnsUpdatedClient() {
-		final Client CLIENT_A = clientConstants.CLIENT;
+		final Client client = clientConstants.CLIENT;
+		final Client newClient = clientConstants.NEW_CLIENT;
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+		when(clientRepository.findById(client.getId())).thenReturn(Optional.of(client));
+		when(clientRepository.save(client)).thenReturn(client);
 
-		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(Optional.of(CLIENT_A));
-		when(clientRepository.save(CLIENT_A)).thenReturn(CLIENT_A);
+		ClientDTO updatedClientDTO = clientService.update(client.getId(), newClientDTO);
 
-		ClientDTO updatedClientDTO = clientService.update(CLIENT_A.getId(), NEW_CLIENT_DTO);
-
-		assertEquals(NEW_CLIENT.getNeighborhood(), updatedClientDTO.neighborhood());
-		assertEquals(NEW_CLIENT.getAddress(), updatedClientDTO.address());
-		assertEquals(NEW_CLIENT.getReference(), updatedClientDTO.reference());
+		assertEquals(newClient.getNeighborhood(), updatedClientDTO.neighborhood());
+		assertEquals(newClient.getAddress(), updatedClientDTO.address());
+		assertEquals(newClient.getReference(), updatedClientDTO.reference());
 	}
 
 	@Test
 	public void updateClient_WithUnexistingClient_ThrowsRecordNotFoundException() {
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
 		assertThrows(RecordNotFoundException.class, () ->
-			clientService.update(UUID.randomUUID(), NEW_CLIENT_DTO)
+			clientService.update(UUID.randomUUID(), newClientDTO)
 		);
 	}
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+		final Client client = clientConstants.CLIENT;
+		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
 
-		when(clientRepository.findById(CLIENT_A.getId())).thenReturn(of(CLIENT_A));
+		when(clientRepository.findById(client.getId())).thenReturn(of(client));
 
-		ClientDTO sut = clientService.findById(CLIENT_A.getId());
+		ClientDTO sut = clientService.findById(client.getId());
 
-		clientAssertions.assertClientProps(CLIENT_A_DTO, sut);
+		clientAssertions.assertClientProps(clientDTO, sut);
 	}
 
 	@Test
@@ -111,14 +108,23 @@ class ClientServiceTest {
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+		//final Client client = clientConstants.CLIENT; // This variable is coming dirty
+		final Client client = new Client(
+			CLIENT_A_UUID,
+			"Felipe",
+			"21986861613",
+			"Tijuca",
+			"Rua Silva Perez 39/21",
+			null,
+			"Amigo do Jaca"
+		);
+		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
 
-		when(clientRepository.findByName(CLIENT_A.getName())).thenReturn(of(CLIENT_A));
+		when(clientRepository.findByName(client.getName())).thenReturn(of(client));
 
-		ClientDTO sut = clientService.findByName(CLIENT_A.getName());
+		ClientDTO sut = clientService.findByName(client.getName());
 
-		clientAssertions.assertClientProps(CLIENT_A_DTO, sut);
+		clientAssertions.assertClientProps(clientDTO, sut);
 	}
 
 	@Test
@@ -128,14 +134,14 @@ class ClientServiceTest {
 
 	@Test
 	public void listClients_WhenClientsExists_ReturnsAllClientsSortedByName() {
-		final List<Client> CLIENTS = clientConstants.CLIENTS;
-		final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
+		final List<Client> clients = clientConstants.CLIENTS;
+		final List<ClientDTO> clientsDTO = clientConstants.CLIENTS_DTO;
 
-		when(clientRepository.findAll()).thenReturn(CLIENTS);
+		when(clientRepository.findAll()).thenReturn(clients);
 
 		List<ClientDTO> sut = clientService.listAll();
 
-		clientAssertions.assertClientListProps(CLIENTS_DTO, sut);
+		clientAssertions.assertClientListProps(clientsDTO, sut);
 	}
 
 	@Test

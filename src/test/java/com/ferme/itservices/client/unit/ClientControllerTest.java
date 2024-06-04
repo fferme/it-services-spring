@@ -20,7 +20,6 @@ import java.util.UUID;
 
 import static com.ferme.itservices.client.utils.ClientConstants.CLIENT_A_UUID;
 import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -45,121 +44,116 @@ public class ClientControllerTest {
 
 	@Test
 	public void createClient_WithValidData_ReturnsCreated() throws Exception {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
 
-		when(clientService.create(CLIENT_A_DTO)).thenReturn(CLIENT_A_DTO);
+		when(clientService.create(clientDTO)).thenReturn(clientDTO);
 
 		mockMvc
 			.perform(
-				post("/api/clients").content(objectMapper.writeValueAsString(CLIENT_A_DTO))
+				post("/api/clients").content(objectMapper.writeValueAsString(clientDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isCreated())
-			.andExpect(jsonPath("$.name").value(CLIENT_A_DTO.name()))
-			.andExpect(jsonPath("$.phoneNumber").value(CLIENT_A_DTO.phoneNumber()))
-			.andExpect(jsonPath("$.neighborhood").value(CLIENT_A_DTO.neighborhood()))
-			.andExpect(jsonPath("$.address").value(CLIENT_A_DTO.address()))
-			.andExpect(jsonPath("$.reference").value(CLIENT_A_DTO.reference()));
+			.andExpect(jsonPath("$.name").value(clientDTO.name()))
+			.andExpect(jsonPath("$.phoneNumber").value(clientDTO.phoneNumber()))
+			.andExpect(jsonPath("$.neighborhood").value(clientDTO.neighborhood()))
+			.andExpect(jsonPath("$.address").value(clientDTO.address()))
+			.andExpect(jsonPath("$.reference").value(clientDTO.reference()));
 	}
 
 	@Test
 	public void createClient_WithInvalidData_ReturnsUnprocessableEntity() throws Exception {
-		final Client EMPTY_CLIENT = clientConstants.EMPTY_CLIENT;
-		final ClientDTO EMPTY_CLIENT_DTO = toClientDTO(EMPTY_CLIENT);
-
-		final Client INVALID_CLIENT = clientConstants.INVALID_CLIENT;
-		final ClientDTO INVALID_CLIENT_DTO = toClientDTO(INVALID_CLIENT);
+		final ClientDTO emptyClientDTO = clientConstants.EMPTY_CLIENT_DTO;
+		final ClientDTO invalidClientDTO = clientConstants.INVALID_CLIENT_DTO;
 
 		mockMvc
 			.perform(
-				post("/api/clients").content(objectMapper.writeValueAsString(EMPTY_CLIENT_DTO))
+				post("/api/clients").content(objectMapper.writeValueAsString(emptyClientDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 
 		mockMvc
 			.perform(
-				post("/api/clients").content(objectMapper.writeValueAsString(INVALID_CLIENT_DTO))
+				post("/api/clients").content(objectMapper.writeValueAsString(invalidClientDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnprocessableEntity());
 	}
 
 	@Test
 	public void createClient_WithExistingPhoneNumber_ReturnsConflict() throws Exception {
-		final Client CLIENT_A = clientConstants.CLIENT;
+		final Client client = clientConstants.CLIENT;
 
 		when(clientService.create(any(ClientDTO.class))).thenThrow(DataIntegrityViolationException.class);
 
 		mockMvc
 			.perform(
-				post("/api/clients").content(objectMapper.writeValueAsString(CLIENT_A))
+				post("/api/clients").content(objectMapper.writeValueAsString(client))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict());
 	}
 
 	@Test
 	public void updateClient_WithValidDataAndId_ReturnsOk() throws Exception {
-		final Client NEW_CLIENT = clientConstants.NEW_CLIENT;
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(NEW_CLIENT);
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
-		when(clientService.update(CLIENT_A_UUID, NEW_CLIENT_DTO)).thenReturn(NEW_CLIENT_DTO);
+		when(clientService.update(CLIENT_A_UUID, newClientDTO)).thenReturn(newClientDTO);
 
 		mockMvc
 			.perform(
 				put("/api/clients/" + CLIENT_A_UUID)
-					.content(objectMapper.writeValueAsString(NEW_CLIENT_DTO))
+					.content(objectMapper.writeValueAsString(newClientDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.name").value(NEW_CLIENT_DTO.name()))
-			.andExpect(jsonPath("$.phoneNumber").value(NEW_CLIENT_DTO.phoneNumber()))
-			.andExpect(jsonPath("$.neighborhood").value(NEW_CLIENT_DTO.neighborhood()))
-			.andExpect(jsonPath("$.address").value(NEW_CLIENT_DTO.address()))
-			.andExpect(jsonPath("$.reference").value(NEW_CLIENT_DTO.reference()));
+			.andExpect(jsonPath("$.name").value(newClientDTO.name()))
+			.andExpect(jsonPath("$.phoneNumber").value(newClientDTO.phoneNumber()))
+			.andExpect(jsonPath("$.neighborhood").value(newClientDTO.neighborhood()))
+			.andExpect(jsonPath("$.address").value(newClientDTO.address()))
+			.andExpect(jsonPath("$.reference").value(newClientDTO.reference()));
 	}
 
 	@Test
 	public void updateClient_WithUnexistentId_ReturnsNotFound() throws Exception {
-		final ClientDTO NEW_CLIENT_DTO = toClientDTO(clientConstants.NEW_CLIENT);
+		final ClientDTO newClientDTO = clientConstants.NEW_CLIENT_DTO;
 
 		when(clientService.update(eq(UUID.randomUUID()), any(ClientDTO.class))).thenReturn(null);
 
 		mockMvc
 			.perform(
 				put("/api/clients/" + UUID.randomUUID())
-					.content(objectMapper.writeValueAsString(NEW_CLIENT_DTO))
+					.content(objectMapper.writeValueAsString(newClientDTO))
 					.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isNotFound());
 	}
 
 	@Test
 	public void getClient_ByExistingId_ReturnsClient() throws Exception {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+		final Client client = clientConstants.CLIENT;
+		final ClientDTO clientDTO = toClientDTO(client);
 
-		when(clientService.findById(CLIENT_A_UUID)).thenReturn(CLIENT_A_DTO);
+		when(clientService.findById(CLIENT_A_UUID)).thenReturn(clientDTO);
 
 		mockMvc.perform(get("/api/clients/" + CLIENT_A_UUID))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.name").value(CLIENT_A_DTO.name()))
-			.andExpect(jsonPath("$.phoneNumber").value(CLIENT_A_DTO.phoneNumber()))
-			.andExpect(jsonPath("$.neighborhood").value(CLIENT_A_DTO.neighborhood()))
-			.andExpect(jsonPath("$.address").value(CLIENT_A_DTO.address()))
-			.andExpect(jsonPath("$.reference").value(CLIENT_A_DTO.reference()));
+			.andExpect(jsonPath("$.name").value(clientDTO.name()))
+			.andExpect(jsonPath("$.phoneNumber").value(clientDTO.phoneNumber()))
+			.andExpect(jsonPath("$.neighborhood").value(clientDTO.neighborhood()))
+			.andExpect(jsonPath("$.address").value(clientDTO.address()))
+			.andExpect(jsonPath("$.reference").value(clientDTO.reference()));
 	}
 
 	@Test
 	public void getClient_ByExistingName_ReturnsClient() throws Exception {
-		final Client CLIENT_A = clientConstants.CLIENT;
-		final ClientDTO CLIENT_A_DTO = toClientDTO(CLIENT_A);
+		final Client client = clientConstants.CLIENT;
+		final ClientDTO clientDTO = toClientDTO(client);
 
-		when(clientService.findByName(CLIENT_A_DTO.name())).thenReturn((CLIENT_A_DTO));
+		when(clientService.findByName(clientDTO.name())).thenReturn((clientDTO));
 
-		mockMvc.perform(get("/api/clients/name/" + CLIENT_A_DTO.name()))
+		mockMvc.perform(get("/api/clients/name/" + clientDTO.name()))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.name").value(CLIENT_A_DTO.name()))
-			.andExpect(jsonPath("$.phoneNumber").value(CLIENT_A_DTO.phoneNumber()))
-			.andExpect(jsonPath("$.neighborhood").value(CLIENT_A_DTO.neighborhood()))
-			.andExpect(jsonPath("$.address").value(CLIENT_A_DTO.address()))
-			.andExpect(jsonPath("$.reference").value(CLIENT_A_DTO.reference()));
+			.andExpect(jsonPath("$.name").value(clientDTO.name()))
+			.andExpect(jsonPath("$.phoneNumber").value(clientDTO.phoneNumber()))
+			.andExpect(jsonPath("$.neighborhood").value(clientDTO.neighborhood()))
+			.andExpect(jsonPath("$.address").value(clientDTO.address()))
+			.andExpect(jsonPath("$.reference").value(clientDTO.reference()));
 	}
 
 	@Test
@@ -170,10 +164,9 @@ public class ClientControllerTest {
 
 	@Test
 	public void listClients_WhenClientsExists_ReturnsAllClientsSortedByName() throws Exception {
-		final List<Client> CLIENTS = clientConstants.CLIENTS;
-		final List<ClientDTO> CLIENTS_DTO = toClientDTOList(CLIENTS);
+		final List<ClientDTO> clientsDTO = clientConstants.CLIENTS_DTO;
 
-		when(clientService.listAll()).thenReturn(CLIENTS_DTO);
+		when(clientService.listAll()).thenReturn(clientsDTO);
 
 		mockMvc
 			.perform(get("/api/clients"))
