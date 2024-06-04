@@ -20,18 +20,24 @@ public abstract class OrderMapper {
 		order.setDeviceSN(orderDTO.deviceSN());
 		order.setIssues(orderDTO.issues());
 
-		Client client = toClient(orderDTO.clientDTO());
-		List<OrderItem> orderItems = orderDTO.orderItemsDTO().stream()
-			.map(orderItemDTO -> {
-				OrderItem orderItem = new OrderItem();
-				if (orderItemDTO.id() != null) { orderItem.setId(orderItemDTO.id()); }
+		Client client = null;
+		final ClientDTO orderClientDTO = orderDTO.clientDTO();
+		if (orderClientDTO != null) {	client = toClient(orderClientDTO); }
 
-				orderItem.setOrderItemType(orderItemDTO.orderItemType());
-				orderItem.setDescription(orderItemDTO.description());
-				orderItem.setPrice(orderItemDTO.price());
+		List<OrderItem> orderItems = new ArrayList<>();
+		if (orderDTO.orderItemsDTO() != null) {
+			orderItems = orderDTO.orderItemsDTO().stream()
+				.map(orderItemDTO -> {
+					OrderItem orderItem = new OrderItem();
+					if (orderItemDTO.id() != null) { orderItem.setId(orderItemDTO.id()); }
 
-				return orderItem;
-			}).collect(Collectors.toList());
+					orderItem.setOrderItemType(orderItemDTO.orderItemType());
+					orderItem.setDescription(orderItemDTO.description());
+					orderItem.setPrice(orderItemDTO.price());
+
+					return orderItem;
+				}).collect(Collectors.toList());
+		}
 
 		order.setClient(client);
 		order.setOrderItems(orderItems);
@@ -43,18 +49,20 @@ public abstract class OrderMapper {
 	public static OrderDTO toOrderDTO(Order order) {
 		if (order == null) { return null; }
 
-		Client orderClient = order.getClient();
-		ClientDTO clientDTO = ClientDTO.builder()
-			.id(orderClient.getId())
-			.name(orderClient.getName())
-			.phoneNumber(orderClient.getPhoneNumber())
-			.neighborhood(orderClient.getNeighborhood())
-			.address(orderClient.getAddress())
-			.reference(orderClient.getReference())
-			.build();
+		ClientDTO clientDTO = null;
+		if (order.getClient() != null) {
+			final Client orderClient = order.getClient();
+			clientDTO = new ClientDTO(
+				orderClient.getId(),
+				orderClient.getName(),
+				orderClient.getPhoneNumber(),
+				orderClient.getNeighborhood(),
+				orderClient.getAddress(), null,
+				orderClient.getReference()
+			);
+		}
 
 		List<OrderItemDTO> orderItemDTOs = new ArrayList<>();
-
 		if (order.getOrderItems() != null) {
 			orderItemDTOs = order.getOrderItems()
 				.stream()
