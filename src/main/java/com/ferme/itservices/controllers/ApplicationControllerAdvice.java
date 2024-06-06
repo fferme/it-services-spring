@@ -1,7 +1,7 @@
-package com.ferme.itservices.application.controllers;
+package com.ferme.itservices.controllers;
 
-import com.ferme.itservices.application.exceptions.RecordAlreadyExistsException;
-import com.ferme.itservices.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.exceptions.RecordAlreadyExistsException;
+import com.ferme.itservices.exceptions.RecordNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Generated;
 import org.springframework.dao.DataIntegrityViolationException;
