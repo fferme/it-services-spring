@@ -1,10 +1,10 @@
 package com.ferme.itservices.order.integration;
 
-import com.ferme.itservices.client.dtos.ClientDTO;
-import com.ferme.itservices.order.dtos.OrderDTO;
+import com.ferme.itservices.dtos.ClientDTO;
+import com.ferme.itservices.dtos.OrderDTO;
+import com.ferme.itservices.dtos.OrderItemDTO;
 import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
-import com.ferme.itservices.orderItem.dtos.OrderItemDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.List;
 
-import static com.ferme.itservices.order.dtos.mappers.OrderMapper.toOrderDTO;
-import static com.ferme.itservices.order.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
 import static com.ferme.itservices.order.utils.OrderConstants.ORDER_A_UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

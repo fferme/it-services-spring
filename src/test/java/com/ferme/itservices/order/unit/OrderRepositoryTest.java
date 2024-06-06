@@ -1,8 +1,8 @@
 package com.ferme.itservices.order.unit;
 
-import com.ferme.itservices.order.models.Order;
-import com.ferme.itservices.order.repositories.OrderRepository;
+import com.ferme.itservices.models.Order;
 import com.ferme.itservices.order.utils.OrderConstants;
+import com.ferme.itservices.repositories.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

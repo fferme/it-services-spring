@@ -1,12 +1,12 @@
 package com.ferme.itservices.client.unit;
 
-import com.ferme.itservices.client.dtos.ClientDTO;
-import com.ferme.itservices.client.models.Client;
-import com.ferme.itservices.client.repositories.ClientRepository;
-import com.ferme.itservices.client.services.ClientService;
 import com.ferme.itservices.client.utils.ClientAssertions;
 import com.ferme.itservices.client.utils.ClientConstants;
+import com.ferme.itservices.dtos.ClientDTO;
 import com.ferme.itservices.exceptions.RecordNotFoundException;
+import com.ferme.itservices.models.Client;
+import com.ferme.itservices.repositories.ClientRepository;
+import com.ferme.itservices.services.ClientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
