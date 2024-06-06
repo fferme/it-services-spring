@@ -1,7 +1,7 @@
 package com.ferme.itservices.orderItem.unit;
 
-import com.ferme.itservices.enums.OrderItemType;
-import com.ferme.itservices.enums.converter.OrderItemTypeConverter;
+import com.ferme.itservices.orderItem.enums.OrderItemType;
+import com.ferme.itservices.orderItem.enums.converter.OrderItemTypeConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

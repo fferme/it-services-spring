@@ -1,16 +1,16 @@
 package com.ferme.itservices.order.utils;
 
 import com.ferme.itservices.client.utils.ClientConstants;
-import com.ferme.itservices.dtos.OrderDTO;
-import com.ferme.itservices.models.Order;
+import com.ferme.itservices.order.dtos.OrderDTO;
+import com.ferme.itservices.order.models.Order;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTO;
-import static com.ferme.itservices.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.order.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.order.dtos.mappers.OrderMapper.toOrderDTOList;
 
 public class OrderConstants {
 	public static OrderConstants instance;

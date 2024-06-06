@@ -1,11 +1,11 @@
 package com.ferme.itservices.order.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ferme.itservices.controllers.OrderController;
-import com.ferme.itservices.dtos.OrderDTO;
+import com.ferme.itservices.order.controllers.OrderController;
+import com.ferme.itservices.order.dtos.OrderDTO;
+import com.ferme.itservices.order.services.OrderService;
 import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
-import com.ferme.itservices.services.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

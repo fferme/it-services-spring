@@ -1,7 +1,7 @@
 package com.ferme.itservices.client.integration;
 
+import com.ferme.itservices.client.dtos.ClientDTO;
 import com.ferme.itservices.client.utils.ClientConstants;
-import com.ferme.itservices.dtos.ClientDTO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

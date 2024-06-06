@@ -1,15 +1,15 @@
 package com.ferme.itservices.orderItem.utils;
 
-import com.ferme.itservices.dtos.OrderItemDTO;
-import com.ferme.itservices.enums.OrderItemType;
-import com.ferme.itservices.models.OrderItem;
+import com.ferme.itservices.orderItem.dtos.OrderItemDTO;
+import com.ferme.itservices.orderItem.enums.OrderItemType;
+import com.ferme.itservices.orderItem.models.OrderItem;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTO;
-import static com.ferme.itservices.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
+import static com.ferme.itservices.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 
 
 public class OrderItemConstants {

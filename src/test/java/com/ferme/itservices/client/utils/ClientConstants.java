@@ -1,14 +1,14 @@
 package com.ferme.itservices.client.utils;
 
-import com.ferme.itservices.dtos.ClientDTO;
-import com.ferme.itservices.models.Client;
+import com.ferme.itservices.client.dtos.ClientDTO;
+import com.ferme.itservices.client.models.Client;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTO;
-import static com.ferme.itservices.dtos.mappers.ClientMapper.toClientDTOList;
+import static com.ferme.itservices.client.dtos.mappers.ClientMapper.toClientDTO;
+import static com.ferme.itservices.client.dtos.mappers.ClientMapper.toClientDTOList;
 
 public class ClientConstants {
 	public static ClientConstants instance;
