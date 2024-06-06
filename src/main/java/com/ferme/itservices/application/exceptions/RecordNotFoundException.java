@@ -1,4 +1,4 @@
-package com.ferme.itservices.exceptions;
+package com.ferme.itservices.application.exceptions;
 
 import lombok.Generated;
 
