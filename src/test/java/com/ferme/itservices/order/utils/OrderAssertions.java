@@ -1,7 +1,7 @@
 package com.ferme.itservices.order.utils;
 
+import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.client.utils.ClientAssertions;
-import com.ferme.itservices.dtos.OrderDTO;
 import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
 
 import java.util.List;

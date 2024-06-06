@@ -1,6 +1,6 @@
 package com.ferme.itservices.orderItem.utils;
 
-import com.ferme.itservices.dtos.OrderItemDTO;
+import com.ferme.itservices.api.dtos.OrderItemDTO;
 
 import java.util.Comparator;
 import java.util.List;
