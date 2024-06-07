@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Slf4j
 public class FileDownloader {
@@ -30,10 +31,18 @@ public class FileDownloader {
 
 			if (downloadConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
+				Path destinationPath = Paths.get(destinationFilePath);
+
+				// Check if the file already exists
+				if (Files.exists(destinationPath)) {
+					Files.delete(destinationPath);
+					log.info("Existing file deleted: {}", destinationFilePath);
+				}
+
+				// Download and save the file
 				try (InputStream inputStream = downloadConnection.getInputStream()) {
-					Path destinationPath = Paths.get(destinationFilePath);
-					Files.copy(inputStream, destinationPath);
-					log.info("File conversion completed successfully");
+					Files.copy(inputStream, destinationPath, StandardCopyOption.REPLACE_EXISTING);
+					log.info("File downloaded and saved successfully to: {}", destinationFilePath);
 				}
 			} else {
 				log.error("Fail to download converted file. Status code: {}", downloadConnection.getResponseCode());
