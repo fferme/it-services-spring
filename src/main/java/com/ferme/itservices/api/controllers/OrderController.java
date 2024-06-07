@@ -138,4 +138,9 @@ public class OrderController {
 		orderService.deleteAll();
 		return ResponseEntity.noContent().build();
 	}
+
+	@GetMapping("/import")
+	public void importOrders() {
+		orderService.importOrders();
+	}
 }

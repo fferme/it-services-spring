@@ -12,6 +12,7 @@ import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.ClientRepository;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.ferme.itservices.api.repositories.OrderRepository;
+import com.ferme.itservices.ocrreader.OCRRestAPI;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -99,5 +100,10 @@ public class OrderService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteAll() {
 		orderRepository.deleteAll();
+	}
+
+	public void importOrders() {
+		OCRRestAPI ocrRestAPI = OCRRestAPI.getInstance();
+		ocrRestAPI.extractTextFromJPG("./Marco.jpg");
 	}
 }
