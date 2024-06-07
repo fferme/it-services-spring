@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.api.dtos.OrderItemDTO;
 import com.ferme.itservices.api.dtos.mappers.ClientMapper;
@@ -13,6 +14,8 @@ import com.ferme.itservices.api.repositories.ClientRepository;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.ferme.itservices.api.repositories.OrderRepository;
 import com.ferme.itservices.ocrreader.OCRRestAPI;
+import com.ferme.itservices.ocrreader.OCRService;
+import com.ferme.itservices.ocrreader.file.FileConverter;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -103,7 +106,7 @@ public class OrderService {
 	}
 
 	public void importOrders() {
-		OCRRestAPI ocrRestAPI = OCRRestAPI.getInstance();
+		OCRRestAPI ocrRestAPI = OCRRestAPI.getInstance(new FileConverter(new OCRService()), new ObjectMapper());
 		ocrRestAPI.extractTextFromJPG("./Marco.jpg");
 	}
 }

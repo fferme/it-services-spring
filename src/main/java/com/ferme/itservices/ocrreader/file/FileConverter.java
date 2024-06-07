@@ -1,21 +1,18 @@
 package com.ferme.itservices.ocrreader.file;
 
 import com.ferme.itservices.ocrreader.OCRService;
+import lombok.AllArgsConstructor;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 
+@AllArgsConstructor
 public class FileConverter {
 	private final OCRService ocrService;
-
-	public FileConverter(OCRService ocrService) {
-		this.ocrService = ocrService;
-	}
 
 	public HttpURLConnection sendFile(String filePath) throws IOException {
 		final String licenseCode = "7F050B24-570C-4DBB-A0A5-8A6BE632A5BD";
@@ -35,22 +32,24 @@ public class FileConverter {
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setRequestProperty("Content-Length", Integer.toString(fileContent.length));
 
-		try (OutputStream outputStream = connection.getOutputStream()) {
-			outputStream.write(fileContent);
-		}
+		OutputStream stream = connection.getOutputStream();
+		stream.write(fileContent);
+		stream.close();
 
 		return connection;
 	}
 
 	public String getResponseToString(InputStream inputStream) throws IOException {
-		StringBuilder response = new StringBuilder();
-		byte[] buffer = new byte[1024];
-		int bytesRead;
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+			StringBuilder strBuff = new StringBuilder();
+			char[] buffer = new char[8192];
+			int length;
 
-		while ((bytesRead = inputStream.read(buffer)) != -1) {
-			response.append(new String(buffer, 0, bytesRead));
+			while ((length = br.read(buffer)) != -1) {
+				strBuff.append(buffer, 0, length);
+			}
+
+			return strBuff.toString();
 		}
-
-		return response.toString();
 	}
 }

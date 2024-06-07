@@ -1,5 +1,7 @@
 package com.ferme.itservices.ocrreader;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ferme.itservices.ocrreader.file.FileConverter;
 import com.ferme.itservices.ocrreader.file.FileDownloader;
 import lombok.extern.slf4j.Slf4j;
@@ -9,24 +11,27 @@ import java.net.HttpURLConnection;
 
 @Slf4j
 public class OCRRestAPI {
-	private static class InstanceHolder {
-		private static final OCRRestAPI instance = new OCRRestAPI();
-	}
-
-	public static OCRRestAPI getInstance() {
-		return InstanceHolder.instance;
-	}
-
-	//private static final Logger logger = LoggerFactory.getLogger(OCRRestAPI.class);
+	private static volatile OCRRestAPI instance;
 
 	private final FileConverter fileConverter;
-	private final OCRResponseHandler ocrResponseHandler;
+	private final OCRResponseHandler ocrResponseHandler = OCRResponseHandler.getInstance();
+	private final FileDownloader fileDownloader = FileDownloader.getInstance();
+	private final ObjectMapper objectMapper;
 
-	private OCRRestAPI() {
-		OCRService ocrService = new OCRService();
-		this.fileConverter = new FileConverter(ocrService);
-		this.ocrResponseHandler = new OCRResponseHandler();
-		FileDownloader fileDownloader = new FileDownloader();
+	private OCRRestAPI(FileConverter fileConverter, ObjectMapper objectMapper) {
+		this.fileConverter = fileConverter;
+		this.objectMapper = objectMapper;
+	}
+
+	public static OCRRestAPI getInstance(FileConverter fileConverter, ObjectMapper objectMapper) {
+		if (instance == null) {
+			synchronized (OCRRestAPI.class) {
+				if (instance == null) {
+					instance = new OCRRestAPI(fileConverter, objectMapper);
+				}
+			}
+		}
+		return instance;
 	}
 
 	public void extractTextFromJPG(String filePath) {
@@ -36,8 +41,14 @@ public class OCRRestAPI {
 			log.info("{}({})", httpCode, connection.getResponseMessage());
 
 			if (httpCode == HttpURLConnection.HTTP_OK) {
-				String jsonResponse = fileConverter.getResponseToString(connection.getInputStream());
-				ocrResponseHandler.printOCRResponse(jsonResponse);
+				assert objectMapper != null;
+				JsonNode jsonObj = objectMapper.readTree(fileConverter.getResponseToString(connection.getInputStream()));
+
+				JsonNode outputFileUrlNode = jsonObj.get("OutputFileUrl");
+				if ((outputFileUrlNode != null) && (!outputFileUrlNode.asText().isEmpty())) {
+					fileDownloader.downloadFile(outputFileUrlNode.asText(), "./converted.txt");
+				}
+
 			} else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				log.error("{}: Error: {}", httpCode, connection.getResponseMessage());
 			} else {
