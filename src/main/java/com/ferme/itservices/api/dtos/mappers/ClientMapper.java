@@ -36,7 +36,8 @@ public abstract class ClientMapper {
 					order.getIssues(),
 					null,
 					null,
-					order.getTotalPrice()
+					order.getTotalPrice(),
+					order.getCreatedAt()
 				))
 				.toList();
 		}

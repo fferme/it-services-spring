@@ -42,6 +42,7 @@ public abstract class OrderMapper {
 		order.setClient(client);
 		order.setOrderItems(orderItems);
 		order.setTotalPrice(orderDTO.totalPrice());
+		order.setCreatedAt(orderDTO.createdAt());
 
 		return order;
 	}
@@ -84,7 +85,8 @@ public abstract class OrderMapper {
 			order.getIssues(),
 			clientDTO,
 			orderItemDTOs,
-			order.getTotalPrice()
+			order.getTotalPrice(),
+			order.getCreatedAt()
 		);
 	}
 

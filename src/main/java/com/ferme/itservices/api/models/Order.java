@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ferme.itservices.api.utils.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
@@ -8,9 +9,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.sql.Types;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -74,9 +78,27 @@ public class Order implements Serializable {
 	@Column(length = 7, nullable = false, updatable = false)
 	private Double totalPrice = 0.0;
 
+	@Setter
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT-3")
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime createdAt;
+
 	@PrePersist
+	private void prePersist() {
+		if (createdAt == null) {
+			createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+		}
+
+		Price priceInstance = Price.getInstance();
+		final Double price = priceInstance.calculateTotalPrice(this.getOrderItems());
+
+		if (price >= 0) { this.totalPrice = price; }
+	}
+
+
 	@PreUpdate
-	private void prePersistAndUpdate() {
+	private void preUpdate() {
 		Price priceInstance = Price.getInstance();
 		final Double price = priceInstance.calculateTotalPrice(this.getOrderItems());
 
