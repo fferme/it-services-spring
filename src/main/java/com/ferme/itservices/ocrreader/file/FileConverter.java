@@ -15,8 +15,8 @@ public class FileConverter {
 	private final OCRService ocrService;
 
 	public HttpURLConnection sendFile(String filePath) throws IOException {
-		final String licenseCode = "7F050B24-570C-4DBB-A0A5-8A6BE632A5BD";
-		final String username = "FFERME";
+		final String licenseCode = "93C9860A-8B95-46A4-80E0-A81DC205A4C7";
+		final String username = "FFERME1212";
 		final String language = "portuguese";
 		final String outputFormat = "txt";
 

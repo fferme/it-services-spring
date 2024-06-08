@@ -8,6 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static com.ferme.itservices.ocrreader.file.FileUtils.getClientPath;
 
 @Slf4j
 public class OCRRestAPI {
@@ -34,7 +40,24 @@ public class OCRRestAPI {
 		return instance;
 	}
 
+	public void iterateOverPhotos(String photosDir) {
+		Path dirPath = Paths.get(photosDir);
+		if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
+			try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath, "*.jpg")) {
+				for (Path entry : stream) {
+					extractTextFromJPG(entry.toAbsolutePath().toString());
+				}
+			} catch (IOException e) {
+				log.error("Error accessing folder: {}", e.getMessage());
+			}
+		} else {
+			log.error("The specified folder does not exist or is not a directory");
+		}
+	}
+
 	public void extractTextFromJPG(String filePath) {
+		log.info(filePath);
+		log.info(getClientPath(filePath));
 		try {
 			HttpURLConnection connection = fileConverter.sendFile(filePath);
 			int httpCode = connection.getResponseCode();
@@ -43,10 +66,12 @@ public class OCRRestAPI {
 			if (httpCode == HttpURLConnection.HTTP_OK) {
 				assert objectMapper != null;
 				JsonNode jsonObj = objectMapper.readTree(fileConverter.getResponseToString(connection.getInputStream()));
+				log.info("Pages: {}", jsonObj.get("AvailablePages").asText());
 
 				JsonNode outputFileUrlNode = jsonObj.get("OutputFileUrl");
 				if ((outputFileUrlNode != null) && (!outputFileUrlNode.asText().isEmpty())) {
-					fileDownloader.downloadFile(outputFileUrlNode.asText(), "./converted.txt");
+					fileDownloader.downloadFile(outputFileUrlNode.asText(), "src/main/resources/output/" +
+						getClientPath(filePath));
 				}
 
 			} else if (httpCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
