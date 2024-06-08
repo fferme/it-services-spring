@@ -92,6 +92,28 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
+	@Operation(summary = "Recupera cliente pelo nome e celular", method = "GET")
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "200", description = "Sucesso ao recuperar cliente pelo nome e celular",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+			@ApiResponse(responseCode = "400", description = "Nome e celular informado inválido", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com nome e celular informados", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Erro interno do servidor",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
+	@GetMapping("/name/{name}/phoneNumber/{phoneNumber}")
+	public ResponseEntity<ClientDTO> findByNameAndPhoneNumber(@PathVariable("name") @NotEmpty String name, @PathVariable("phoneNumber") @NotEmpty String phoneNumber) {
+		ClientDTO clientDTO = clientService.findByNameAndPhoneNumber(name, phoneNumber);
+
+		return (clientDTO != null)
+			? ResponseEntity.ok(clientDTO)
+			: ResponseEntity.notFound().build();
+	}
+
 	@Operation(summary = "Salva novo cliente", method = "POST")
 	@ApiResponses(
 		value = {

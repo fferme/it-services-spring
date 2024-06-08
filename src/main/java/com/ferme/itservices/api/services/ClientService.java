@@ -52,6 +52,14 @@ public class ClientService {
 		return ClientMapper.toClientDTO(client);
 	}
 
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public ClientDTO findByNameAndPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber) {
+		Client client = clientRepository.findByNameAndPhoneNumber(name, phoneNumber)
+			.orElseThrow(() -> new RecordNotFoundException(Client.class, name));
+
+		return ClientMapper.toClientDTO(client);
+	}
+
 	@Transactional(propagation = Propagation.REQUIRED)
 	public ClientDTO create(ClientDTO clientDTO) {
 		return ClientMapper.toClientDTO(clientRepository.save(ClientMapper.toClient(clientDTO)));

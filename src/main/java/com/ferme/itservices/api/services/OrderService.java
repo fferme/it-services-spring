@@ -1,6 +1,6 @@
 package com.ferme.itservices.api.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ferme.itservices.api.dtos.ClientDTO;
 import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.api.dtos.OrderItemDTO;
 import com.ferme.itservices.api.dtos.mappers.ClientMapper;
@@ -13,18 +13,22 @@ import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.ClientRepository;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.ferme.itservices.api.repositories.OrderRepository;
-import com.ferme.itservices.ocrreader.OCRRestAPI;
-import com.ferme.itservices.ocrreader.OCRService;
-import com.ferme.itservices.ocrreader.file.FileConverter;
+import com.ferme.itservices.ocrreader.file.FileUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +36,7 @@ import java.util.UUID;
 @Validated
 @Service
 @AllArgsConstructor
+@Slf4j
 public class OrderService {
 	private final OrderRepository orderRepository;
 	private final ClientRepository clientRepository;
@@ -51,10 +56,19 @@ public class OrderService {
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public OrderDTO create(OrderDTO orderDTO) {
-		Client client = orderDTO.clientDTO().id() != null
-			? clientRepository.findById(orderDTO.clientDTO().id())
-			.orElseThrow(() -> new EntityNotFoundException("Client not found with given ID"))
-			: clientRepository.save(ClientMapper.toClient(orderDTO.clientDTO()));
+		Client client;
+		ClientDTO orderClientDTO = orderDTO.clientDTO();
+
+		if (orderDTO.clientDTO().id() != null) {
+			client = clientRepository.findById(orderDTO.clientDTO().id())
+				.orElseThrow(() -> new EntityNotFoundException("Client not found with given ID"));
+		} else {
+			final boolean clientExists = clientRepository.findByNameAndPhoneNumber(orderClientDTO.name(), orderClientDTO.phoneNumber()).isPresent();
+			client = clientExists
+				? clientRepository.findByNameAndPhoneNumber(orderClientDTO.name(), orderClientDTO.phoneNumber())
+				.orElseThrow(() -> new EntityNotFoundException("Client not found with given name and phoneNumber"))
+				: clientRepository.save(ClientMapper.toClient(orderDTO.clientDTO()));
+		}
 
 		Order order = new Order();
 		order.setClient(client);
@@ -105,8 +119,24 @@ public class OrderService {
 		orderRepository.deleteAll();
 	}
 
-	public void importOrders() {
-		OCRRestAPI ocrRestAPI = OCRRestAPI.getInstance(new FileConverter(new OCRService()), new ObjectMapper());
-		ocrRestAPI.extractTextFromJPG("./Marco.jpg");
+	public static void importOrders(String dir) {
+		FileUtils fileUtils = FileUtils.getInstance();
+
+		Path dirPath = Paths.get(dir);
+		if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
+			try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath, "*.txt")) {
+				for (Path entry : stream) {
+					log.info("Processing file: {}", entry.toAbsolutePath());
+					String content = new String(Files.readAllBytes(entry));
+					log.info("Nome: {}", fileUtils.findAndExtractValor(content, "Nome do(a) solicitante:"));
+					log.info("Celular: {}", fileUtils.findAndExtractValor(content, "Celular:"));
+					log.info("Data: {}", fileUtils.findAndExtractValor(content, "Data:"));
+				}
+			} catch (IOException e) {
+				log.error("Error accessing folder: {}", e.getMessage());
+			}
+		} else {
+			log.error("The specified folder does not exist or is not a directory");
+		}
 	}
 }
