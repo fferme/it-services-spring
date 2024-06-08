@@ -80,10 +80,21 @@ public class OrderService {
 		List<OrderItem> orderItems = new ArrayList<>();
 
 		for (OrderItemDTO orderItemDTO : orderDTO.orderItemsDTO()) {
-			OrderItem orderItem = orderItemDTO.id() != null
-				? orderItemRepository.findById(orderItemDTO.id())
-				.orElseThrow(() -> new EntityNotFoundException("Order Item not found with given ID"))
-				: orderItemRepository.save(OrderItemMapper.toOrderItem(orderItemDTO));
+			OrderItem orderItem;
+
+			if (orderItemDTO.id() != null) {
+				orderItem = orderItemRepository.findById(orderItemDTO.id())
+					.orElseThrow(() -> new EntityNotFoundException("Order item not found with given ID"));
+			} else {
+				final boolean orderItemExists = orderItemRepository.findByOrderItemTypeAndDescriptionAndPrice(
+					orderItemDTO.orderItemType(), orderItemDTO.description(), orderItemDTO.price()).isPresent();
+				orderItem = orderItemExists
+					? orderItemRepository.findByOrderItemTypeAndDescriptionAndPrice(
+						orderItemDTO.orderItemType(), orderItemDTO.description(), orderItemDTO.price()
+					)
+					.orElseThrow(() -> new EntityNotFoundException("Order item not found with given order item type, description and price"))
+					: orderItemRepository.save(OrderItemMapper.toOrderItem(orderItemDTO));
+			}
 
 			orderItems.add(orderItem);
 		}
@@ -119,7 +130,7 @@ public class OrderService {
 		orderRepository.deleteAll();
 	}
 
-	public static void importOrders(String dir) {
+	public void importOrders(String dir) {
 		FileUtils fileUtils = FileUtils.getInstance();
 
 		Path dirPath = Paths.get(dir);

@@ -141,6 +141,6 @@ public class OrderController {
 
 	@GetMapping("/import")
 	public void importOrders() {
-		orderService.importOrders();
+		orderService.importOrders("");
 	}
 }

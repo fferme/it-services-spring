@@ -82,7 +82,7 @@ public class OrderItemController {
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
-	@GetMapping("/name/{name}")
+	@GetMapping("/description/{description}")
 	public ResponseEntity<OrderItemDTO> findByDescription(@PathVariable("description") @NotEmpty String description) {
 		OrderItemDTO orderItemDTO = orderItemService.findByDescription(description);
 
