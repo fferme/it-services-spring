@@ -4,15 +4,23 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
-public abstract class FileUtils {
+public class FileUtils {
+	public static FileUtils instance;
+
+	private FileUtils() { }
+
+	public static FileUtils getInstance() {
+		return (instance == null)
+			? instance = new FileUtils()
+			: instance;
+	}
+
 	public static String getClientPath(String filePath) {
 		String clientPath = null;
 
@@ -29,21 +37,6 @@ public abstract class FileUtils {
 		}
 
 		return clientPath;
-	}
-
-	public static void iterateOverTXTs(String dir) {
-		Path dirPath = Paths.get(dir);
-		if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
-			try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath, "*.txt")) {
-				for (Path entry : stream) {
-					log.info("Processing file: {}", entry.toAbsolutePath());
-				}
-			} catch (IOException e) {
-				log.error("Error accessing folder: {}", e.getMessage());
-			}
-		} else {
-			log.error("The specified folder does not exist or is not a directory");
-		}
 	}
 
 	private static void processFile(String filePath) {
@@ -98,8 +91,14 @@ public abstract class FileUtils {
 		}
 	}
 
+	public String findAndExtractValor(String textFile, String anchor) {
+		String pattern1 = Pattern.quote(anchor) + "\\s*(.*)";
+		Pattern pattern2 = Pattern.compile(pattern1, Pattern.MULTILINE);
+		Matcher matcher = pattern2.matcher(textFile);
 
-	public static void main(String[] args) {
-		iterateOverTXTs("src/main/resources/output2");
+		if (matcher.find()) {
+			return matcher.group(1).trim();
+		}
+		return null;
 	}
 }
