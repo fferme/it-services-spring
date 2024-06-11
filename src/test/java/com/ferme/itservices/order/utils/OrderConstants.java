@@ -30,15 +30,15 @@ public class OrderConstants {
 	private final static UUID ORDER_B_UUID = UUID.fromString("fdfe1855-8c37-4fce-bdeb-2dcd00ab2ca0");
 	private final static UUID ORDER_C_UUID = UUID.fromString("1b4d3287-296c-4a81-9f5b-e234f5aa7aef");
 
-	public final Order ORDER = new Order(
-		ORDER_A_UUID,
-		"Asus Notebook AB9299",
-		"918390SDA21",
-		"Erro ao iniciar sistema",
-		clientConstants.CLIENT,
-		orderItemConstants.ORDER_ITEMS,
-		1000.0
-	);
+	public final Order ORDER = Order.builder()
+		.id(ORDER_A_UUID)
+		.deviceName("Asus Notebook AB9299")
+		.deviceSN("918390SDA21")
+		.issues("Erro ao iniciar sistema")
+		.client(clientConstants.CLIENT)
+		.orderItems(orderItemConstants.ORDER_ITEMS)
+		.totalPrice(1000.0)
+		.build();
 	public final OrderDTO ORDER_DTO = toOrderDTO(ORDER);
 
 	public final Order NEW_ORDER_CLIENTS_AND_ORDERITEMS = Order.builder()
@@ -72,39 +72,38 @@ public class OrderConstants {
 	public final List<Order> ORDERS = new ArrayList<>() {
 		{
 			add(
-				new Order(
-					ORDER_A_UUID,
-					"Asus Notebook AB9299",
-					"918390SDA21",
-					"Erro ao iniciar sistema",
-					clientConstants.CLIENT,
-					orderItemConstants.ORDER_ITEMS,
-					1000.0
-				)
+				Order.builder()
+					.id(ORDER_A_UUID)
+					.deviceName("Asus Notebook AB9299")
+					.deviceSN("918390SDA21")
+					.issues("Erro ao iniciar sistema")
+					.client(clientConstants.CLIENT)
+					.orderItems(orderItemConstants.ORDER_ITEMS)
+					.totalPrice(1000.0)
+					.build()
 			);
 			add(
-				new Order(
-					ORDER_B_UUID,
-					"Asus Notebook AB9499",
-					"91233301",
-					"Erro ao iniciar sistema",
-					clientConstants.CLIENTS.get(1),
-					orderItemConstants.ORDER_ITEMS,
-					1000.0
-				)
+				Order.builder()
+					.id(ORDER_B_UUID)
+					.deviceName("Asus Notebook AB9499")
+					.deviceSN("91233301")
+					.issues("Erro ao iniciar sistema")
+					.client(clientConstants.CLIENTS.get(1))
+					.orderItems(orderItemConstants.ORDER_ITEMS)
+					.totalPrice(1000.0)
+					.build()
 			);
 			add(
-				new Order(
-					ORDER_C_UUID,
-					"Asus Notebook AB4599",
-					"233314445",
-					"Erro ao iniciar sistema",
-					clientConstants.CLIENTS.get(2),
-					orderItemConstants.ORDER_ITEMS,
-					1200.0
-				)
+				Order.builder()
+					.id(ORDER_C_UUID)
+					.deviceName("Asus Notebook AB4599")
+					.deviceSN("233314445")
+					.issues("Erro ao iniciar sistema")
+					.client(clientConstants.CLIENTS.get(2))
+					.orderItems(orderItemConstants.ORDER_ITEMS)
+					.totalPrice(1200.0)
+					.build()
 			);
-
 		}
 	};
 	public final List<OrderDTO> ORDERS_DTO = toOrderDTOList(ORDERS);
