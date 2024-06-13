@@ -29,6 +29,9 @@ public record OrderItemDTO(
 	@DecimalMax(value = "9999.00", message = "Price must be max 9999.00")
 	Double price,
 
+	@NotNull
+	Boolean showInListAll,
+
 	@JsonIgnore
 	List<Order> orders
 ) { }

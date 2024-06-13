@@ -13,6 +13,7 @@ public class OrderItemMapper {
 			orderItemDTO.orderItemType(),
 			orderItemDTO.description(),
 			orderItemDTO.price(),
+			orderItemDTO.showInListAll(),
 			orderItemDTO.orders()
 		);
 	}
@@ -23,6 +24,7 @@ public class OrderItemMapper {
 			orderItem.getOrderItemType(),
 			orderItem.getDescription(),
 			orderItem.getPrice(),
+			orderItem.getShowInListAll(),
 			orderItem.getOrders()
 		);
 	}

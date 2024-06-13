@@ -72,6 +72,7 @@ public abstract class OrderMapper {
 					orderItem.getOrderItemType(),
 					orderItem.getDescription(),
 					orderItem.getPrice(),
+					orderItem.getShowInListAll(),
 					null
 				))
 				.toList();
