@@ -1,12 +1,12 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.dtos.OrderItemDTO;
 import com.ferme.itservices.api.dtos.mappers.OrderItemMapper;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
-import com.ferme.itservices.api.utils.JsonDataRead;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.ferme.itservices.api.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
+import static com.ferme.itservices.api.utils.JsonDataRead.readJsonData;
+
 @Service
 @AllArgsConstructor
 public class OrderItemService {
@@ -30,7 +33,7 @@ public class OrderItemService {
 	public List<OrderItemDTO> listAll() {
 		List<OrderItem> orderItems = orderItemRepository.findAll();
 
-		return OrderItemMapper.toOrderItemDTOList(
+		return toOrderItemDTOList(
 			orderItems.stream()
 				.sorted(Comparator.comparing(OrderItem::getDescription))
 				.collect(Collectors.toList())
@@ -88,6 +91,9 @@ public class OrderItemService {
 	@Generated
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<OrderItemDTO> exportDataToOrderItem() {
-		return OrderItemMapper.toOrderItemDTOList(orderItemRepository.saveAll(JsonDataRead.readOrderItemsJsonData()));
+		List<OrderItem> orderItems = orderItemRepository.saveAll(
+			readJsonData("src/main/resources/entities/orderItems.json", new TypeReference<List<OrderItem>>() { })
+		);
+		return toOrderItemDTOList(orderItems);
 	}
 }

@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.dtos.ClientDTO;
 import com.ferme.itservices.api.dtos.OrderDTO;
 import com.ferme.itservices.api.dtos.OrderItemDTO;
@@ -13,7 +14,6 @@ import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.api.repositories.ClientRepository;
 import com.ferme.itservices.api.repositories.OrderItemRepository;
 import com.ferme.itservices.api.repositories.OrderRepository;
-import com.ferme.itservices.ocrreader.file.FileUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -24,14 +24,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static com.ferme.itservices.api.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.api.utils.JsonDataRead.readJsonData;
 
 @Validated
 @Service
@@ -43,7 +41,7 @@ public class OrderService {
 	private final OrderItemRepository orderItemRepository;
 
 	public List<OrderDTO> listAll() {
-		return OrderMapper.toOrderDTOList(orderRepository.findAll());
+		return toOrderDTOList(orderRepository.findAll());
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -130,24 +128,11 @@ public class OrderService {
 		orderRepository.deleteAll();
 	}
 
-	public void importOrders(String dir) {
-		FileUtils fileUtils = FileUtils.getInstance();
+	public List<OrderDTO> importOrders() {
+		List<Order> orders = orderRepository.saveAll(
+			readJsonData("src/main/resources/entities/orders.json", new TypeReference<List<Order>>() { })
+		);
 
-		Path dirPath = Paths.get(dir);
-		if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
-			try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath, "*.txt")) {
-				for (Path entry : stream) {
-					log.info("Processing file: {}", entry.toAbsolutePath());
-					String content = new String(Files.readAllBytes(entry));
-					log.info("Nome: {}", fileUtils.findAndExtractValor(content, "Nome do(a) solicitante:"));
-					log.info("Celular: {}", fileUtils.findAndExtractValor(content, "Celular:"));
-					log.info("Data: {}", fileUtils.findAndExtractValor(content, "Data:"));
-				}
-			} catch (IOException e) {
-				log.error("Error accessing folder: {}", e.getMessage());
-			}
-		} else {
-			log.error("The specified folder does not exist or is not a directory");
-		}
+		return toOrderDTOList(orders);
 	}
 }

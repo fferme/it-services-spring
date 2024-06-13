@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -188,7 +187,7 @@ public class ClientController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Importa clientes de arquivo e salva no banco", method = "POST")
+	@Operation(summary = "Importa clientes de arquivo e salva no banco", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
@@ -201,8 +200,8 @@ public class ClientController {
 				})
 		})
 	@Generated
-	@PostMapping("/import")
-	public ResponseEntity<List<ClientDTO>> importClients() throws IOException {
+	@GetMapping("/import")
+	public ResponseEntity<List<ClientDTO>> importClients() {
 		List<ClientDTO> clientsDTO = clientService.exportDataToClient();
 		return ResponseEntity.status(HttpStatus.CREATED).body(clientsDTO);
 	}

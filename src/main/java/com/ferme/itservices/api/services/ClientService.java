@@ -1,11 +1,11 @@
 package com.ferme.itservices.api.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.dtos.ClientDTO;
 import com.ferme.itservices.api.dtos.mappers.ClientMapper;
 import com.ferme.itservices.api.exceptions.RecordNotFoundException;
 import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.repositories.ClientRepository;
-import com.ferme.itservices.api.utils.JsonDataRead;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +19,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.ferme.itservices.api.utils.JsonDataRead.readJsonData;
 
 @Service
 @AllArgsConstructor
@@ -92,6 +94,9 @@ public class ClientService {
 
 	@Generated
 	public List<ClientDTO> exportDataToClient() {
-		return ClientMapper.toClientDTOList(clientRepository.saveAll(JsonDataRead.readClientsJsonData()));
+		List<Client> clients = clientRepository.saveAll(
+			readJsonData("src/main/resources/entities/clients.json", new TypeReference<List<Client>>() { })
+		);
+		return ClientMapper.toClientDTOList(clients);
 	}
 }

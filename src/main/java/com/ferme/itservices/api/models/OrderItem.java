@@ -49,6 +49,10 @@ public class OrderItem implements Serializable {
 	@Column(length = 7, nullable = false)
 	private Double price;
 
+	@Setter
+	@NotNull
+	private Boolean showInListAll = true;
+
 	@JsonIgnore
 	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
 	private List<Order> orders;

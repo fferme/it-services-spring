@@ -1,6 +1,7 @@
 package com.ferme.itservices.api.controllers;
 
 import com.ferme.itservices.api.dtos.OrderDTO;
+import com.ferme.itservices.api.models.Client;
 import com.ferme.itservices.api.models.Order;
 import com.ferme.itservices.api.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -139,8 +141,22 @@ public class OrderController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Operation(summary = "Importa ordens de serviço de arquivo e salva no banco", method = "GET")
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "201", description = "Sucesso ao gravar ordens de serviço no banco",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
+			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Erro interno do servidor",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
+	@Generated
 	@GetMapping("/import")
-	public void importOrders() {
-		orderService.importOrders("");
+	public ResponseEntity<List<OrderDTO>> importOrders() {
+		List<OrderDTO> ordersDTO = orderService.importOrders();
+		return ResponseEntity.status(HttpStatus.CREATED).body(ordersDTO);
 	}
 }
