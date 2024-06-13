@@ -53,7 +53,7 @@ public class Client implements Serializable {
 	private String address;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "client", cascade = CascadeType.MERGE)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "client")
 	private List<Order> orders;
 
 	@Setter
