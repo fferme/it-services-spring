@@ -22,7 +22,7 @@ public record OrderItemDTO(
 	@Convert(converter = OrderItemTypeConverter.class)
 	OrderItemType orderItemType,
 
-	@Size(max = 70)
+	@Size(max = 240)
 	String description,
 
 	@DecimalMin(value = "0.0", message = "Price must be minimum 0.0")

@@ -5,7 +5,6 @@ import com.ferme.itservices.api.utils.Price;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -13,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.sql.Types;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
@@ -34,19 +33,18 @@ public class Order implements Serializable {
 	@Column(name = "id", updatable = false, unique = true, nullable = false, columnDefinition = "VARCHAR(36)")
 	private UUID id;
 
-	@Size(max = 95)
-	@Column(length = 95, updatable = false, unique = true)
+	@Size(max = 90)
+	@Column(length = 90, updatable = false)
 	private final String header = "ORÇAMENTOS DE SERVIÇOS DE TERCEIROS - PESSOA FÍSICA, DESCRIÇÃO DE SERVIÇO(S) PRESTADO(S)";
 
 	@Setter
-	@Size(max = 35, message = "Device name must be maximum 35 characters")
-	@Column(name = "device_name", length = 35)
+	@Size(max = 90, message = "Device name must be maximum 35 characters")
+	@Column(name = "device_name", length = 90)
 	private String deviceName;
 
 	@Setter
-	@NotBlank
 	@Size(max = 35)
-	@Column(name = "device_sn", unique = true, nullable = false, length = 35)
+	@Column(name = "device_sn", unique = true, length = 35)
 	private String deviceSN;
 
 	@Setter
@@ -79,15 +77,15 @@ public class Order implements Serializable {
 	private Double totalPrice = 0.0;
 
 	@Setter
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT-3")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT-3")
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt;
+	private LocalDate createdAt;
 
 	@PrePersist
 	private void prePersist() {
 		if (createdAt == null) {
-			createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+			createdAt = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 		}
 
 		Price priceInstance = Price.getInstance();

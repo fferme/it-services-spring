@@ -39,8 +39,8 @@ public class OrderItem implements Serializable {
 	private OrderItemType orderItemType;
 
 	@Setter
-	@Size(max = 50)
-	@Column(length = 50, unique = true)
+	@Size(max = 240)
+	@Column(length = 240)
 	private String description;
 
 	@Setter
