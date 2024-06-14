@@ -40,11 +40,12 @@ public class OrderService {
 	private final ClientRepository clientRepository;
 	private final OrderItemRepository orderItemRepository;
 
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 	public List<OrderDTO> listAll() {
 		return toOrderDTOList(orderRepository.findAll());
 	}
 
-	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public OrderDTO findById(@Valid @NotNull UUID id) {
 		Order order = orderRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
@@ -128,11 +129,20 @@ public class OrderService {
 		orderRepository.deleteAll();
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED)
 	public List<OrderDTO> importOrders() {
-		List<Order> orders = orderRepository.saveAll(
-			readJsonData("src/main/resources/entities/orders.json", new TypeReference<List<Order>>() { })
-		);
+		List<OrderDTO> ordersDTO = toOrderDTOList(readJsonData("src/main/resources/entities/orders.json", new TypeReference<List<Order>>() { }));
+		List<OrderDTO> createdOrdersDTO = new ArrayList<>();
 
-		return toOrderDTOList(orders);
+		for (OrderDTO orderDTO : ordersDTO) {
+			try {
+				createdOrdersDTO.add(create(orderDTO));
+			} catch (Exception e) {
+				log.error("Error in entity: {}", orderDTO);
+				throw new RuntimeException(e);
+			}
+		}
+
+		return createdOrdersDTO;
 	}
 }

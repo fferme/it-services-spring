@@ -1,0 +1,1112 @@
+[
+  {
+    "deviceName": "B560M PRO-E",
+    "issues": "BIOS não reconhecendo SSD para instalação de Windows",
+    "createdAt": "2024-03-17",
+    "client": {
+      "name": "Alexandre",
+      "phoneNumber": "21971157469"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.0
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa",
+        "price": 10.0,
+        "showInListAll": false
+      }
+    ]
+  },
+  {
+    "deviceName": "Samsung NP350XAA-KF3BR",
+    "issues": "Notebook muito lento, tela trincada e suporte da rosca da dobradiça estourado",
+    "createdAt": "2023-12-06",
+    "client": {
+      "name": "Avô Miland",
+      "phoneNumber": "21969904398"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de armazenamento",
+        "price": 60.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote office",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de SSD",
+        "price": 60.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de tela",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 240Gb",
+        "price": 145.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Tela",
+        "price": 246.04,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 771.04
+  },
+  {
+    "deviceName": "Modem Nokia da Oi",
+    "issues": "Modem de internet com má configuração",
+    "createdAt": "2024-04-10",
+    "client": {
+      "name": "Carla",
+      "phoneNumber": "21996923024"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa Cliente (Trem)",
+        "price": 5.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa Cliente (Metrô)",
+        "price": 6.50,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa Cliente (Barco)",
+        "price": 2.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Configuração de Wi-fi do modem",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa (Trem)",
+        "price": 5.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa (Metrô)",
+        "price": 6.50,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa (Barco)",
+        "price": 5.00,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 110.00
+  },
+  {
+    "deviceName": "Notebook Acer Nitro 5",
+    "createdAt": "2023-06-01",
+    "client": {
+      "name": "Cláudia Alves",
+      "phoneNumber": "21970567054"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Photoshop",
+        "price": 50.00
+      }
+    ],
+    "totalPrice": 200.00
+  },
+  {
+    "createdAt": "2023-06-05",
+    "client": {
+      "name": "Cláudia Alves",
+      "phoneNumber": "21970567054"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de HDD",
+        "price": 50.00
+      }
+    ],
+    "totalPrice": 130.00
+  },
+  {
+    "issues": "PC apresentando problemas de boot ao ligá-lo",
+    "createdAt": "2023-05-01",
+    "client": {
+      "name": "Cristiane",
+      "phoneNumber": "21976649817"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 480GB",
+        "price": 225.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de SSD",
+        "price": 50.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 10 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 425.00
+  },
+  {
+    "deviceName": "Samsung Book X55",
+    "issues": "Tela quebrada",
+    "createdAt": "2024-03-14",
+    "client": {
+      "name": "Cristina",
+      "phoneNumber": "21988664262"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Tela 15.6 LED Slim NT156WHM-N44 V8.0",
+        "price": 309.90,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de tela",
+        "price": 100.00
+      }
+    ],
+    "totalPrice": 409.90
+  },
+  {
+    "deviceName": "Optiplex 390",
+    "deviceSN": "1171290860",
+    "issues": "Computador com problemas na inicialização",
+    "createdAt": "2023-09-06",
+    "client": {
+      "name": "Danielle",
+      "phoneNumber": "21998522125"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de Armazenamento",
+        "price": 60.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação de SSD",
+        "price": 60.00
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 240Gb",
+        "price": 225.04,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 200.00
+  },
+  {
+    "createdAt": "2023-05-29",
+    "client": {
+      "name": "Davi",
+      "phoneNumber": "21968124848"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "2 x Fans Coolermaster Sickleflow 120mm",
+        "price": 100.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "2 x Fans Coolermaster Sickleflow 140mm",
+        "price": 120.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem Completa",
+        "price": 250.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 10",
+        "price": 60.00
+      }
+    ],
+    "totalPrice": 530.00
+  },
+  {
+    "deviceName": "HP EliteBook 745",
+    "issues": "Fan do notebook defeituoso fazendo barulho",
+    "createdAt": "2023-06-27",
+    "client": {
+      "name": "Elisa",
+      "phoneNumber": "21975592512"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa Cliente",
+        "price": 11.55,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza completa",
+        "price": 80.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Fan de notebook",
+        "price": 77.75,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa",
+        "price": 12.08,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 103.63
+  },
+  {
+    "createdAt": "2024-01-21",
+    "client": {
+      "name": "Gabriel",
+      "phoneNumber": "21965611572"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem do PC",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 180.0
+  },
+  {
+    "deviceName": "Cartão SD",
+    "issues": "Corrompido",
+    "createdAt": "2024-05-19",
+    "client": {
+      "name": "Gabriel Vitiello",
+      "phoneNumber": "21982908183"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Recuperação de arquivos",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Restauração do sistema de arquivos do SD",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 160.00
+  },
+  {
+    "deviceName": "Tablet Samsung GT-P5100",
+    "issues": "Tablet não conecta no wi-fi nem acessa Youtube",
+    "createdAt": "2024-02-14",
+    "client": {
+      "name": "Gisele",
+      "phoneNumber": "21992865833"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 80.00
+  },
+  {
+    "issues": "Sujeira acumulada",
+    "createdAt": "2024-03-18",
+    "client": {
+      "name": "Guilherme",
+      "phoneNumber": "21988551608"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza completa",
+        "price": 100.00
+      }
+    ],
+    "totalPrice": 100.00
+  },
+  {
+    "issues": "Sistema lento",
+    "createdAt": "2024-03-18",
+    "client": {
+      "name": "Guilherme",
+      "phoneNumber": "21988551608"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 480GB",
+        "price": 189.42,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Clonagem de dados de HDD para SSD",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 269.42
+  },
+  {
+    "createdAt": "2024-05-28",
+    "client": {
+      "name": "Guilherme",
+      "phoneNumber": "21988551608"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem do PC",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza de PC",
+        "price": 100.00
+      }
+    ],
+    "totalPrice": 280.0
+  },
+  {
+    "createdAt": "2023-11-08",
+    "client": {
+      "name": "Guilherme Araújo",
+      "phoneNumber": "21964814150"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 240Gb",
+        "price": 80.0,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11",
+        "price": 60.0
+      }
+    ],
+    "totalPrice": 140.0
+  },
+  {
+    "createdAt": "2023-10-18",
+    "client": {
+      "name": "João Marcos",
+      "phoneNumber": "21984744263"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de pasta térmica",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de fonte",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza completa",
+        "price": 100.00
+      }
+    ],
+    "totalPrice": 250.00
+  },
+  {
+    "issues": "Problema na placa mãe, troca de placa, processador e cooler",
+    "createdAt": "2023-11-17",
+    "client": {
+      "name": "João Marcos",
+      "phoneNumber": "21984744263"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem completa",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 80.00
+  },
+  {
+    "deviceName": "B450M-A Pro Max/Ryzen 5500",
+    "issues": "Placa mãe com problema no conector RJ45",
+    "createdAt": "2023-12-01",
+    "client": {
+      "name": "João Marcos",
+      "phoneNumber": "21984744263"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de placa mãe",
+        "price": 0.0
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD NVME Sata Kingston 480Gb",
+        "price": 100.00,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 100.00
+  },
+  {
+    "createdAt": "2024-03-04",
+    "client": {
+      "name": "João Vitor",
+      "phoneNumber": "21970979227"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem do PC",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 180.0
+  },
+  {
+    "deviceName": "Notebook Samsung Essentials NP340XAA-KF3BR",
+    "issues": "Sistema lento",
+    "createdAt": "2024-05-31",
+    "client": {
+      "name": "Joeber",
+      "phoneNumber": "21979147991"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD 240Gb Kingston",
+        "price": 176.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação do SSD",
+        "price": 60.00
+      }
+    ],
+    "totalPrice": 236.00
+  },
+  {
+    "issues": "Sistema lento",
+    "createdAt": "2024-03-18",
+    "client": {
+      "name": "Guilherme",
+      "phoneNumber": "21988551608"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 480GB",
+        "price": 189.42,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Clonagem de dados de HDD para SSD",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 269.42
+  },
+  {
+    "deviceName": "Samsung",
+    "issues": "Computador lento",
+    "createdAt": "2024-01-06",
+    "client": {
+      "name": "Lenita",
+      "phoneNumber": "21997831370"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 240Gb",
+        "price": 129.98,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados do HDD",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação do SSD",
+        "price": 70.00
+      }
+    ],
+    "totalPrice": 279.98
+  },
+  {
+    "deviceName": "PC",
+    "issues": "PC pisca a luz de HD rapidamente e desliga logo em seguida",
+    "createdAt": "2024-06-12",
+    "client": {
+      "name": "Marcelo",
+      "phoneNumber": "21998159699"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Aerocool Bivolt 350W VX-350 EN57181",
+        "price": 149.99,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de fonte",
+        "price": 60.00
+      }
+    ],
+    "totalPrice": 209.99
+  },
+  {
+    "deviceName": "HP Pro Desk 400 G7",
+    "createdAt": "2024-05-28",
+    "client": {
+      "name": "Marcelo dos Santos Oliveira",
+      "phoneNumber": "21964159271"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "HP Pro Desk 400 G7",
+        "price": 300.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston NVME 240Gb",
+        "price": 160.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Memória RAM 4Gb DDR4",
+        "price": 40.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa Cliente",
+        "price": 16.00,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 516.00
+  },
+  {
+    "issues": "Computador liga e desliga logo em seguida e bateria CMOS descarregada",
+    "createdAt": "2024-03-25",
+    "client": {
+      "name": "Marcelo",
+      "phoneNumber": "21998159699"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Bateria Duracell Lítio 2032",
+        "price": 17.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca da bateria CMOS",
+        "price": 60.00
+      }
+    ],
+    "totalPrice": 77.00
+  },
+  {
+    "deviceName": "Lenovo Ideapad Z470",
+    "issues": "Notebook superaquecendo ao ligar",
+    "createdAt": "2023-07-15",
+    "client": {
+      "name": "Marco",
+      "phoneNumber": "21998012881"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza completa",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa",
+        "price": 15.88,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 115.88
+  },
+  {
+    "deviceName": "LG N450",
+    "issues": "Teclado com problemas nas teclas",
+    "createdAt": "2023-07-18",
+    "client": {
+      "name": "Marco",
+      "phoneNumber": "21998012881"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Teclado LG2",
+        "price": 86.69,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca do teclado",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa Cliente -> Casa",
+        "price": 15.04,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 85.04
+  },
+  {
+    "deviceName": "Dell Inspiron N4030",
+    "issues": "Fonte ruim",
+    "createdAt": "2024-01-14",
+    "client": {
+      "name": "Marina",
+      "phoneNumber": "21979794554"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Fonte Carregador Dell Inspiron N4030",
+        "price": 84.49,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 84.49
+  },
+  {
+    "deviceName": "Dell Inspiron N4030",
+    "issues": "Computador lento",
+    "createdAt": "2024-01-15",
+    "client": {
+      "name": "Marina",
+      "phoneNumber": "21979794554"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD WD 240Gb",
+        "price": 150.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Fonte Inspiron N4030",
+        "price": 84.49,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de HD",
+        "price": 60.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Desconto",
+        "description": "Diferença do valor do SSD",
+        "price": 36.02
+      }
+    ],
+    "totalPrice": 183.98
+  },
+  {
+    "issues": "PC apresentando problemas de boot ao ligá-lo",
+    "createdAt": "2023-05-01",
+    "client": {
+      "name": "Rafaella",
+      "phoneNumber": "21988012515"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston 240GB",
+        "price": 149.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Adaptador Caddy para HDD",
+        "price": 25.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de SSD",
+        "price": 50.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 10 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 374.00
+  },
+  {
+    "issues": "Análise de notebooks para colocá-los para funcionar",
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Recuperação de dados do HDD",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação do Windows 10 + Pacote Office 1",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Recuperação de dados do HDD",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação do Windows 10 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 320.00,
+    "client": {
+      "name": "Sônia",
+      "phoneNumber": "21991160618"
+    },
+    "createdAt": "2023-05-01"
+  },
+  {
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Placa Mãe MSI B560M PRO-E",
+        "price": 591.35,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Processador Intel Core i5-10400F",
+        "price": 685.39,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Placa de Vídeo RX 6600 CLD 8G ASRock AMD Radeon, 8GB",
+        "price": 1274.35,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Gabinete Gamer Rise Mode Glass 06X",
+        "price": 176.46,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Clamper Energia 5 Tomadas",
+        "price": 44.90,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Montagem do PC",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      }
+    ],
+    "totalPrice": 180.00,
+    "client": {
+      "name": "Tiago",
+      "phoneNumber": "21970656348"
+    },
+    "createdAt": "2024-01-03"
+  },
+  {
+    "deviceName": "B560M-Pro E / i5-10400F",
+    "issues": "Memórias incompatíveis",
+    "createdAt": "2023-12-02",
+    "client": {
+      "name": "Tiago",
+      "phoneNumber": "21970656348"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "2 x Memória RAM 8GB Kingston HyperX Fury",
+        "price": 240.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Centro",
+        "price": 10.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Centro -> Casa",
+        "price": 10.00,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 260.00
+  },
+  {
+    "deviceName": "Dell Inspiron Latitude 3440",
+    "issues": "Computador liga e desliga logo em seguida: bateria CMOS descarregada",
+    "createdAt": "2024-04-05",
+    "client": {
+      "name": "Vanessa",
+      "phoneNumber": "21999999999"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 100.00
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Bateria CMOS 2032",
+        "price": 5.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Troca de bateria CMOS",
+        "price": 60.00
+      }
+    ],
+    "totalPrice": 165.00
+  },
+  {
+    "deviceName": "Positivo Motion Q464C",
+    "issues": "Sistema lento no geral e wi-fi não funcionando",
+    "createdAt": "2023-06-30",
+    "client": {
+      "name": "Vanja",
+      "phoneNumber": "21998164723"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Cliente",
+        "price": 11.28,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de armazenamento",
+        "price": 50.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Conserto módulo wi-fi",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa cliente -> Casa",
+        "price": 12.51,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 293.79
+  },
+  {
+    "deviceName": "Compaq CQ-23",
+    "issues": "Sistema lento no geral",
+    "createdAt": "2023-07-02",
+    "client": {
+      "name": "Vanja",
+      "phoneNumber": "21998164723"
+    },
+    "orderItems": [
+      {
+        "orderItemType": "Transporte Ida",
+        "description": "Casa -> Casa cliente",
+        "price": 11.38,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "SSD Kingston",
+        "price": 100.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "HD Externo 1TB",
+        "price": 276.79,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Compra de Peça",
+        "description": "Adaptador Caddy",
+        "price": 38.90,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Backup de dados",
+        "price": 70.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Formatação de armazenamento",
+        "price": 50.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação Windows 11 + Pacote Office",
+        "price": 80.00
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Limpeza completa",
+        "price": 80.00,
+        "showInListAll": false
+      },
+      {
+        "orderItemType": "Mão de Obra",
+        "description": "Instalação adaptador caddy",
+        "price": 50.00
+      },
+      {
+        "orderItemType": "Transporte Volta",
+        "description": "Casa cliente -> Casa",
+        "price": 19.31,
+        "showInListAll": false
+      }
+    ],
+    "totalPrice": 461.11
+  }
+]
