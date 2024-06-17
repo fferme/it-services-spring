@@ -29,16 +29,16 @@ public class ClientController {
 	private ClientService clientService;
 
 	@GetMapping
-	@Operation(summary = "Recupera lista de clientes", method = "GET")
+	@Operation(summary = "Retrieve list of clients", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar lista de clientes",
+				responseCode = "200", description = "Successfully retrieved list of clients",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))
 				}),
-			@ApiResponse(responseCode = "400", description = "Erro ao realizar requisição", content = @Content()),
+			@ApiResponse(responseCode = "400", description = "Bad request", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -47,16 +47,16 @@ public class ClientController {
 		return ResponseEntity.ok(clients);
 	}
 
-	@Operation(summary = "Recupera cliente pelo ID", method = "GET")
+	@Operation(summary = "Retrieve client by ID", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar cliente pelo id",
+				responseCode = "200", description = "Successfully retrieved client by ID",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "400", description = "ID informado inválido", content = @Content()),
-			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "400", description = "Invalid ID provided", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Client not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -69,16 +69,16 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Recupera cliente pelo nome", method = "GET")
+	@Operation(summary = "Retrieve client by name", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar cliente pelo nome",
+				responseCode = "200", description = "Successfully retrieved client by name",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "400", description = "Nome informado inválido", content = @Content()),
-			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com nome informado", content = @Content()),
+			@ApiResponse(responseCode = "400", description = "Invalid name provided", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Client not found with the provided name", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -91,16 +91,16 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Recupera cliente pelo nome e celular", method = "GET")
+	@Operation(summary = "Retrieve client by name and phone number", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar cliente pelo nome e celular",
+				responseCode = "200", description = "Successfully retrieved client by name and phone number",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "400", description = "Nome e celular informado inválido", content = @Content()),
-			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com nome e celular informados", content = @Content()),
+			@ApiResponse(responseCode = "400", description = "Invalid name and phone number provided", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Client not found with the provided name and phone number", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -113,15 +113,15 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Salva novo cliente", method = "POST")
+	@Operation(summary = "Save a new client", method = "POST")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao gravar cliente no banco",
+				responseCode = "201", description = "Successfully saved client to the database",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -131,15 +131,15 @@ public class ClientController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdClientDTO);
 	}
 
-	@Operation(summary = "Atualiza cliente existente", method = "PUT")
+	@Operation(summary = "Update an existing client", method = "PUT")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao atualizar cliente no banco",
+				responseCode = "200", description = "Successfully updated client in the database",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Client not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -152,15 +152,15 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Deleta cliente existente", method = "DELETE")
+	@Operation(summary = "Delete an existing client", method = "DELETE")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "204", description = "Cliente deletado e não encontrado",
+				responseCode = "204", description = "Client deleted and not found",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "404", description = "Cliente não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Client not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -170,14 +170,14 @@ public class ClientController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Deleta todos clientes existentes", method = "DELETE")
+	@Operation(summary = "Delete all existing clients", method = "DELETE")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "204", description = "Cliente deletados e não encontrados",
+				responseCode = "204", description = "Clients deleted and not found",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -187,15 +187,15 @@ public class ClientController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Importa clientes de arquivo e salva no banco", method = "GET")
+	@Operation(summary = "Import clients from file and save to the database", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao gravar clientes no banco",
+				responseCode = "201", description = "Successfully saved clients to the database",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})

@@ -28,15 +28,15 @@ import java.util.UUID;
 public class OrderController {
 	private OrderService orderService;
 
-	@Operation(summary = "Recupera lista de pedidos", method = "GET")
+	@Operation(summary = "Retrieve list of orders", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar lista de pedidos",
+				responseCode = "200", description = "Successfully retrieved list of orders",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))
 				}),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -46,16 +46,16 @@ public class OrderController {
 		return ResponseEntity.ok(ordersDTO);
 	}
 
-	@Operation(summary = "Recupera pedido pelo ID", method = "GET")
+	@Operation(summary = "Retrieve order by ID", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "200", description = "Sucesso ao recuperar pedido pelo id",
+				responseCode = "200", description = "Successfully retrieved order by ID",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))}),
-			@ApiResponse(responseCode = "400", description = "ID informado inválido", content = @Content()),
-			@ApiResponse(responseCode = "404", description = "Pedido não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "400", description = "Invalid ID provided", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Order not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -68,15 +68,15 @@ public class OrderController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Cria novo pedido", method = "POST")
+	@Operation(summary = "Create a new order", method = "POST")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao criar pedido",
+				responseCode = "201", description = "Successfully created order",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))}),
-			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -86,15 +86,15 @@ public class OrderController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderDTO);
 	}
 
-	@Operation(summary = "Atualiza pedido existente", method = "PUT")
+	@Operation(summary = "Update an existing order", method = "PUT")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao atualizar pedido",
+				responseCode = "201", description = "Successfully updated order",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))}),
-			@ApiResponse(responseCode = "404", description = "Pedido não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Order not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -106,15 +106,15 @@ public class OrderController {
 			: ResponseEntity.notFound().build();
 	}
 
-	@Operation(summary = "Deleta pedido existente", method = "DELETE")
+	@Operation(summary = "Delete an existing order", method = "DELETE")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "204", description = "Pedido deletado com sucesso",
+				responseCode = "204", description = "Order successfully deleted",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))}),
-			@ApiResponse(responseCode = "404", description = "Pedido não encontrado com ID informado", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Order not found with the provided ID", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -124,14 +124,14 @@ public class OrderController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Deleta todos pedidos existentes", method = "DELETE")
+	@Operation(summary = "Delete all existing orders", method = "DELETE")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "204", description = "Pedidos deletados com sucesso",
+				responseCode = "204", description = "Orders successfully deleted",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class))}),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
@@ -141,15 +141,15 @@ public class OrderController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@Operation(summary = "Importa ordens de serviço de arquivo e salva no banco", method = "GET")
+	@Operation(summary = "Import orders from file and save to the database", method = "GET")
 	@ApiResponses(
 		value = {
 			@ApiResponse(
-				responseCode = "201", description = "Sucesso ao gravar ordens de serviço no banco",
+				responseCode = "201", description = "Successfully saved orders to the database",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Client.class))}),
-			@ApiResponse(responseCode = "404", description = "Requisição não encontrada", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
 			@ApiResponse(
-				responseCode = "500", description = "Erro interno do servidor",
+				responseCode = "500", description = "Internal server error",
 				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
 				})
 		})
