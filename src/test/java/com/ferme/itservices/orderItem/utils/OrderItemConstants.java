@@ -32,6 +32,7 @@ public class OrderItemConstants {
 		OrderItemType.CARRIAGE_GOING,
 		"Ilha da Mantiqueira -> Ilha da Gigóia",
 		25.0,
+		false,
 		null
 	);
 	public final OrderItemDTO ORDERITEM_DTO = toOrderItemDTO(ORDERITEM);
@@ -60,6 +61,7 @@ public class OrderItemConstants {
 				OrderItemType.CARRIAGE_GOING,
 				"Ilha da Mantiqueira -> Ilha da Gigóia",
 				25.0,
+				false,
 				null
 			));
 			add(new OrderItem(
@@ -67,6 +69,7 @@ public class OrderItemConstants {
 				OrderItemType.CARRIAGE_BACK,
 				"Méier -> Cachambi",
 				35.0,
+				false,
 				null
 			));
 			add(new OrderItem(
@@ -74,6 +77,7 @@ public class OrderItemConstants {
 				OrderItemType.MANPOWER,
 				"Troca de SSD",
 				80.0,
+				true,
 				null
 			));
 		}
