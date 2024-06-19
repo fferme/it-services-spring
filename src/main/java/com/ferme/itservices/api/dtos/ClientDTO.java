@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,5 +41,5 @@ public record ClientDTO(
 
 	@Embedded
 	AuditInfo auditInfo
-) {
+) implements Serializable {
 }

@@ -12,6 +12,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ public class OrderItemService {
 	private final OrderItemRepository orderItemRepository;
 
 	@Transactional(readOnly = true)
+	@Cacheable(value = "orderItemsList")
 	public List<OrderItemDTO> listAll() {
 		List<OrderItem> orderItems = orderItemRepository.findAll();
 
@@ -41,6 +45,7 @@ public class OrderItemService {
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "orderItem", key = "#id")
 	public OrderItemDTO findById(@Valid @NotNull UUID id) {
 		OrderItem orderItem = orderItemRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id.toString()));
@@ -49,6 +54,7 @@ public class OrderItemService {
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "orderItem", key = "#description")
 	public OrderItemDTO findByDescription(@NotBlank String description) {
 		OrderItem orderItem = orderItemRepository.findByDescription(description)
 			.orElseThrow(() -> new RecordNotFoundException(OrderItem.class, description));
@@ -57,6 +63,8 @@ public class OrderItemService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "orderItemsList", allEntries = true)
+	@CachePut(value = "orderItem", key = "#result.id")
 	public OrderItemDTO create(OrderItemDTO orderItemDTO) {
 		OrderItem orderItem = OrderItemMapper.toOrderItem(orderItemDTO);
 
@@ -64,6 +72,8 @@ public class OrderItemService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "orderItemsList", allEntries = true)
+	@CachePut(value = "orderItem", key = "#id")
 	public OrderItemDTO update(@NotNull UUID id, @Valid @NotNull OrderItemDTO updatedOrderItemDTO) {
 		return orderItemRepository.findById(id)
 			.map(orderItemFound -> {
@@ -79,6 +89,7 @@ public class OrderItemService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"orderItem", "orderItemsList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		orderItemRepository.deleteById(id);
 	}
@@ -90,6 +101,7 @@ public class OrderItemService {
 
 	@Generated
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"orderItem", "orderItemsList"}, allEntries = true)
 	public List<OrderItemDTO> exportDataToOrderItem() {
 		List<OrderItem> orderItems = orderItemRepository.saveAll(
 			readJsonData("src/main/resources/entities/orderItems.json", new TypeReference<List<OrderItem>>() { })

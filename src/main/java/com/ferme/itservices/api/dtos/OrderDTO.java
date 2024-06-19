@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -48,5 +49,5 @@ public record OrderDTO(
 
 	@Embedded
 	AuditInfo auditInfo
-) {
+) implements Serializable {
 }

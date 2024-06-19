@@ -11,6 +11,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Generated;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,7 @@ public class ClientService {
 	private final ClientRepository clientRepository;
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "clientsList")
 	public List<ClientDTO> listAll() {
 		List<Client> clients = clientRepository.findAll();
 
@@ -39,6 +43,7 @@ public class ClientService {
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "client", key = "#id")
 	public ClientDTO findById(@Valid @NotNull UUID id) {
 		Client client = clientRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
@@ -47,6 +52,7 @@ public class ClientService {
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "client", key = "#name")
 	public ClientDTO findByName(@NotBlank String name) {
 		Client client = clientRepository.findByName(name)
 			.orElseThrow(() -> new RecordNotFoundException(Client.class, name));
@@ -55,6 +61,7 @@ public class ClientService {
 	}
 
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	@Cacheable(value = "client", key = "{#name, #phoneNumber}")
 	public ClientDTO findByNameAndPhoneNumber(@NotBlank String name, @NotBlank String phoneNumber) {
 		Client client = clientRepository.findByNameAndPhoneNumber(name, phoneNumber)
 			.orElseThrow(() -> new RecordNotFoundException(Client.class, name));
@@ -63,11 +70,15 @@ public class ClientService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "clientsList", allEntries = true)
+	@CachePut(value = "client", key = "#result.id")
 	public ClientDTO create(ClientDTO clientDTO) {
 		return ClientMapper.toClientDTO(clientRepository.save(ClientMapper.toClient(clientDTO)));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "clientsList", allEntries = true)
+	@CachePut(value = "client", key = "#id")
 	public ClientDTO update(@NotNull UUID id, @Valid @NotNull ClientDTO newClientDTO) {
 		return clientRepository.findById(id)
 			.map(clientFound -> {
@@ -83,11 +94,13 @@ public class ClientService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"client", "clientsList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		clientRepository.deleteById(id);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"client", "clientsList"}, allEntries = true)
 	public void deleteAll() {
 		clientRepository.deleteAll();
 	}

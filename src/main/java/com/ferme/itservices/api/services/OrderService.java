@@ -19,6 +19,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +49,7 @@ public class OrderService {
 	}
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	@Cacheable(value = "ordersList")
 	public OrderDTO findById(@Valid @NotNull UUID id) {
 		Order order = orderRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
@@ -54,6 +58,8 @@ public class OrderService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "ordersList", allEntries = true)
+	@CachePut(value = "order", key = "#result.id")
 	public OrderDTO create(OrderDTO orderDTO) {
 		Client client;
 		ClientDTO orderClientDTO = orderDTO.clientDTO();
@@ -104,6 +110,8 @@ public class OrderService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "ordersList", allEntries = true)
+	@CachePut(value = "order", key = "#id")
 	public OrderDTO update(@NotNull UUID id, @Valid @NotNull OrderDTO updatedOrderDTO) {
 		return orderRepository.findById(id)
 			.map(orderFound -> {
@@ -120,11 +128,13 @@ public class OrderService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"order", "ordersList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		orderRepository.deleteById(id);
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = {"order", "ordersList"}, allEntries = true)
 	public void deleteAll() {
 		orderRepository.deleteAll();
 	}

@@ -14,6 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,4 +42,4 @@ public record OrderItemDTO(
 
 	@Embedded
 	AuditInfo auditInfo
-) { }
+) implements Serializable { }
