@@ -15,6 +15,12 @@ services:
         volumes:
             - ${PC_DATABASE_PATH}:${CONTAINER_PATH}
 
+    redisdb:
+        container_name: redis
+        image: redis
+        ports:
+            - ${REDIS_LOCAL_PORT}:${REDIS_DOCKER_PORT}
+
     app:
         container_name: app
         depends_on:
