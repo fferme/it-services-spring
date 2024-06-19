@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ferme.itservices.api.enums.OrderItemType;
 import com.ferme.itservices.api.enums.converter.OrderItemTypeConverter;
 import com.ferme.itservices.api.models.Order;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Builder
+@Embeddable
 public record OrderItemDTO(
 	UUID id,
 
@@ -33,5 +37,8 @@ public record OrderItemDTO(
 	Boolean showInListAll,
 
 	@JsonIgnore
-	List<Order> orders
+	List<Order> orders,
+
+	@Embedded
+	AuditInfo auditInfo
 ) { }

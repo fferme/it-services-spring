@@ -37,7 +37,8 @@ public abstract class ClientMapper {
 					null,
 					null,
 					order.getTotalPrice(),
-					order.getCreatedAt()
+					order.getEmitedAt(),
+					order.getAuditInfo()
 				))
 				.toList();
 		}
@@ -49,7 +50,8 @@ public abstract class ClientMapper {
 			client.getNeighborhood(),
 			client.getAddress(),
 			ordersDTO,
-			client.getReference()
+			client.getReference(),
+			client.getAuditInfo()
 		);
 	}
 

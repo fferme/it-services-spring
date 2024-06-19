@@ -42,7 +42,7 @@ public abstract class OrderMapper {
 		order.setClient(client);
 		order.setOrderItems(orderItems);
 		order.setTotalPrice(orderDTO.totalPrice());
-		order.setCreatedAt(orderDTO.createdAt());
+		order.setEmitedAt(orderDTO.emitedAt());
 
 		return order;
 	}
@@ -59,7 +59,8 @@ public abstract class OrderMapper {
 				orderClient.getPhoneNumber(),
 				orderClient.getNeighborhood(),
 				orderClient.getAddress(), null,
-				orderClient.getReference()
+				orderClient.getReference(),
+				orderClient.getAuditInfo()
 			);
 		}
 
@@ -73,7 +74,8 @@ public abstract class OrderMapper {
 					orderItem.getDescription(),
 					orderItem.getPrice(),
 					orderItem.getShowInListAll(),
-					null
+					null,
+					orderItem.getAuditInfo()
 				))
 				.toList();
 		}
@@ -87,7 +89,8 @@ public abstract class OrderMapper {
 			clientDTO,
 			orderItemDTOs,
 			order.getTotalPrice(),
-			order.getCreatedAt()
+			order.getEmitedAt(),
+			order.getAuditInfo()
 		);
 	}
 

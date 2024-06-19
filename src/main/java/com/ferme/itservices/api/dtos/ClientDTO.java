@@ -1,6 +1,9 @@
 package com.ferme.itservices.api.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Builder
+@Embeddable
 public record ClientDTO(
 	UUID id,
 
@@ -32,6 +36,9 @@ public record ClientDTO(
 	List<OrderDTO> ordersDTO,
 
 	@Size(max = 70)
-	String reference
+	String reference,
+
+	@Embedded
+	AuditInfo auditInfo
 ) {
 }

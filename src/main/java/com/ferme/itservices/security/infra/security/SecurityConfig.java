@@ -1,9 +1,10 @@
 package com.ferme.itservices.security.infra.security;
 
+import com.ferme.itservices.security.auditing.services.ApplicationAuditAware;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @AllArgsConstructor
@@ -33,7 +33,7 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests((requests) -> requests
 				.requestMatchers(mvcMatcherBuilder.pattern("/auth/login")).permitAll()
-				.requestMatchers(mvcMatcherBuilder.pattern("/auth/**")).hasRole("ADMIN")
+				.requestMatchers(mvcMatcherBuilder.pattern("/auth/**")).permitAll()
 				.requestMatchers(mvcMatcherBuilder.pattern("/api/**")).hasRole("ADMIN")
 
             .requestMatchers(mvcMatcherBuilder.pattern("/v3/api-docs/**")).permitAll()
@@ -52,5 +52,10 @@ public class SecurityConfig {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean()
+	public AuditorAware<String> auditorAware() {
+		return new ApplicationAuditAware();
 	}
 }

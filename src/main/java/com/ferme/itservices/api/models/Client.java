@@ -1,15 +1,19 @@
 package com.ferme.itservices.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
+import com.ferme.itservices.security.auditing.services.ApplicationAuditAware;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +25,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity(name = "clients")
 @Table(name = "clients")
+@EntityListeners(AuditingEntityListener.class)
 public class Client implements Serializable {
 	@Setter
 	@Id
@@ -60,4 +65,25 @@ public class Client implements Serializable {
 	@Size(max = 70)
 	@Column(length = 70)
 	private String reference;
+
+	@Embedded
+	private AuditInfo auditInfo;
+
+	@PrePersist
+	public void prePersist() {
+		if (auditInfo == null) { auditInfo = new AuditInfo(); }
+		ApplicationAuditAware applicationAuditAware = new ApplicationAuditAware();
+
+		auditInfo.setCreatedAt(LocalDateTime.now());
+		auditInfo.setCreatedBy(applicationAuditAware.getCurrentAuditor().orElse("System"));
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		if (auditInfo == null) { auditInfo = new AuditInfo(); }
+		ApplicationAuditAware applicationAuditAware = new ApplicationAuditAware();
+
+		auditInfo.setUpdatedAt(LocalDateTime.now());
+		auditInfo.setUpdatedBy(applicationAuditAware.getCurrentAuditor().orElse("System"));
+	}
 }
