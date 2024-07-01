@@ -1,109 +1,53 @@
 %=====================================================================
  % Na introdução deve-se utilizar \chapter* e \section* 
-\chapter*{Introdução}
+\chapter*{1. Introdução}
 %=====================================================================
 
+\section*{1.1 Apresentação}
+
+Este trabalho se propõe a facilitar a realização  do registro de clientes, ordens e ordens de serviço por parte do prestador de serviço responsável. A aplicação é construída seguindo o paradigma CRUD (Create, Read, Update, Delete), que permite a manipulação eficiente dos dados armazenados.
+
+Para a implementação do projeto, foi utilizado o framework Java Spring Boot, que facilita o desenvolvimento de aplicações robustas e escaláveis. O versionamento de código é gerenciado pelo Git e GitHub, garantindo um controle eficiente das versões e a colaboração entre desenvolvedores.
+
+O projeto utiliza Docker para a criação de ambientes de desenvolvimento e testes consistentes, e H2 como banco de dados de teste. Para o banco de dados de produção, foi adotado uma solução SQL integrada ao Docker. A qualidade do código é assegurada por meio de testes automatizados com JUnit, cobertura de testes com Jacoco e mutação de testes com Pitest. Maven é utilizado como gerenciador de dependências, facilitando a gestão e atualização das bibliotecas necessárias.
+
+A aplicação adota a abordagem de serviços RESTful, garantindo uma comunicação eficiente e padronizada entre os componentes do sistema. A segurança é reforçada com a implementação de autenticação e autorização utilizando tokens JWT (JSON Web Token), que protegem os recursos da aplicação de acessos não autorizados. Além disso, o projeto incorpora o uso de um servidor de cache com Redis, melhorando significativamente o desempenho da aplicação.
+
+A aplicação desenvolvida é altamente adaptável e customizável, podendo ser ajustada conforme as necessidades específicas de diferentes tipos de negócios. Isso a torna uma ferramenta versátil e escalável, adequada para diversas empresas no ramo da tecnologia, que buscam otimizar seus processos de registro e gerenciamento de clientes e serviços.
+\\\\\\\\\\\\
+\section*{1.2 Justificativa}
+
+No atual cenário tecnológico, a gestão eficiente de informações é crucial para profissionais de TI, que lidam diariamente com uma vasta quantidade de dados, desde registros de clientes até ordens de serviço. A necessidade de um sistema robusto e confiável para gerenciar essas informações é imperativa, garantindo que todos os dados relevantes sejam armazenados de forma segura e acessível.
+
+Profissionais de TI enfrentam desafios constantes relacionados à organização e manutenção de dados críticos. A falta de uma ferramenta adequada para gerenciar esses dados pode resultar em perda de informações, dificuldades no acesso e processamento de dados, além de problemas de segurança e conformidade. Um sistema bem estruturado é essencial para minimizar esses riscos e melhorar a eficiência operacional.
+
+O próprio armazenamento de tais informações faz parte de um dos paradigmas do programador que é versionar todos os códigos. Ao conseguir manter e armazenar o histórico de ordens de serviço e clientes, o prestador de serviço é capaz de prestar um atendimento totalmente atencioso e personalizado (já que ele irá saber o que foi alterado no passado e possíveis preferências do cliente).\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+\section*{1.3 Objetivos}
+
+\section*{1.3.1 Objetivo geral}
+
+Desenvolver uma aplicação web robusta e eficiente para o registro e gerenciamento de clientes, ordens e ordens de serviço, utilizando a abordagem CRUD (Create, Read, Update, Delete) e adotando práticas de segurança e desempenho que atendam às necessidades de profissionais de TI.
+
+\section*{1.3.1 Objetivos específicos}
+
+Desenvolver uma API que permita a criação, leitura, atualização e exclusão de registros de clientes, ordens e ordens de serviço, garantindo a conformidade com os princípios REST para promover uma comunicação eficiente e padronizada entre os componentes do sistema.
+
+Implementar autenticação e autorização utilizando tokens JWT para proteger os dados contra acessos não autorizados, adotando práticas recomendadas de segurança para assegurar a integridade e confidencialidade das informações.
+
+Utilizar Git e GitHub para versionamento de código, promovendo a colaboração entre desenvolvedores e o controle de versões, e documentar a API de forma clara e acessível, utilizando ferramentas como Swagger, para facilitar a integração com outras aplicações.
+
+Implementar um servidor de cache com Redis para melhorar o tempo de resposta da aplicação, e realizar testes automatizados com JUnit e cobertura de testes com Jacoco para garantir a eficiência e a estabilidade do código.
+
+Realizar testes de mutação com Pitest para identificar e corrigir possíveis falhas no código, utilizando um banco de dados de teste H2 durante o desenvolvimento para simular condições reais e garantir a consistência dos dados.
+
+Utilizar Docker para a criação de ambientes de desenvolvimento e teste consistentes, facilitando a escalabilidade da aplicação, e garantir que a aplicação seja adaptável e customizável para atender às necessidades específicas de diferentes tipos de negócios.
+
+Desenvolver uma interface de usuário intuitiva e amigável que facilite a interação com a aplicação, proporcionando uma experiência eficiente e responsiva que atenda às expectativas dos profissionais de TI.
+
+\section*{1.4 Estrutura do Trabalho}
 
 
-Veja abaixo algumas dicas de utilização deste template:
-
---------------------------------------------------
-
-
-\red{Neste modelo, deve-se usar os comandos $\backslash$cite para citar o trabalho e $\backslash$citeonline para citar o autor!!! \textbf{Não utilize} $\backslash$citet ou $\backslash$citep. Veja abaixo alguns exemplos:}
-
-Citando o autor:
-
-Existem diversos trabalhos sobre escoamentos incompressíveis, dentre eles, podemos citar o trabalho de \citeonline{Munz:2003}, que desenvolveu....
-
-
-Citando o trabalho:
-
-A equação de compatibilidade deve ser verificada para a formulação matematicamente razoável \cite{Guermond:2003}. 
-
-
---------------------------------------------------
-
-Esse template já veio preparado para a utilização de comentários coloridos. Isso facilita bastante a revisão do texto junto com seus orientadores. Veja abaixo alguns exemplos de utilização:
-
-\red{Texto em vermelho.}
-
-\sred{Texto em vermelho sublinhado.}
-
-\blue{Texto em azul.}
-
-\sblue{Texto em azul sublinhado.}
-
-\green{Texto em verde.}
-
-\sgreen{Texto em verde sublinhado.}
-
-\orange{Texto em laranja.}
-
-\sorange{Texto em laranja sublinhado.}
-
-\sout{Texto cortado}
-
---------------------------------------------------
-
-Figuras e tabelas:
-
-Figuras e tabelas, de acordo com a norma ABNT, devem sempre ficar na parte superior da página. Esse template impõe isso automaticamente. 
-
---------------------------------------------------
-
-Verifique a hiphenização da palavra monumental abaixo: Para texto em português deve ser mo-numental. Para texto em inglês deve ser mon-umental
-
- xxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx teste de hiphenização: monumental bla bla bla
-
-
-
-
-
-\section*{Objetivo}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-
-\section*{Justificativa}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-
-
-\section*{Revisão Bibliográfica}
-
-
-
-Neste parágrafo, temos mais exemplos de citações. Os trabalhos \cite{Guermond:2006,Guermond:2003} explicam o método da projeção. O trabalho de \citeonline{Chorin:1968} é muito bom. Os trabalhos \cite{Munz:2003,Thomadakis:1996} também são muito bons. O trabalho \cite{cotta:1996} fala sobre...
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Something is being unveiled. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-
-
-
-Author recalls that happiness is better than sadness. On the other hand, points out that sadness can be overcame by happiness. Therefore, both authors have concluded that happiness is something really powerful.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-
-
-\section*{Organização da Dissertação/Tese}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 
 
