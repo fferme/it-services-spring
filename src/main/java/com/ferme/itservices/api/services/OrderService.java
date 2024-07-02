@@ -141,7 +141,7 @@ public class OrderService {
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public List<OrderDTO> importOrders() {
-		List<OrderDTO> ordersDTO = toOrderDTOList(readJsonData("src/main/resources/entities/orders.json", new TypeReference<List<Order>>() { }));
+		List<OrderDTO> ordersDTO = toOrderDTOList(readJsonData("src/main/resources/json_imports/orders.json", new TypeReference<List<Order>>() { }));
 		List<OrderDTO> createdOrdersDTO = new ArrayList<>();
 
 		for (OrderDTO orderDTO : ordersDTO) {
