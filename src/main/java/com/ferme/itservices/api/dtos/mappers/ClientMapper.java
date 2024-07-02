@@ -37,7 +37,6 @@ public abstract class ClientMapper {
 					null,
 					null,
 					order.getTotalPrice(),
-					order.getEmitedAt(),
 					order.getAuditInfo()
 				))
 				.toList();

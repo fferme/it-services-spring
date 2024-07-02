@@ -42,7 +42,6 @@ public abstract class OrderMapper {
 		order.setClient(client);
 		order.setOrderItems(orderItems);
 		order.setTotalPrice(orderDTO.totalPrice());
-		order.setEmitedAt(orderDTO.emitedAt());
 
 		return order;
 	}
@@ -89,7 +88,6 @@ public abstract class OrderMapper {
 			clientDTO,
 			orderItemDTOs,
 			order.getTotalPrice(),
-			order.getEmitedAt(),
 			order.getAuditInfo()
 		);
 	}
