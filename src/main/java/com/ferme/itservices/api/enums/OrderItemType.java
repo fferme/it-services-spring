@@ -18,11 +18,23 @@ public enum OrderItemType {
 	@JsonProperty("Mão de Obra")
 	MANPOWER("Mão de Obra"),
 
-	@JsonProperty("Transporte Ida")
-	CARRIAGE_GOING("Transporte Ida"),
+	@JsonProperty("Transporte Uber")
+	UBER_TRANSPORTATION("Transporte Uber"),
 
-	@JsonProperty("Transporte Volta")
-	CARRIAGE_BACK("Transporte Volta"),
+	@JsonProperty("Transporte Ônibus")
+	BUS_TRANSPORTATION("Transporte Ônibus"),
+
+	@JsonProperty("Transporte Trem")
+	TRAIN_TRANSPORTATION("Transporte Trem"),
+
+	@JsonProperty("Transporte Metrô")
+	SUBWAY_TRANSPORTATION("Transporte Metrô"),
+
+	@JsonProperty("Transporte Barco")
+	BOAT_TRANSPORTATION("Transporte Barco"),
+
+	@JsonProperty("Instalação App")
+	SOFTWARE_INSTALLATION("Instalação App"),
 
 	@JsonProperty("Desconto")
 	DISCOUNT("Desconto");
