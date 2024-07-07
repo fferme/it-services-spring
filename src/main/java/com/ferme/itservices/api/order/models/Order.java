@@ -88,7 +88,6 @@ public class Order implements Serializable {
 			auditInfo = new AuditInfo();
 			ApplicationAuditAware applicationAuditAware = new ApplicationAuditAware();
 
-			auditInfo.setCreatedAt(LocalDateTime.now());
 			auditInfo.setCreatedBy(applicationAuditAware.getCurrentAuditor().orElse("System"));
 			auditInfo.setUpdatedAt(null);
 			auditInfo.setUpdatedBy(null);
