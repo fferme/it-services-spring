@@ -7,6 +7,7 @@ import com.ferme.itservices.api.client.repositories.ClientRepository;
 import com.ferme.itservices.api.client.services.ClientService;
 import com.ferme.itservices.client.utils.ClientAssertions;
 import com.ferme.itservices.client.utils.ClientConstants;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -122,7 +123,8 @@ class ClientServiceTest {
 			"Tijuca",
 			"Rua Silva Perez 39/21",
 			null,
-			"Amigo do Jaca"
+			"Amigo do Jaca",
+			new AuditInfo()
 		);
 		final ClientDTO clientDTO = clientConstants.CLIENT_DTO;
 

@@ -3,6 +3,7 @@ package com.ferme.itservices.orderItem.utils;
 import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
 import com.ferme.itservices.api.orderItem.enums.OrderItemType;
 import com.ferme.itservices.api.orderItem.models.OrderItem;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,12 @@ public class OrderItemConstants {
 
 	public final OrderItem ORDERITEM = new OrderItem(
 		ORDERITEM_A_UUID,
-		OrderItemType.CARRIAGE_GOING,
+		OrderItemType.UBER_TRANSPORTATION,
 		"Ilha da Mantiqueira -> Ilha da Gigóia",
 		25.0,
 		false,
-		null
+		null,
+		new AuditInfo()
 	);
 	public final OrderItemDTO ORDERITEM_DTO = toOrderItemDTO(ORDERITEM);
 
@@ -58,19 +60,21 @@ public class OrderItemConstants {
 		{
 			add(new OrderItem(
 				ORDERITEM_A_UUID,
-				OrderItemType.CARRIAGE_GOING,
+				OrderItemType.BOAT_TRANSPORTATION,
 				"Ilha da Mantiqueira -> Ilha da Gigóia",
 				25.0,
 				false,
-				null
+				null,
+				new AuditInfo()
 			));
 			add(new OrderItem(
 				ORDERITEM_B_UUID,
-				OrderItemType.CARRIAGE_BACK,
+				OrderItemType.UBER_TRANSPORTATION,
 				"Méier -> Cachambi",
 				35.0,
 				false,
-				null
+				null,
+				new AuditInfo()
 			));
 			add(new OrderItem(
 				ORDERITEM_C_UUID,
@@ -78,7 +82,8 @@ public class OrderItemConstants {
 				"Troca de SSD",
 				80.0,
 				true,
-				null
+				null,
+				new AuditInfo()
 			));
 		}
 	};

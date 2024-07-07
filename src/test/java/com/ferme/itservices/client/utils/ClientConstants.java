@@ -2,6 +2,7 @@ package com.ferme.itservices.client.utils;
 
 import com.ferme.itservices.api.client.dtos.ClientDTO;
 import com.ferme.itservices.api.client.models.Client;
+import com.ferme.itservices.security.auditing.models.AuditInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,8 @@ public class ClientConstants {
 		"Tijuca",
 		"Rua Silva Perez 39/21",
 		null,
-		"Amigo do Jaca"
+		"Amigo do Jaca",
+		new AuditInfo()
 	);
 	public ClientDTO CLIENT_DTO = toClientDTO(CLIENT);
 
@@ -66,7 +68,8 @@ public class ClientConstants {
 				"Tijuca",
 				"Rua Silva Perez 39/21",
 				null,
-				"Amigo do Jaca"
+				"Amigo do Jaca",
+				new AuditInfo()
 			));
 			add(new Client(
 				CLIENT_B_UUID,
@@ -75,7 +78,8 @@ public class ClientConstants {
 				"Méier",
 				"Rua Adolfo 2334",
 				null,
-				"Irmão do Jorel"
+				"Irmão do Jorel",
+				new AuditInfo()
 			));
 			add(new Client(
 				CLIENT_C_UUID,
@@ -84,7 +88,8 @@ public class ClientConstants {
 				"Penha",
 				"Rua Silva Cruz 33/200",
 				null,
-				"Pai do Sandro"
+				"Pai do Sandro",
+				new AuditInfo()
 			));
 		}
 	};
