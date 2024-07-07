@@ -23,7 +23,7 @@ public class Price {
 				if (orderItem.getOrderItemType().equals(OrderItemType.DISCOUNT)) {
 					totalPrice -= orderItem.getPrice();
 				} else {
-					totalPrice += orderItem.getPrice();
+					totalPrice += (orderItem.getQuantity() * orderItem.getPrice());
 				}
 			}
 		}

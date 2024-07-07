@@ -8,10 +8,7 @@ import com.ferme.itservices.security.auditing.models.AuditInfo;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 
 import java.io.Serializable;
@@ -36,6 +33,9 @@ public record OrderItemDTO(
 
 	@NotNull
 	Boolean showInListAll,
+
+	@Positive
+	Integer quantity,
 
 	@JsonIgnore
 	List<Order> orders,

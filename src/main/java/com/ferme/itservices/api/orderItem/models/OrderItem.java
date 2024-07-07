@@ -7,17 +7,13 @@ import com.ferme.itservices.api.orderItem.enums.converter.OrderItemTypeConverter
 import com.ferme.itservices.security.auditing.models.AuditInfo;
 import com.ferme.itservices.security.auditing.services.ApplicationAuditAware;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.sql.Types;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +55,10 @@ public class OrderItem implements Serializable {
 	@NotNull
 	private Boolean showInListAll = true;
 
+	@Setter
+	@Positive
+	private Integer quantity = 1;
+
 	@JsonIgnore
 	@ManyToMany(mappedBy = "orderItems", fetch = FetchType.LAZY)
 	private List<Order> orders;
@@ -71,7 +71,6 @@ public class OrderItem implements Serializable {
 		if (auditInfo == null) { auditInfo = new AuditInfo(); }
 		ApplicationAuditAware applicationAuditAware = new ApplicationAuditAware();
 
-		auditInfo.setCreatedAt(LocalDateTime.now());
 		auditInfo.setCreatedBy(applicationAuditAware.getCurrentAuditor().orElse("System"));
 	}
 
@@ -80,7 +79,6 @@ public class OrderItem implements Serializable {
 		if (auditInfo == null) { auditInfo = new AuditInfo(); }
 		ApplicationAuditAware applicationAuditAware = new ApplicationAuditAware();
 
-		auditInfo.setUpdatedAt(LocalDateTime.now());
 		auditInfo.setUpdatedBy(applicationAuditAware.getCurrentAuditor().orElse("System"));
 	}
 }

@@ -312,15 +312,17 @@
     "orderItems": [
       {
         "orderItemType": "Compra de Peça",
-        "description": "2 x Fans Coolermaster Sickleflow 120mm",
+        "description": "Coolermaster Sickleflow 120mm",
         "price": 100.00,
-        "showInListAll": false
+        "showInListAll": false,
+        "quantity": 2
       },
       {
         "orderItemType": "Compra de Peça",
-        "description": "2 x Fans Coolermaster Sickleflow 140mm",
+        "description": "Fan Coolermaster Sickleflow 140mm",
         "price": 120.00,
-        "showInListAll": false
+        "showInListAll": false,
+        "quantity": 2
       },
       {
         "orderItemType": "Mão de Obra",
@@ -1125,9 +1127,10 @@
     "orderItems": [
       {
         "orderItemType": "Compra de Peça",
-        "description": "2 x Memória RAM 8GB Kingston HyperX Fury",
+        "description": "Memória RAM 8GB Kingston HyperX Fury",
         "price": 240.00,
-        "showInListAll": false
+        "showInListAll": false,
+        "quantity": 2
       },
       {
         "orderItemType": "Transporte Uber",
