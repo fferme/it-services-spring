@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 @Embeddable
@@ -37,5 +36,12 @@ public class AuditInfo implements Serializable {
 	@LastModifiedBy
 	@Column(insertable = false)
 	private String updatedBy;
+
+	public AuditInfo() {
+		this.createdAt = LocalDateTime.now();
+		this.createdBy = "System";
+		this.updatedAt = null;
+		this.updatedBy = "System";
+	}
 }
 
