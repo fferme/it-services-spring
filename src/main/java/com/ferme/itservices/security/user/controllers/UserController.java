@@ -1,6 +1,5 @@
 package com.ferme.itservices.security.user.controllers;
 
-import com.ferme.itservices.api.models.OrderItem;
 import com.ferme.itservices.security.user.models.User;
 import com.ferme.itservices.security.user.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;

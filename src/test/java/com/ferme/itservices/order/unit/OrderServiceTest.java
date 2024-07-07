@@ -1,12 +1,12 @@
 package com.ferme.itservices.order.unit;
 
-import com.ferme.itservices.api.dtos.OrderDTO;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.Order;
-import com.ferme.itservices.api.repositories.ClientRepository;
-import com.ferme.itservices.api.repositories.OrderItemRepository;
-import com.ferme.itservices.api.repositories.OrderRepository;
-import com.ferme.itservices.api.services.OrderService;
+import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.client.repositories.ClientRepository;
+import com.ferme.itservices.api.order.dtos.OrderDTO;
+import com.ferme.itservices.api.order.models.Order;
+import com.ferme.itservices.api.order.repositories.OrderRepository;
+import com.ferme.itservices.api.order.services.OrderService;
+import com.ferme.itservices.api.orderItem.repositories.OrderItemRepository;
 import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
 import org.junit.jupiter.api.Test;

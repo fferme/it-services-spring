@@ -1,10 +1,10 @@
 package com.ferme.itservices.client.unit;
 
-import com.ferme.itservices.api.dtos.ClientDTO;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.Client;
-import com.ferme.itservices.api.repositories.ClientRepository;
-import com.ferme.itservices.api.services.ClientService;
+import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.client.dtos.ClientDTO;
+import com.ferme.itservices.api.client.models.Client;
+import com.ferme.itservices.api.client.repositories.ClientRepository;
+import com.ferme.itservices.api.client.services.ClientService;
 import com.ferme.itservices.client.utils.ClientAssertions;
 import com.ferme.itservices.client.utils.ClientConstants;
 import org.junit.jupiter.api.Test;

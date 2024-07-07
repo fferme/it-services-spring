@@ -1,7 +1,7 @@
 package com.ferme.itservices.security.user.services;
 
-import com.ferme.itservices.api.exceptions.RecordAlreadyExistsException;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.application.exceptions.RecordAlreadyExistsException;
+import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
 import com.ferme.itservices.security.user.enums.UserRole;
 import com.ferme.itservices.security.user.enums.converters.UserRoleConverter;
 import com.ferme.itservices.security.user.models.User;

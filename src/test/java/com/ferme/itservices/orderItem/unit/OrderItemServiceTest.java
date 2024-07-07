@@ -1,10 +1,10 @@
 package com.ferme.itservices.orderItem.unit;
 
-import com.ferme.itservices.api.dtos.OrderItemDTO;
-import com.ferme.itservices.api.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.models.OrderItem;
-import com.ferme.itservices.api.repositories.OrderItemRepository;
-import com.ferme.itservices.api.services.OrderItemService;
+import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
+import com.ferme.itservices.api.orderItem.models.OrderItem;
+import com.ferme.itservices.api.orderItem.repositories.OrderItemRepository;
+import com.ferme.itservices.api.orderItem.services.OrderItemService;
 import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.ferme.itservices.api.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTO;
 import static com.ferme.itservices.orderItem.utils.OrderItemConstants.ORDERITEM_A_UUID;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;

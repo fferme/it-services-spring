@@ -1,7 +1,7 @@
 package com.ferme.itservices.order.unit;
 
-import com.ferme.itservices.api.models.Order;
-import com.ferme.itservices.api.repositories.OrderRepository;
+import com.ferme.itservices.api.order.models.Order;
+import com.ferme.itservices.api.order.repositories.OrderRepository;
 import com.ferme.itservices.order.utils.OrderConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
