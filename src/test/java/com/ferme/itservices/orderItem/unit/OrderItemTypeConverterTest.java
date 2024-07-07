@@ -20,8 +20,13 @@ public class OrderItemTypeConverterTest {
 		assertEquals(OrderItemType.PART_BUYOUT, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.PART_BUYOUT.getValue()));
 		assertEquals(OrderItemType.PART_EXCHANGE, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.PART_EXCHANGE.getValue()));
 		assertEquals(OrderItemType.MANPOWER, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.MANPOWER.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_GOING, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.CARRIAGE_GOING.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_BACK, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.CARRIAGE_BACK.getValue()));
+		assertEquals(OrderItemType.BOAT_TRANSPORTATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.BOAT_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.BUS_TRANSPORTATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.BUS_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.DISCOUNT, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.DISCOUNT.getValue()));
+		assertEquals(OrderItemType.SOFTWARE_INSTALLATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.SOFTWARE_INSTALLATION.getValue()));
+		assertEquals(OrderItemType.SUBWAY_TRANSPORTATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.SUBWAY_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.TRAIN_TRANSPORTATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.TRAIN_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.UBER_TRANSPORTATION, OrderItemTypeConverter.convertToOrderItemType(OrderItemType.UBER_TRANSPORTATION.getValue()));
 	}
 
 	@Test
@@ -35,8 +40,13 @@ public class OrderItemTypeConverterTest {
 		assertEquals(OrderItemType.PART_BUYOUT.getValue(), converter.convertToDatabaseColumn(OrderItemType.PART_BUYOUT));
 		assertEquals(OrderItemType.PART_EXCHANGE.getValue(), converter.convertToDatabaseColumn(OrderItemType.PART_EXCHANGE));
 		assertEquals(OrderItemType.MANPOWER.getValue(), converter.convertToDatabaseColumn(OrderItemType.MANPOWER));
-		assertEquals(OrderItemType.CARRIAGE_GOING.getValue(), converter.convertToDatabaseColumn(OrderItemType.CARRIAGE_GOING));
-		assertEquals(OrderItemType.CARRIAGE_BACK.getValue(), converter.convertToDatabaseColumn(OrderItemType.CARRIAGE_BACK));
+		assertEquals(OrderItemType.BOAT_TRANSPORTATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.BOAT_TRANSPORTATION));
+		assertEquals(OrderItemType.BUS_TRANSPORTATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.BUS_TRANSPORTATION));
+		assertEquals(OrderItemType.DISCOUNT.getValue(), converter.convertToDatabaseColumn(OrderItemType.DISCOUNT));
+		assertEquals(OrderItemType.SOFTWARE_INSTALLATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.SOFTWARE_INSTALLATION));
+		assertEquals(OrderItemType.SUBWAY_TRANSPORTATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.SUBWAY_TRANSPORTATION));
+		assertEquals(OrderItemType.TRAIN_TRANSPORTATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.TRAIN_TRANSPORTATION));
+		assertEquals(OrderItemType.UBER_TRANSPORTATION.getValue(), converter.convertToDatabaseColumn(OrderItemType.UBER_TRANSPORTATION));
 	}
 
 	@Test
@@ -49,8 +59,13 @@ public class OrderItemTypeConverterTest {
 		assertEquals(OrderItemType.PART_BUYOUT, converter.convertToEntityAttribute(OrderItemType.PART_BUYOUT.getValue()));
 		assertEquals(OrderItemType.PART_EXCHANGE, converter.convertToEntityAttribute(OrderItemType.PART_EXCHANGE.getValue()));
 		assertEquals(OrderItemType.MANPOWER, converter.convertToEntityAttribute(OrderItemType.MANPOWER.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_GOING, converter.convertToEntityAttribute(OrderItemType.CARRIAGE_GOING.getValue()));
-		assertEquals(OrderItemType.CARRIAGE_BACK, converter.convertToEntityAttribute(OrderItemType.CARRIAGE_BACK.getValue()));
+		assertEquals(OrderItemType.BOAT_TRANSPORTATION, converter.convertToEntityAttribute(OrderItemType.BOAT_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.BUS_TRANSPORTATION, converter.convertToEntityAttribute(OrderItemType.BUS_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.DISCOUNT, converter.convertToEntityAttribute(OrderItemType.DISCOUNT.getValue()));
+		assertEquals(OrderItemType.SOFTWARE_INSTALLATION, converter.convertToEntityAttribute(OrderItemType.SOFTWARE_INSTALLATION.getValue()));
+		assertEquals(OrderItemType.SUBWAY_TRANSPORTATION, converter.convertToEntityAttribute(OrderItemType.SUBWAY_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.TRAIN_TRANSPORTATION, converter.convertToEntityAttribute(OrderItemType.TRAIN_TRANSPORTATION.getValue()));
+		assertEquals(OrderItemType.UBER_TRANSPORTATION, converter.convertToEntityAttribute(OrderItemType.UBER_TRANSPORTATION.getValue()));
 	}
 
 	@Test
