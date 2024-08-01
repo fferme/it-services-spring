@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.fermesolutions</groupId>
     <artifactId>it-services-spring</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>it-services-spring</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -215,6 +215,7 @@
     </dependencies>
 
     <build>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
