@@ -74,6 +74,7 @@ public class Order implements Serializable {
 	private List<OrderItem> orderItems;
 
 	@Setter
+	@Builder.Default
 	@DecimalMin(value = "0.0", message = "Total price must be minimum 0.0")
 	@DecimalMax(value = "9999.00", message = "Total price must be max 9999.00")
 	@Column(length = 7, nullable = false, updatable = false)

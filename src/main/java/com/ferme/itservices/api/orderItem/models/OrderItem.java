@@ -53,10 +53,12 @@ public class OrderItem implements Serializable {
 
 	@Setter
 	@NotNull
+	@Builder.Default
 	private Boolean showInListAll = true;
 
 	@Setter
 	@Positive
+	@Builder.Default
 	private Integer quantity = 1;
 
 	@JsonIgnore

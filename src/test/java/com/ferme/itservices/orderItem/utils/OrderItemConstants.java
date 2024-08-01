@@ -34,6 +34,7 @@ public class OrderItemConstants {
 		"Ilha da Mantiqueira -> Ilha da Gigóia",
 		25.0,
 		false,
+		1,
 		null,
 		new AuditInfo()
 	);
@@ -64,6 +65,7 @@ public class OrderItemConstants {
 				"Ilha da Mantiqueira -> Ilha da Gigóia",
 				25.0,
 				false,
+				1,
 				null,
 				new AuditInfo()
 			));
@@ -73,6 +75,7 @@ public class OrderItemConstants {
 				"Méier -> Cachambi",
 				35.0,
 				false,
+				1,
 				null,
 				new AuditInfo()
 			));
@@ -82,6 +85,7 @@ public class OrderItemConstants {
 				"Troca de SSD",
 				80.0,
 				true,
+				1,
 				null,
 				new AuditInfo()
 			));
