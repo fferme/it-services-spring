@@ -38,6 +38,8 @@ public class SecurityConfig {
 
             .requestMatchers(mvcMatcherBuilder.pattern("/v3/api-docs/**")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern("/swagger-ui/**")).permitAll()
+				.requestMatchers(mvcMatcherBuilder.pattern("/actuator/**")).permitAll()
+
 				.anyRequest().authenticated()
 		).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
 
