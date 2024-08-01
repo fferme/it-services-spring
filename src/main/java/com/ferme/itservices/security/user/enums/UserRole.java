@@ -7,14 +7,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum UserRole {
-    @JsonProperty(value = "Owner") OWNER("Owner"),
-    @JsonProperty(value = "Admin") ADMIN("Admin"),
-    @JsonProperty(value = "Guest") GUEST("Guest");
+	@JsonProperty(value = "Owner") OWNER("Owner"),
+	@JsonProperty(value = "Admin") ADMIN("Admin"),
+	@JsonProperty(value = "Guest") GUEST("Guest");
 
-    private final String value;
+	private final String value;
 
-    @Override
-    public String toString() {
-        return this.value;
-    }
+	@Override
+	public String toString() {
+		return this.value;
+	}
 }

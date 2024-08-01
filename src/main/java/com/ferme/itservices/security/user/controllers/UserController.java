@@ -31,43 +31,52 @@ public class UserController {
 	private UserService userService;
 
 	@Operation(summary = "Retrieve list of users", method = "GET")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Successfully retrieved list of users",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
-			}),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "200", description = "Successfully retrieved list of users",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+				}),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@GetMapping
 	public List<User> listAll() {
 		return userService.listAll();
 	}
 
 	@Operation(summary = "Retrieve user by username", method = "GET")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "Successfully retrieved user by username",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-		@ApiResponse(responseCode = "400", description = "Invalid username provided", content = @Content()),
-		@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "200", description = "Successfully retrieved user by username",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+			@ApiResponse(responseCode = "400", description = "Invalid username provided", content = @Content()),
+			@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@GetMapping("/{username}")
 	public Optional<User> findById(@PathVariable @NotBlank String username) {
 		return userService.findById(username);
 	}
 
 	@Operation(summary = "Create new user", method = "POST")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201", description = "Successfully created user",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-		@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "201", description = "Successfully created user",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+			@ApiResponse(responseCode = "404", description = "Request not found", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public User create(@RequestBody @Valid @NotNull User user) {
@@ -75,28 +84,34 @@ public class UserController {
 	}
 
 	@Operation(summary = "Update existing user", method = "PUT")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "201", description = "Successfully updated user",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-		@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "201", description = "Successfully updated user",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+			@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@PutMapping("/{username}")
 	public User update(@PathVariable @NotBlank String username, @RequestBody @Valid @NotNull User newUser) {
 		return userService.update(username, newUser);
 	}
 
 	@Operation(summary = "Delete existing user", method = "DELETE")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "204", description = "Successfully deleted user",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-		@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "204", description = "Successfully deleted user",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+			@ApiResponse(responseCode = "404", description = "User not found with the provided username", content = @Content()),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@DeleteMapping("/{username}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deleteById(@PathVariable @NotBlank String username) {
@@ -104,13 +119,16 @@ public class UserController {
 	}
 
 	@Operation(summary = "Delete all existing users", method = "DELETE")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "204", description = "Successfully deleted all users",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
-		@ApiResponse(responseCode = "500", description = "Internal server error",
-			content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
-			})
-	})
+	@ApiResponses(
+		value = {
+			@ApiResponse(
+				responseCode = "204", description = "Successfully deleted all users",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = User.class))}),
+			@ApiResponse(
+				responseCode = "500", description = "Internal server error",
+				content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+				})
+		})
 	@DeleteMapping
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void deleteAll() {

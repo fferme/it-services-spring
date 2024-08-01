@@ -45,9 +45,9 @@ public class UserService {
 		String encryptedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
 		UserRole userRole = UserRoleConverter.convertToUserRoleValue(user.getUserRole().getValue());
 		User newUser = User.builder()
-		   .username(user.getUsername())
+			.username(user.getUsername())
 			.password(encryptedPassword)
-		   .userRole(userRole)
+			.userRole(userRole)
 			.build();
 
 		return userRepository.save(newUser);

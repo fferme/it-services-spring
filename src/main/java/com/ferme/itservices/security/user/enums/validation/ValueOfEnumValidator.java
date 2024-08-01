@@ -8,29 +8,29 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
-    private List<String> acceptedValues;
+	private List<String> acceptedValues;
 
-    @Override
-    public void initialize(ValueOfEnum annotation) {
-        this.acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
-                                    .map(Enum::toString)
-                                    .collect(Collectors.toList());
-    }
+	@Override
+	public void initialize(ValueOfEnum annotation) {
+		this.acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
+			.map(Enum::toString)
+			.collect(Collectors.toList());
+	}
 
-    @Override
-    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-        if (value == null || value.toString().trim().isEmpty()) {
-            return true;
-        }
+	@Override
+	public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+		if (value == null || value.toString().trim().isEmpty()) {
+			return true;
+		}
 
-        if (!this.acceptedValues.contains(value.toString())) {
-            context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(
-                       "Só são aceitos os valores " + this.acceptedValues)
-                   .addConstraintViolation();
-            return false;
-        }
+		if (!this.acceptedValues.contains(value.toString())) {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(
+					"Só são aceitos os valores " + this.acceptedValues)
+				.addConstraintViolation();
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 }
