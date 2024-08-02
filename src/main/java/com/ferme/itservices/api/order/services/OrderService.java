@@ -2,6 +2,7 @@ package com.ferme.itservices.api.order.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.application.services.GenericCRUDService;
 import com.ferme.itservices.api.client.dtos.ClientDTO;
 import com.ferme.itservices.api.client.dtos.mappers.ClientMapper;
 import com.ferme.itservices.api.client.models.Client;
@@ -38,16 +39,18 @@ import static com.ferme.itservices.api.order.dtos.mappers.OrderMapper.toOrderDTO
 @Service
 @AllArgsConstructor
 @Slf4j
-public class OrderService {
+public class OrderService implements GenericCRUDService<OrderDTO, UUID> {
 	private final OrderRepository orderRepository;
 	private final ClientRepository clientRepository;
 	private final OrderItemRepository orderItemRepository;
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
 	public List<OrderDTO> listAll() {
 		return toOrderDTOList(orderRepository.findAll());
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	@Cacheable(value = "ordersList")
 	public OrderDTO findById(@Valid @NotNull UUID id) {
@@ -57,6 +60,7 @@ public class OrderService {
 		return OrderMapper.toOrderDTO(order);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "ordersList", allEntries = true)
 	@CachePut(value = "order", key = "#result.id")
@@ -109,6 +113,7 @@ public class OrderService {
 		return OrderMapper.toOrderDTO(savedOrder);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "ordersList", allEntries = true)
 	@CachePut(value = "order", key = "#id")
@@ -127,12 +132,14 @@ public class OrderService {
 			}).orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = {"order", "ordersList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		orderRepository.deleteById(id);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = {"order", "ordersList"}, allEntries = true)
 	public void deleteAll() {

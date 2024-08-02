@@ -2,6 +2,7 @@ package com.ferme.itservices.api.orderItem.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.application.services.GenericCRUDService;
 import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
 import com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper;
 import com.ferme.itservices.api.orderItem.enums.converter.OrderItemTypeConverter;
@@ -29,9 +30,10 @@ import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.to
 
 @Service
 @AllArgsConstructor
-public class OrderItemService {
+public class OrderItemService implements GenericCRUDService<OrderItemDTO, UUID> {
 	private final OrderItemRepository orderItemRepository;
 
+	@Override
 	@Transactional(readOnly = true)
 	@Cacheable(value = "orderItemsList")
 	public List<OrderItemDTO> listAll() {
@@ -44,6 +46,7 @@ public class OrderItemService {
 		);
 	}
 
+	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	@Cacheable(value = "orderItem", key = "#id")
 	public OrderItemDTO findById(@Valid @NotNull UUID id) {
@@ -62,6 +65,7 @@ public class OrderItemService {
 		return OrderItemMapper.toOrderItemDTO(orderItem);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "orderItemsList", allEntries = true)
 	@CachePut(value = "orderItem", key = "#result.id")
@@ -71,6 +75,7 @@ public class OrderItemService {
 		return OrderItemMapper.toOrderItemDTO(orderItemRepository.save(orderItem));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "orderItemsList", allEntries = true)
 	@CachePut(value = "orderItem", key = "#id")
@@ -88,12 +93,14 @@ public class OrderItemService {
 			}).orElseThrow(() -> new RecordNotFoundException(OrderItem.class, id.toString()));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = {"orderItem", "orderItemsList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		orderItemRepository.deleteById(id);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void deleteAll() {
 		orderItemRepository.deleteAll();

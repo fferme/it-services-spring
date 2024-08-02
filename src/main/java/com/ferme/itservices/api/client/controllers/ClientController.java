@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.client.controllers;
 
+import com.ferme.itservices.api.application.controllers.GenericCRUDController;
 import com.ferme.itservices.api.client.dtos.ClientDTO;
 import com.ferme.itservices.api.client.models.Client;
 import com.ferme.itservices.api.client.services.ClientService;
@@ -25,9 +26,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/api/clients", produces = {"application/json"})
 @Tag(name = "Client Controller")
-public class ClientController {
+public class ClientController implements GenericCRUDController<ClientDTO, UUID> {
 	private ClientService clientService;
 
+	@Override
 	@GetMapping
 	@Operation(summary = "Retrieve list of clients", method = "GET")
 	@ApiResponses(
@@ -47,6 +49,7 @@ public class ClientController {
 		return ResponseEntity.ok(clients);
 	}
 
+	@Override
 	@Operation(summary = "Retrieve client by ID", method = "GET")
 	@ApiResponses(
 		value = {
@@ -113,6 +116,7 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
+	@Override
 	@Operation(summary = "Save a new client", method = "POST")
 	@ApiResponses(
 		value = {
@@ -131,6 +135,7 @@ public class ClientController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdClientDTO);
 	}
 
+	@Override
 	@Operation(summary = "Update an existing client", method = "PUT")
 	@ApiResponses(
 		value = {
@@ -152,6 +157,7 @@ public class ClientController {
 			: ResponseEntity.notFound().build();
 	}
 
+	@Override
 	@Operation(summary = "Delete an existing client", method = "DELETE")
 	@ApiResponses(
 		value = {
@@ -170,6 +176,7 @@ public class ClientController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@Operation(summary = "Delete all existing clients", method = "DELETE")
 	@ApiResponses(
 		value = {

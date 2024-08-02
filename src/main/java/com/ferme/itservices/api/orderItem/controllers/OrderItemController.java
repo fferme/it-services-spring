@@ -1,5 +1,6 @@
 package com.ferme.itservices.api.orderItem.controllers;
 
+import com.ferme.itservices.api.application.controllers.GenericCRUDController;
 import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
 import com.ferme.itservices.api.orderItem.models.OrderItem;
 import com.ferme.itservices.api.orderItem.services.OrderItemService;
@@ -25,9 +26,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/api/orderItems", produces = {"application/json"})
 @Tag(name = "OrderItem Controller")
-public class OrderItemController {
+public class OrderItemController implements GenericCRUDController<OrderItemDTO, UUID> {
 	private OrderItemService orderItemService;
 
+	@Override
 	@Operation(summary = "Retrieve list of order items", method = "GET")
 	@ApiResponses(
 		value = {
@@ -46,6 +48,7 @@ public class OrderItemController {
 		return ResponseEntity.ok(orderItemsDTO);
 	}
 
+	@Override
 	@Operation(summary = "Retrieve order item by ID", method = "GET")
 	@ApiResponses(
 		value = {
@@ -90,6 +93,7 @@ public class OrderItemController {
 			: ResponseEntity.notFound().build();
 	}
 
+	@Override
 	@Operation(summary = "Create new order item", method = "POST")
 	@ApiResponses(
 		value = {
@@ -108,6 +112,7 @@ public class OrderItemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdOrderItemDTO);
 	}
 
+	@Override
 	@Operation(summary = "Update an existing order item", method = "PUT")
 	@ApiResponses(
 		value = {
@@ -129,6 +134,7 @@ public class OrderItemController {
 			: ResponseEntity.notFound().build();
 	}
 
+	@Override
 	@Operation(summary = "Delete an existing order item", method = "DELETE")
 	@ApiResponses(
 		value = {
@@ -147,6 +153,7 @@ public class OrderItemController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@Override
 	@Operation(summary = "Delete all existing order items", method = "DELETE")
 	@ApiResponses(
 		value = {

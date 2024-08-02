@@ -2,6 +2,7 @@ package com.ferme.itservices.api.client.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
+import com.ferme.itservices.api.application.services.GenericCRUDService;
 import com.ferme.itservices.api.client.dtos.ClientDTO;
 import com.ferme.itservices.api.client.dtos.mappers.ClientMapper;
 import com.ferme.itservices.api.client.models.Client;
@@ -27,9 +28,10 @@ import static com.ferme.itservices.api.application.utils.JsonDataRead.readJsonDa
 
 @Service
 @AllArgsConstructor
-public class ClientService {
+public class ClientService implements GenericCRUDService<ClientDTO, UUID> {
 	private final ClientRepository clientRepository;
 
+	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	@Cacheable(value = "clientsList")
 	public List<ClientDTO> listAll() {
@@ -42,6 +44,7 @@ public class ClientService {
 		);
 	}
 
+	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	@Cacheable(value = "client", key = "#id")
 	public ClientDTO findById(@Valid @NotNull UUID id) {
@@ -69,6 +72,7 @@ public class ClientService {
 		return ClientMapper.toClientDTO(client);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "clientsList", allEntries = true)
 	@CachePut(value = "client", key = "#result.id")
@@ -76,6 +80,7 @@ public class ClientService {
 		return ClientMapper.toClientDTO(clientRepository.save(ClientMapper.toClient(clientDTO)));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "clientsList", allEntries = true)
 	@CachePut(value = "client", key = "#id")
@@ -93,12 +98,14 @@ public class ClientService {
 			}).orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = {"client", "clientsList"}, key = "#id")
 	public void deleteById(@NotNull UUID id) {
 		clientRepository.deleteById(id);
 	}
 
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = {"client", "clientsList"}, allEntries = true)
 	public void deleteAll() {
