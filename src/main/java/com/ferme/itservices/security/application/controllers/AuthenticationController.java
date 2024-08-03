@@ -1,6 +1,6 @@
 package com.ferme.itservices.security.application.controllers;
 
-import com.ferme.itservices.api.client.models.Client;
+import com.ferme.itservices.api.entities.models.Client;
 import com.ferme.itservices.security.application.dtos.AuthenticationDTO;
 import com.ferme.itservices.security.application.dtos.LoginResponseDTO;
 import com.ferme.itservices.security.application.services.TokenService;

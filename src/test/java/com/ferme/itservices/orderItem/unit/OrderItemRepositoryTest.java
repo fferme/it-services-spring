@@ -1,7 +1,7 @@
 package com.ferme.itservices.orderItem.unit;
 
-import com.ferme.itservices.api.orderItem.models.OrderItem;
-import com.ferme.itservices.api.orderItem.repositories.OrderItemRepository;
+import com.ferme.itservices.api.entities.models.OrderItem;
+import com.ferme.itservices.api.entities.repositories.OrderItemRepository;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

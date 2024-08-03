@@ -1,10 +1,10 @@
 package com.ferme.itservices.client.unit;
 
 import com.ferme.itservices.api.application.exceptions.RecordNotFoundException;
-import com.ferme.itservices.api.client.dtos.ClientDTO;
-import com.ferme.itservices.api.client.models.Client;
-import com.ferme.itservices.api.client.repositories.ClientRepository;
-import com.ferme.itservices.api.client.services.ClientService;
+import com.ferme.itservices.api.entities.dtos.ClientDTO;
+import com.ferme.itservices.api.entities.models.Client;
+import com.ferme.itservices.api.entities.repositories.ClientRepository;
+import com.ferme.itservices.api.entities.services.ClientService;
 import com.ferme.itservices.client.utils.ClientAssertions;
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.security.auditing.models.AuditInfo;

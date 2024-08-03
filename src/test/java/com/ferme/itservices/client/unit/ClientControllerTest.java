@@ -1,10 +1,10 @@
 package com.ferme.itservices.client.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ferme.itservices.api.client.controllers.ClientController;
-import com.ferme.itservices.api.client.dtos.ClientDTO;
-import com.ferme.itservices.api.client.models.Client;
-import com.ferme.itservices.api.client.services.ClientService;
+import com.ferme.itservices.api.entities.controllers.ClientController;
+import com.ferme.itservices.api.entities.dtos.ClientDTO;
+import com.ferme.itservices.api.entities.models.Client;
+import com.ferme.itservices.api.entities.services.ClientService;
 import com.ferme.itservices.client.utils.ClientConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.api.client.dtos.mappers.ClientMapper.toClientDTO;
+import static com.ferme.itservices.api.entities.dtos.mappers.ClientMapper.toClientDTO;
 import static com.ferme.itservices.client.utils.ClientConstants.CLIENT_A_UUID;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;

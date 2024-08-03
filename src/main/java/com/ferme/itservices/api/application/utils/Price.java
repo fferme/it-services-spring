@@ -1,7 +1,7 @@
 package com.ferme.itservices.api.application.utils;
 
-import com.ferme.itservices.api.orderItem.enums.OrderItemType;
-import com.ferme.itservices.api.orderItem.models.OrderItem;
+import com.ferme.itservices.api.entities.enums.OrderItemType;
+import com.ferme.itservices.api.entities.models.OrderItem;
 
 import java.util.List;
 

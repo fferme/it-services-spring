@@ -1,6 +1,6 @@
 package com.ferme.itservices.client.utils;
 
-import com.ferme.itservices.api.client.dtos.ClientDTO;
+import com.ferme.itservices.api.entities.dtos.ClientDTO;
 
 import java.util.Comparator;
 import java.util.List;

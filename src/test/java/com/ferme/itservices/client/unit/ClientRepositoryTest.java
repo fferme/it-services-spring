@@ -1,7 +1,7 @@
 package com.ferme.itservices.client.unit;
 
-import com.ferme.itservices.api.client.models.Client;
-import com.ferme.itservices.api.client.repositories.ClientRepository;
+import com.ferme.itservices.api.entities.models.Client;
+import com.ferme.itservices.api.entities.repositories.ClientRepository;
 import com.ferme.itservices.client.utils.ClientConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

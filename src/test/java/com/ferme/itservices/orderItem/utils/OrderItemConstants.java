@@ -1,16 +1,16 @@
 package com.ferme.itservices.orderItem.utils;
 
-import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
-import com.ferme.itservices.api.orderItem.enums.OrderItemType;
-import com.ferme.itservices.api.orderItem.models.OrderItem;
+import com.ferme.itservices.api.entities.dtos.OrderItemDTO;
+import com.ferme.itservices.api.entities.enums.OrderItemType;
+import com.ferme.itservices.api.entities.models.OrderItem;
 import com.ferme.itservices.security.auditing.models.AuditInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTO;
-import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 
 
 public class OrderItemConstants {

@@ -1,7 +1,7 @@
 package com.ferme.itservices.order.utils;
 
-import com.ferme.itservices.api.order.dtos.OrderDTO;
-import com.ferme.itservices.api.order.models.Order;
+import com.ferme.itservices.api.entities.dtos.OrderDTO;
+import com.ferme.itservices.api.entities.models.Order;
 import com.ferme.itservices.client.utils.ClientConstants;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 
@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ferme.itservices.api.order.dtos.mappers.OrderMapper.toOrderDTO;
-import static com.ferme.itservices.api.order.dtos.mappers.OrderMapper.toOrderDTOList;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderMapper.toOrderDTO;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderMapper.toOrderDTOList;
 
 public class OrderConstants {
 	public static OrderConstants instance;

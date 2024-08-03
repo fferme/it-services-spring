@@ -1,9 +1,9 @@
 package com.ferme.itservices.order.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ferme.itservices.api.order.controllers.OrderController;
-import com.ferme.itservices.api.order.dtos.OrderDTO;
-import com.ferme.itservices.api.order.services.OrderService;
+import com.ferme.itservices.api.entities.controllers.OrderController;
+import com.ferme.itservices.api.entities.dtos.OrderDTO;
+import com.ferme.itservices.api.entities.services.OrderService;
 import com.ferme.itservices.order.utils.OrderAssertions;
 import com.ferme.itservices.order.utils.OrderConstants;
 import org.junit.jupiter.api.Test;

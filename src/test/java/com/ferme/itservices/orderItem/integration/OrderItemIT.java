@@ -1,6 +1,6 @@
 package com.ferme.itservices.orderItem.integration;
 
-import com.ferme.itservices.api.orderItem.dtos.OrderItemDTO;
+import com.ferme.itservices.api.entities.dtos.OrderItemDTO;
 import com.ferme.itservices.orderItem.utils.OrderItemConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTO;
-import static com.ferme.itservices.api.orderItem.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderItemMapper.toOrderItemDTO;
+import static com.ferme.itservices.api.entities.dtos.mappers.OrderItemMapper.toOrderItemDTOList;
 import static com.ferme.itservices.orderItem.utils.OrderItemConstants.ORDERITEM_A_UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

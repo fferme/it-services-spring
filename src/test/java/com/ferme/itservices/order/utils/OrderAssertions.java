@@ -1,6 +1,6 @@
 package com.ferme.itservices.order.utils;
 
-import com.ferme.itservices.api.order.dtos.OrderDTO;
+import com.ferme.itservices.api.entities.dtos.OrderDTO;
 import com.ferme.itservices.client.utils.ClientAssertions;
 import com.ferme.itservices.orderItem.utils.OrderItemAssertions;
 
