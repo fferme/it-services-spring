@@ -47,7 +47,7 @@ public class ClientService implements GenericCRUDService<ClientDTO, UUID> {
 	@Override
 	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	@Cacheable(value = "client", key = "#id")
-	public ClientDTO findById(@Valid @NotNull UUID id) {
+	public ClientDTO findById(@NotNull UUID id) {
 		Client client = clientRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(Client.class, id.toString()));
 

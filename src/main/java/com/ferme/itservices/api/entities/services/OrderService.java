@@ -53,7 +53,7 @@ public class OrderService implements GenericCRUDService<OrderDTO, UUID> {
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	@Cacheable(value = "ordersList")
-	public OrderDTO findById(@Valid @NotNull UUID id) {
+	public OrderDTO findById(@NotNull UUID id) {
 		Order order = orderRepository.findById(id)
 			.orElseThrow(() -> new RecordNotFoundException(Order.class, id.toString()));
 
