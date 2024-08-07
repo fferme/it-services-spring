@@ -27,6 +27,7 @@ HEALTHCHECK --interval=20s --timeout=5s --start-period=40s --retries=5 \
 WORKDIR /var/spring-app
 
 COPY --from=builder /opt/demo/target/it-services-spring-0.0.1.jar .
+COPY --from=builder /opt/demo/src/main/resources/json_imports/orders.json src/main/resources/json_imports/orders.json
 
 RUN chown spring-app:spring-app it-services-spring-0.0.1.jar
 USER spring-app
