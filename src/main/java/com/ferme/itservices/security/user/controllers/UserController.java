@@ -24,7 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @RestController
 @Transactional
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/auth/users", produces = {"application/json"})
 @Tag(name = "User Controller")
 public class UserController {
